@@ -53,9 +53,7 @@ footer{text-align:center;font-size:11px;opacity:.7;padding:8px 10px 0}
 <div id="chat">
 <div class="row"><div class="msg bot">Wsh bg c'est LumyGPT V12.3 PRO 🔥👑
 
-Genre là je comprends VRAIMENT tout, tkt ! Même si tu écris mal, avec des fautes, en slang, j'ai capté !
-
-Teste-moi : 'Tkt bg je sais c'est moi qui t'ai codé' ou 'Genre là tu comprends tout ??'</div></div>
+Genre là je comprends VRAIMENT tout, tkt ! Même si tu écris mal, avec des fautes, en slang, j'ai capté !</div></div>
 </div>
 <div class="bottom">
 <div class="plus-menu" id="plusMenu">
@@ -84,25 +82,40 @@ async function send(textOverride){
   chat.innerHTML+=`<div class="row"><div class="avatar">L</div><div class="msg bot">${d.reply}</div></div>`;
   chat.scrollTop=chat.scrollHeight;
 }
-fileInput.addEventListener('change',()=>{
+function compressImage(file){
+  return new Promise((resolve)=>{
+    const reader=new FileReader();
+    reader.onload=(e)=>{
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        let w=img.width, h=img.height;
+        const max=800;
+        if(w>max||h>max){ const ratio=Math.min(max/w, max/h); w=Math.round(w*ratio); h=Math.round(h*ratio); }
+        canvas.width=w; canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL('image/jpeg',0.7));
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+fileInput.addEventListener('change',async ()=>{
   const f=fileInput.files[0]; if(!f) return;
-  const reader=new FileReader();
-  reader.onload=async (e)=>{
-    const base64=e.target.result;
-    let html='';
-    if(f.type.startsWith('image/')) html=`📸 Photo : ${f.name}<img src="${base64}">`;
-    else if(f.type.startsWith('video/')) html=`🎥 Vidéo : ${f.name}<video src="${base64}" controls></video>`;
-    else html=`📁 Fichier : ${f.name} (${Math.round(f.size/1024)} Ko)`;
-    chat.innerHTML+=`<div class="row user-row"><div class="msg user">${html}</div><div class="user-avatar">Z</div></div>`;
+  fileInput.value='';
+  if(f.type.startsWith('image/')){
+    const compressed=await compressImage(f);
+    chat.innerHTML+=`<div class="row user-row"><div class="msg user">📸 Photo : ${f.name}<img src="${compressed}"></div><div class="user-avatar">Z</div></div>`;
     chat.scrollTop=chat.scrollHeight;
-    fileInput.value='';
-    const text = f.type.startsWith('image/') ? "Décris cette image en détail, c'est quoi ? T'en penses quoi ?" : "J'ai envoyé ce fichier : "+f.name+" - tu en penses quoi ?";
-    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text, image: f.type.startsWith('image/') ? base64 : null })});
+    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:"Décris cette image en détail, c'est quoi ? T'en penses quoi ?", image: compressed })});
     const d=await r.json();
     chat.innerHTML+=`<div class="row"><div class="avatar">L</div><div class="msg bot">${d.reply}</div></div>`;
     chat.scrollTop=chat.scrollHeight;
-  };
-  reader.readAsDataURL(f);
+  } else {
+    chat.innerHTML+=`<div class="row user-row"><div class="msg user">📁 Fichier : ${f.name}</div><div class="user-avatar">Z</div></div>`;
+    send("J'ai envoyé ce fichier : "+f.name+" - tu en penses quoi ?");
+  }
 });
 document.addEventListener('click',(e)=>{if(!e.target.closest('.bottom')){menu.classList.remove('show');plusBtn.classList.remove('open')}});
 inp.addEventListener('focus',()=>{setTimeout(()=>chat.scrollTop=chat.scrollHeight,300)});
