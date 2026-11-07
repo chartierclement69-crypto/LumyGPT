@@ -8,7 +8,7 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
+      model: 'openai/gpt-oss-20b',
       messages: [
         { role: 'system', content: 'Tu es LumyGPT, un assistant cool qui parle comme les jeunes. Tu comprends et tu utilises le langage des jeunes.' },
         { role: 'user', content: message }
