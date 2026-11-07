@@ -1,19 +1,69 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LumyGPT</title>
-<style>body{background:#0f0f0f;color:white;font-family:sans-serif;margin:0;display:flex;flex-direction:column;height:100vh}header{padding:15px;text-align:center;font-weight:900;font-size:22px}header span{color:#a855f7}#chat{flex:1;overflow:auto;padding:15px;display:flex;flex-direction:column;gap:10px}.msg{max-width:80%;padding:10px 14px;border-radius:15px}.user{background:#a855f7;align-self:flex-end}.bot{background:#222;align-self:flex-start}#bar{display:flex;padding:12px;gap:8px}input{flex:1;padding:12px;border-radius:20px;border:none;background:#222;color:white;outline:none}button{padding:12px 18px;border-radius:20px;border:none;background:#a855f7;color:white;font-weight:900}</style>
-</head><body>
-<header>💜 LUMY<span>GPT</span> - V12.3 PRO</header>
-<div id="chat"></div>
-<div id="bar"><input id="input" placeholder="Écris à LumyGPT..."><button onclick="send()">➤</button></div>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LumyGPT V12.3 PRO</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#0a0620;background:linear-gradient(180deg,#0a0620 0%,#1a0b3d 50%,#0d0524 100%);color:white;min-height:100vh;display:flex;flex-direction:column}
+header{padding:14px 12px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+.logo{width:52px;height:52px;min-width:52px;border-radius:14px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 0 20px rgba(59,130,246,.6);border:2px solid #38bdf8}
+.logo b{font-size:22px;line-height:1}
+.logo span{font-size:6px;letter-spacing:.5px;font-weight:800}
+header h1{font-size:26px;letter-spacing:1px;color:#7dd3fc;text-shadow:0 0 15px #38bdf8;flex:1}
+.badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.badge{font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px}
+.green{background:#16a34a}.yellow{background:#eab308;color:#000}.blue{background:#2563eb}.online{font-size:12px;color:#4ade80;font-weight:700}
+#chat{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;padding-bottom:20px}
+.msg{max-width:85%;padding:13px 15px;border-radius:18px;line-height:1.5;font-size:16px;white-space:pre-wrap}
+.bot{background:#2a1a5e;background:linear-gradient(135deg,#2e1a6b,#1e1448);align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.user{background:linear-gradient(135deg,#7c3aed,#3b82f6);align-self:flex-end;border-bottom-right-radius:4px}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;font-weight:900;margin-top:4px}
+.row{display:flex;gap:8px;align-items:flex-end}
+.row.user-row{justify-content:flex-end}
+.user-avatar{width:34px;height:34px;border-radius:50%;background:#0f172a;border:2px solid #22d3ee;display:flex;align-items:center;justify-content:center;font-weight:900}
+.input-bar{padding:10px;display:flex;gap:8px;align-items:center}
+.input-wrap{flex:1;display:flex;align-items:center;gap:8px;background:#1e1448;border:2px solid #7c3aed;border-radius:30px;padding:6px 6px 6px 12px}
+.input-wrap input{flex:1;background:transparent;border:none;outline:none;color:white;font-size:16px}
+.input-wrap input::placeholder{color:#a78bfa}
+.plus{width:32px;height:32px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer}
+.send{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#3b82f6);border:none;color:white;font-size:20px;cursor:pointer;box-shadow:0 0 15px rgba(139,92,246,.7)}
+footer{text-align:center;font-size:11px;opacity:.7;padding:0 10px 12px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo"><b>L</b><span>LumyGPT</span></div>
+<h1>LUMYGPT</h1>
+<div style="text-align:right">
+<div class="badges"><span class="badge green">V12.3</span><span class="badge yellow">PRO</span></div>
+<div style="margin-top:5px;display:flex;gap:6px;align-items:center;justify-content:flex-end"><span class="badge blue">GRATUIT</span><span class="online">● En ligne</span></div>
+</div>
+</header>
+<div id="chat">
+<div class="row"><div class="msg bot">Wsh bg c'est LumyGPT V12.3 PRO 🔥👑
+
+Genre là je comprends VRAIMENT tout, tkt ! Même si tu écris mal, avec des fautes, en slang, j'ai capté !
+
+Teste-moi : 'Tkt bg je sais c'est moi qui t'ai codé' ou 'Genre là tu comprends tout ??'</div></div>
+</div>
+<div class="input-bar">
+<div class="input-wrap"><div class="plus">+</div><input id="input" placeholder="Écris à LumyGPT..." onkeydown="if(event.key==='Enter')send()"><button class="send" onclick="send()">➤</button></div>
+</div>
+<footer>🚀 V12.3 PRO • GROQ + 4 IA • 📖 Dico • 🌌 NASA • 🖼️ Vraies photos • 📚 Réviser</footer>
 <script>
 async function send(){
-let inp=document.getElementById('input');let txt=inp.value;if(!txt)return;
-let chat=document.getElementById('chat');
-chat.innerHTML+=`<div class="msg user">${txt}</div>`;inp.value='';
-let div=document.createElement('div');div.className='msg bot';div.textContent='Lumy réfléchit...';chat.appendChild(div);
-let r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:txt})});
-let d=await r.json();div.textContent=d.reply;chat.scrollTop=chat.scrollHeight;
+  const inp=document.getElementById('input');
+  const text=inp.value.trim(); if(!text) return;
+  const chat=document.getElementById('chat');
+  chat.innerHTML+=`<div class="row user-row"><div class="msg user">${text}</div><div class="user-avatar">Z</div></div>`;
+  inp.value=''; chat.scrollTop=chat.scrollHeight;
+  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})});
+  const d=await r.json();
+  chat.innerHTML+=`<div class="row"><div class="avatar">L</div><div class="msg bot">${d.reply}</div></div>`;
+  chat.scrollTop=chat.scrollHeight;
 }
-document.getElementById('input').addEventListener('keydown',e=>{if(e.key==='Enter')send()});
-</script></body></html>
+</script>
+</body>
+</html>
