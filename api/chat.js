@@ -1,10 +1,9 @@
 export default async function handler(req,res){
   if(req.method!=='POST') return res.status(405).json({reply:'Méthode non autorisée'});
   const {message}=req.body;
-  const GROQ_KEY = "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";
   const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
     method:'POST',
-    headers:{'Authorization':`Bearer ${GROQ_KEY}`,'Content-Type':'application/json'},
+    headers:{'Authorization':`Bearer ${process.env.GROQ_API_KEY}`,'Content-Type':'application/json'},
     body:JSON.stringify({
       model:'llama-3.3-70b-versatile',
       messages:[
