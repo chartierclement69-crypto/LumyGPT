@@ -10,7 +10,7 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 html,body{height:100%;height:100dvh;overflow:hidden;background:#0a0620;overscroll-behavior:none}
 body{background:linear-gradient(180deg,#0a0620 0%,#1a0b3d 50%,#0d0524 100%);color:white;display:flex;flex-direction:column;position:fixed;inset:0}
-header{flex-shrink:0;position:sticky;top:0;z-index:10;background:#0a0620;background:linear-gradient(180deg,#14083a,#0a0620);padding:14px 12px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.12)}
+header{flex-shrink:0;z-index:10;background:linear-gradient(180deg,#14083a,#0a0620);padding:14px 12px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.12)}
 .logo{width:52px;height:52px;min-width:52px;border-radius:14px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 0 20px rgba(59,130,246,.6);border:2px solid #38bdf8}
 .logo b{font-size:22px;line-height:1}
 .logo span{font-size:6px;letter-spacing:.5px;font-weight:800}
@@ -20,19 +20,25 @@ header h1{font-size:26px;letter-spacing:1px;color:#7dd3fc;text-shadow:0 0 15px #
 .green{background:#16a34a}.yellow{background:#eab308;color:#000}.blue{background:#2563eb}.online{font-size:12px;color:#4ade80;font-weight:700}
 #chat{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 12px;display:flex;flex-direction:column;gap:12px}
 .msg{max-width:85%;padding:13px 15px;border-radius:18px;line-height:1.5;font-size:16px;white-space:pre-wrap;word-break:break-word}
+.msg img,.msg video{max-width:100%;border-radius:12px;display:block;margin-top:6px}
 .bot{background:linear-gradient(135deg,#2e1a6b,#1e1448);align-self:flex-start;border-bottom-left-radius:4px}
 .user{background:linear-gradient(135deg,#7c3aed,#3b82f6);align-self:flex-end;border-bottom-right-radius:4px}
 .avatar{width:34px;height:34px;min-width:34px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;font-weight:900}
 .row{display:flex;gap:8px;align-items:flex-end}
 .row.user-row{justify-content:flex-end}
 .user-avatar{width:34px;height:34px;min-width:34px;border-radius:50%;background:#0f172a;border:2px solid #22d3ee;display:flex;align-items:center;justify-content:center;font-weight:900}
-.bottom{flex-shrink:0;background:#0d0524;padding:10px 10px calc(10px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.1)}
+.bottom{flex-shrink:0;background:#0d0524;padding:10px 10px calc(10px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.1);position:relative}
 .input-wrap{display:flex;align-items:center;gap:8px;background:#1e1448;border:2px solid #7c3aed;border-radius:30px;padding:6px 6px 6px 12px}
 .input-wrap input{flex:1;background:transparent;border:none;outline:none;color:white;font-size:16px;color-scheme:dark}
 .input-wrap input::placeholder{color:#a78bfa}
-.plus{width:32px;height:32px;min-width:32px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:20px}
+.plus{width:32px;height:32px;min-width:32px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:.2s}
+.plus.open{transform:rotate(45deg);background:#ec4899}
 .send{width:44px;height:44px;min-width:44px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#3b82f6);border:none;color:white;font-size:20px;cursor:pointer}
 footer{text-align:center;font-size:11px;opacity:.7;padding:8px 10px 0}
+.plus-menu{position:absolute;left:12px;bottom:78px;background:#1e1448;border:2px solid #7c3aed;border-radius:18px;padding:8px;display:none;flex-direction:column;gap:6px;width:200px;box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:20}
+.plus-menu.show{display:flex}
+.plus-menu button{background:#2e1a6b;border:none;color:white;padding:12px;border-radius:12px;text-align:left;font-size:15px;cursor:pointer;display:flex;gap:10px;align-items:center}
+.plus-menu button:active{background:#7c3aed}
 </style>
 </head>
 <body>
@@ -52,14 +58,25 @@ Genre là je comprends VRAIMENT tout, tkt ! Même si tu écris mal, avec des fau
 Teste-moi : 'Tkt bg je sais c'est moi qui t'ai codé' ou 'Genre là tu comprends tout ??'</div></div>
 </div>
 <div class="bottom">
-<div class="input-wrap"><div class="plus">+</div><input id="input" placeholder="Écris à LumyGPT..." enterkeyhint="send" onkeydown="if(event.key==='Enter')send()"><button class="send" onclick="send()">➤</button></div>
+<div class="plus-menu" id="plusMenu">
+<button onclick="pickFile('image/*')">📸 Photo</button>
+<button onclick="pickFile('video/*')">🎥 Vidéo</button>
+<button onclick="pickFile('*')">📁 Fichier</button>
+</div>
+<div class="input-wrap"><div class="plus" id="plusBtn" onclick="toggleMenu()">+</div><input id="input" placeholder="Écris à LumyGPT..." enterkeyhint="send" onkeydown="if(event.key==='Enter')send()"><button class="send" onclick="send()">➤</button></div>
 <div class="footer">🚀 V12.3 PRO • GROQ + 4 IA • 📖 Dico • 🌌 NASA • 🖼️ Vraies photos • 📚 Réviser</div>
 </div>
+<input type="file" id="fileInput" hidden>
 <script>
 const chat=document.getElementById('chat');
 const inp=document.getElementById('input');
-async function send(){
-  const text=inp.value.trim(); if(!text) return;
+const menu=document.getElementById('plusMenu');
+const plusBtn=document.getElementById('plusBtn');
+const fileInput=document.getElementById('fileInput');
+function toggleMenu(){menu.classList.toggle('show');plusBtn.classList.toggle('open')}
+function pickFile(type){fileInput.setAttribute('accept',type);fileInput.click();menu.classList.remove('show');plusBtn.classList.remove('open')}
+async function send(textOverride){
+  const text=textOverride||inp.value.trim(); if(!text) return;
   chat.innerHTML+=`<div class="row user-row"><div class="msg user">${text}</div><div class="user-avatar">Z</div></div>`;
   inp.value=''; chat.scrollTop=chat.scrollHeight;
   const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})});
@@ -67,6 +84,19 @@ async function send(){
   chat.innerHTML+=`<div class="row"><div class="avatar">L</div><div class="msg bot">${d.reply}</div></div>`;
   chat.scrollTop=chat.scrollHeight;
 }
+fileInput.addEventListener('change',()=>{
+  const f=fileInput.files[0]; if(!f) return;
+  const url=URL.createObjectURL(f);
+  let html='';
+  if(f.type.startsWith('image/')) html=`📸 Photo : ${f.name}<img src="${url}">`;
+  else if(f.type.startsWith('video/')) html=`🎥 Vidéo : ${f.name}<video src="${url}" controls></video>`;
+  else html=`📁 Fichier : ${f.name} (${Math.round(f.size/1024)} Ko)`;
+  chat.innerHTML+=`<div class="row user-row"><div class="msg user">${html}</div><div class="user-avatar">Z</div></div>`;
+  chat.scrollTop=chat.scrollHeight;
+  fileInput.value='';
+  setTimeout(()=>{send("J'ai envoyé : "+f.name+" - tu peux me dire c'est quoi / tu en penses quoi ?")},300);
+});
+document.addEventListener('click',(e)=>{if(!e.target.closest('.bottom')){menu.classList.remove('show');plusBtn.classList.remove('open')}});
 inp.addEventListener('focus',()=>{setTimeout(()=>chat.scrollTop=chat.scrollHeight,300)});
 </script>
 </body>
