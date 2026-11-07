@@ -18,16 +18,27 @@ export default async function handler(req, res) {
 
   const model = image ? 'qwen/qwen3.8-27b' : 'openai/gpt-oss-20b';
 
-  try {
-    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, messages, temperature: 0.8, max_tokens: 1000 })
-    });
-    const data = await r.json();
-    if (data.error) return res.json({ reply: 'Erreur Groq : ' + data.error.message });
-    return res.json({ reply: data.choices?.[0]?.message?.content || 'bug, réessaie' });
-  } catch (e) {
-    return res.json({ reply: 'bug serveur : ' + e.message });
+  // On réessaie 3 fois si Groq est saturé
+  for (let i = 0; i < 3; i++) {
+    try {
+      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model, messages, temperature: 0.8, max_tokens: 1000 })
+      });
+      const data = await r.json();
+      if (data.error) {
+        // Si c'est "over capacity", on attend et on réessaie
+        if (data.error.message.includes('over capacity') && i < 2) {
+          await new Promise(x => setTimeout(x, 3000 * (i + 1)));
+          continue;
+        }
+        return res.json({ reply: 'Groq est saturé là bg, réessaie dans 30 secondes 🙏 Erreur : ' + data.error.message });
+      }
+      return res.json({ reply: data.choices?.[0]?.message?.content || 'bug, réessaie' });
+    } catch (e) {
+      if (i < 2) { await new Promise(x => setTimeout(x, 2000)); continue; }
+      return res.json({ reply: 'bug serveur : ' + e.message });
+    }
   }
 }
