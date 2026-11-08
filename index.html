@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>LumyGPT</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<script defer src="/_vercel/insights/script.js"></script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{background:#0d001f;color-scheme:dark}
@@ -69,7 +70,6 @@
   .rank-chip b{display:block;font-size:13px}
   .month-note{text-align:center;font-size:11px;color:#d8b4fe;margin-top:10px;line-height:1.5}
   .pseudo-box{display:flex;gap:8px;margin-top:8px} .pseudo-box input{flex:1;background:#fff;color:#000;border:none;border-radius:12px;padding:11px 12px;font-weight:800;font-family:inherit;outline:none} .pseudo-box button{background:#fff;color:#000;border:none;border-radius:12px;padding:11px 14px;font-weight:900;cursor:pointer}
-  /* FIX LOGO - NE S'ARRETE JAMAIS */
   .ring, .ring-out{animation-play-state:running !important;will-change:transform}
   @keyframes spinSlow{from{transform:rotate(12deg)}to{transform:rotate(372deg)}}
   @keyframes spinSlowRev{from{transform:rotate(-10deg)}to{transform:rotate(-370deg)}}
@@ -89,8 +89,6 @@
 <div class="wave"><svg viewBox="0 0 1200 30" preserveAspectRatio="none"><path d="M0,15 Q30,0 60,15 T120,15 T180,15 T240,15 T300,15 T360,15 T420,15 T480,15 T540,15 T600,15 T660,15 T720,15 T780,15 T840,15 T900,15 T960,15 T1020,15 T1080,15 T1140,15 T1200,15 L1200,30 L0,30 Z" fill="#a855f7" opacity=".55"/></svg></div>
 <form id="form"><div class="input-wrap"><button type="button" class="mini-btn" id="modeBtn">⚡</button><button type="button" class="mini-btn" id="photoBtn">📸</button><input type="file" id="photoInput" accept="image/*" hidden><input id="input" placeholder="Écris à LumyGPT..." autocomplete="off" autocorrect="off" autocapitalize="sentences" enterkeyhint="send" /><button id="send" type="submit">➤</button></div></form>
 <div class="fav-drawer" id="favDrawer"><h3>⭐ Mes favoris</h3><div id="favList"></div><button class="action-btn" onclick="document.getElementById('favDrawer').style.display='none'">Fermer</button></div>
-
-<!-- TON RANG PERSO + PSEUDO - PLUS DE CLASSEMENT MONDIAL -->
 <div class="overlay" id="leaderOverlay"><div class="leader-card">
   <button class="close-x" onclick="closeLeader()">✕</button>
   <h2>🏆 Ton Rang</h2><div class="leader-sub" id="leaderMonth">Ton niveau perso</div>
@@ -99,7 +97,6 @@
   <div class="rank-grid" id="rankGrid"></div>
   <div class="month-note">🌟 <b>PRO = 600 questions</b><br>C'est juste ton niveau à toi, personne d'autre le voit.<br>Fin de saison : tout repart à 0.</div>
 </div></div>
-
 <script>
 const chat=document.getElementById('chat'); const form=document.getElementById('form'); const input=document.getElementById('input'); const send=document.getElementById('send'); const splash=document.getElementById('splash'); const splashCenter=document.getElementById('splashCenter'); const fireBadge=document.getElementById('fireBadge'); const favBadge=document.getElementById('favBadge'); const subtitle=document.getElementById('subtitle'); const mainLogo=document.getElementById('mainLogo');
 let currentMood='😴'; let fastMode=true;
@@ -114,8 +111,6 @@ const colors=['#e9d5ff','#a855f7','#facc15','#22d3ee','#fff','#c084fc']; for(let
 let greet='Bonjour ☀️', greetMsg="Bonjour 👋 Je suis LumyGPT, ton assistant intelligent.\nQue veux-tu faire aujourd'hui ?";
 if(hour>=6&&hour<12){greet='Bonjour ☀️'; greetMsg='Bonjour ☀️ Je suis LumyGPT, bien réveillé pour toi.\nOn fait quoi ce matin ?';} else if(hour>=12&&hour<18){greet='Bon après-midi ✨'; greetMsg='Bon après-midi ✨ Je suis LumyGPT.\nQue veux-tu faire ?';} else if(hour>=18&&hour<23){greet='Bonsoir 🌙'; greetMsg='Bonsoir 🌙 Je suis LumyGPT.\nOn finit la journée en beauté ?';} else {greet='Bonne nuit 🌙'; greetMsg='Bonne nuit 🌙 Je suis LumyGPT, je veille pour toi.\nTu veux quoi ?';}
 subtitle.textContent=greet+' • Ton assistant intelligent ✨';
-
-// --- RANGS PERSO BRONZE -> PRO ---
 const RANKS=[{name:'BRONZE',emoji:'🥉',min:0,max:29},{name:'ARGENT',emoji:'🥈',min:30,max:89},{name:'OR',emoji:'🥇',min:90,max:179},{name:'PLATINE',emoji:'💎',min:180,max:299},{name:'DIAMANT',emoji:'🔷',min:300,max:599},{name:'PRO',emoji:'🌟',min:600,max:999999}];
 function seasonKey(){const d=new Date(); const year=d.getFullYear(); const m=d.getMonth()+1; const season=Math.ceil(m/3); return year+'-S'+season;}
 function seasonLabel(){const d=new Date(); const m=d.getMonth()+1; const season=Math.ceil(m/3); const labels={1:'Janvier - Février - Mars',2:'Avril - Mai - Juin',3:'Juillet - Août - Septembre',4:'Octobre - Novembre - Décembre'}; return 'Saison '+season+' • '+labels[season]+' • Reset en fin de saison';}
@@ -129,8 +124,6 @@ let pseudo=localStorage.getItem('lumy_pseudo')||'';
 function updateFire(){ fireBadge.textContent='🔥 '+countMonth; } updateFire();
 let favs=JSON.parse(localStorage.getItem('lumy_favs')||'[]'); function updateFavBadge(){ favBadge.textContent='⭐ '+favs.length; } updateFavBadge();
 favBadge.onclick=()=>{const d=document.getElementById('favDrawer'); const list=document.getElementById('favList'); list.innerHTML=favs.length?favs.map(f=>`<div class="fav-item">${f.replace(/</g,'&lt;')}</div>`).join(''):'<div class="fav-item">Aucun favori pour l\'instant. Clique sur ⭐ sous une réponse.</div>'; d.style.display=d.style.display==='block'?'none':'block';};
-
-// --- TON RANG PERSO + PSEUDO ---
 function openLeader(){ renderLeader(); document.getElementById('leaderOverlay').classList.add('open'); }
 function closeLeader(){ document.getElementById('leaderOverlay').classList.remove('open'); }
 fireBadge.onclick=openLeader;
