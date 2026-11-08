@@ -2,6 +2,8 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
     const { message } = req.body || {};
+    if (!message) return res.status(200).json({ reply: 'Envoie moi un message bg' });
+
     const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -11,15 +13,13 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'openai/gpt-oss-20b',
         messages: [
-          { role: 'system', content: 'Tu es LumyGPT, une IA sympa qui parle en français, style jeune, simple.' },
+          { role: 'system', content: 'Tu es LumyGPT, une IA sympa qui parle en français, style jeune, simple. Réponds de façon courte et claire. Si on te demande du code, donne un exemple court et propre.' },
           { role: 'user', content: message }
         ]
       })
     });
     const data = await r.json();
-    if (!r.ok) {
-      return res.status(200).json({ reply: 'GROQ dit : ' + (data?.error?.message || 'erreur inconnue') });
-    }
+    if (!r.ok) return res.status(200).json({ reply: 'GROQ dit : ' + (data?.error?.message || 'erreur inconnue') });
     return res.status(200).json({ reply: data.choices[0].message.content });
   } catch (e) {
     return res.status(200).json({ reply: 'Erreur serveur : ' + e.message });
