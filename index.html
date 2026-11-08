@@ -7,7 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+  html{background:#0d001f;color-scheme:dark}
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:#0d001f}
   body{
     font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,Arial,sans-serif;color:#fff;
     display:flex;flex-direction:column;height:100dvh;overflow:hidden;
@@ -31,7 +32,7 @@
   body.light .bot-msg{background:#fff;color:#1a0033;border:1px solid #e9d5ff}
   body.light .bot-msg b{color:#6d28d9}
   body.light .time{color:#a78bfa}
-  body.light .input-wrap{background:#fff;border:1.5px solid #d8b4fe}
+  body.light .input-wrap{background:#fff;border:2px solid #d8b4fe}
   body.light #input{color:#1a0033}
   body.light #input::placeholder{color:#a78bfa}
   body.night{background:linear-gradient(180deg,#020010 0%, #0a0033 60%, #000 100%)}
@@ -114,15 +115,17 @@
   .action-btn.active-red{background:#ef4444;border-color:#ef4444}
   .action-btn.fav-active{background:#facc15;border-color:#facc15;color:#000}
   .msg img.chat-img{max-width:100%;border-radius:12px;margin-top:6px;display:block}
-  .wave{position:relative;z-index:1;height:10px;overflow:hidden;opacity:.45;flex-shrink:0;margin-bottom:-2px;pointer-events:none}
+  .wave{position:relative;z-index:1;height:10px;overflow:hidden;opacity:.45;flex-shrink:0;margin-bottom:-2px;pointer-events:none;background:#0d001f}
   .wave svg{width:200%;height:100%;display:block;animation:waveMove 4s linear infinite}
   @keyframes waveMove{to{transform:translateX(-50%)}}
-  #form{flex-shrink:0;padding:4px 12px 12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));position:relative;z-index:2;opacity:0;animation:fadeIn .35s ease 2.9s forwards}
-  .input-wrap{display:flex;align-items:center;gap:6px;background:rgba(18,0,38,.9);border:1.5px solid rgba(216,180,254,.5);border-radius:999px;padding:6px 6px 6px 14px;box-shadow:0 12px 28px rgba(0,0,0,.4)}
-  .mini-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:16px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  #form{flex-shrink:0;padding:6px 12px 12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));position:relative;z-index:5;opacity:0;animation:fadeIn .35s ease 2.9s forwards;background:#0d001f}
+  .input-wrap{display:flex;align-items:center;gap:6px;background:#1a0033;border:2px solid rgba(216,180,254,.7);border-radius:999px;padding:6px 6px 6px 14px;box-shadow:0 0 0 4px rgba(13,0,31,.9), 0 12px 28px rgba(0,0,0,.5)}
+  body.typing .input-wrap{border-color:#fff;background:#220044;box-shadow:0 0 0 4px rgba(13,0,31,.9), 0 0 22px rgba(217,70,239,.7)}
+  .mini-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:16px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
   .mini-btn.active{background:#a855f7;border-color:#fff}
-  #input{flex:1;background:transparent;border:none;color:#fff;padding:11px 4px;outline:none;font-size:16px;font-family:inherit;min-width:0}
-  #input::placeholder{color:#c4b5fd}
+  #input{flex:1;background:transparent;border:none;color:#fff;padding:12px 4px;outline:none;font-size:17px;font-weight:700;font-family:inherit;min-width:0;caret-color:#fff}
+  #input::placeholder{color:#e9d5ff;font-weight:600;opacity:1}
+  #input:focus::placeholder{color:rgba(233,213,255,.6)}
   #send{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#c084fc,#a855f7,#6366f1);border:none;color:#fff;font-size:19px;cursor:pointer;flex-shrink:0}
   #send:active{transform:scale(.92)} #send:disabled{opacity:.5}
   .typing{opacity:.7}
@@ -148,7 +151,7 @@
 <header>
   <div class="top-row">
     <div class="live"><i></i> En ligne</div>
-    <div class="badges"><span class="badge">V26</span><span class="badge-gold">👑 PRO</span><span class="badge-fire" id="fireBadge">🔥 0</span><span class="badge-fav" id="favBadge">⭐ 0</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
+    <div class="badges"><span class="badge">v2.3</span><span class="badge-gold">👑 PRO</span><span class="badge-fire" id="fireBadge">🔥 0</span><span class="badge-fav" id="favBadge">⭐ 0</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
   </div>
   <div class="logo-wrap" id="logoWrap"><div class="ring-out"></div><div class="ring"></div><div class="logo" id="mainLogo">L</div></div>
   <h1>Lumy<span class="grad">GPT</span></h1>
@@ -167,7 +170,7 @@
     <button type="button" class="mini-btn" id="modeBtn" title="Rapide / Lent">⚡</button>
     <button type="button" class="mini-btn" id="photoBtn" title="Envoyer une photo">📸</button>
     <input type="file" id="photoInput" accept="image/*" hidden>
-    <input id="input" placeholder="Écris à LumyGPT..." autocomplete="off" />
+    <input id="input" placeholder="Écris à LumyGPT..." autocomplete="off" autocorrect="off" autocapitalize="sentences" enterkeyhint="send" />
     <button id="send" type="submit">➤</button>
   </div>
 </form>
