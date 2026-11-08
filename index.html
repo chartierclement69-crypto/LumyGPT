@@ -14,23 +14,19 @@
     background-image:radial-gradient(circle at 15% 5%, rgba(192,38,211,.6), transparent 38%),radial-gradient(circle at 90% 15%, rgba(139,92,246,.6), transparent 42%),radial-gradient(circle at 50% 110%, rgba(168,85,247,.65), transparent 50%),linear-gradient(180deg,#1e003a 0%, #0d001f 45%, #05000f 100%);
     transition:background .4s, color .4s;
   }
-  body.light{
-    color:#1a0033;
-    background:#f5f0ff;
-    background-image:radial-gradient(circle at 15% 5%, rgba(168,85,247,.25), transparent 40%),radial-gradient(circle at 90% 15%, rgba(192,38,211,.2), transparent 42%),linear-gradient(180deg,#ffffff 0%, #f3e8ff 60%, #e9d5ff 100%);
-  }
-  body.light header{ background:rgba(255,255,255,.75); border-bottom:1px solid rgba(168,85,247,.25); box-shadow:0 10px 30px rgba(168,85,247,.15); }
-  body.light header h1{ color:#1a0033; text-shadow:none }
-  body.light .subtitle{ color:#6d28d9 }
-  body.light .chip{ background:#fff; color:#6d28d9; border:1px solid #d8b4fe }
-  body.light .bot-msg{ background:#fff; color:#1a0033; border:1px solid #d8b4fe; box-shadow:0 8px 20px rgba(168,85,247,.15) }
-  body.light .bot-msg b{ color:#6d28d9 }
-  body.light .time{ color:#a78bfa }
-  body.light .input-wrap{ background:#fff; border:1.5px solid #a855f7; box-shadow:0 10px 25px rgba(168,85,247,.25) }
-  body.light #input{ color:#1a0033 }
-  body.light #input::placeholder{ color:#a78bfa }
+  body.light{color:#1a0033;background:#f5f0ff;background-image:radial-gradient(circle at 15% 5%, rgba(168,85,247,.25), transparent 40%),radial-gradient(circle at 90% 15%, rgba(192,38,211,.2), transparent 42%),linear-gradient(180deg,#ffffff 0%, #f3e8ff 60%, #e9d5ff 100%)}
+  body.light header{background:rgba(255,255,255,.75);border-bottom:1px solid rgba(168,85,247,.25);box-shadow:0 10px 30px rgba(168,85,247,.15)}
+  body.light header h1{color:#1a0033;text-shadow:none}
+  body.light .subtitle{color:#6d28d9}
+  body.light .chip{background:#fff;color:#6d28d9;border:1px solid #d8b4fe}
+  body.light .bot-msg{background:#fff;color:#1a0033;border:1px solid #d8b4fe;box-shadow:0 8px 20px rgba(168,85,247,.15)}
+  body.light .bot-msg b{color:#6d28d9}
+  body.light .time{color:#a78bfa}
+  body.light .input-wrap{background:#fff;border:1.5px solid #a855f7;box-shadow:0 10px 25px rgba(168,85,247,.25)}
+  body.light #input{color:#1a0033}
+  body.light #input::placeholder{color:#a78bfa}
 
-  /* SPLASH V13 */
+  /* SPLASH */
   #splash{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 50%, #3b0a6d 0%, #1a0033 45%, #0a0018 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;overflow:hidden;animation:splashOut .4s ease 2.8s forwards;perspective:800px}
   #splash::before{content:"";position:absolute;inset:0;background:#fff;opacity:0;animation:flash .3s ease .05s forwards, flash2 .25s ease 2.45s forwards}
   @keyframes flash{0%{opacity:.95}100%{opacity:0}} @keyframes flash2{0%{opacity:.8}100%{opacity:0}}
@@ -96,11 +92,8 @@
   .action-btn.active-red{background:#ef4444;border-color:#ef4444}
 
   #form{flex-shrink:0;padding:10px 12px 12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));opacity:0;animation:fadeIn .4s ease 3.1s forwards}
-  .input-wrap{display:flex;align-items:center;gap:8px;background:rgba(20,0,40,.88);backdrop-filter:blur(20px);border:1.5px solid rgba(168,85,247,.8);border-radius:999px;padding:6px 6px 6px 8px;box-shadow:0 10px 30px rgba(0,0,0,.5), 0 0 25px rgba(168,85,247,.55)}
+  .input-wrap{display:flex;align-items:center;gap:10px;background:rgba(20,0,40,.88);backdrop-filter:blur(20px);border:1.5px solid rgba(168,85,247,.8);border-radius:999px;padding:8px 8px 8px 16px;box-shadow:0 10px 30px rgba(0,0,0,.5), 0 0 25px rgba(168,85,247,.55)}
   .input-wrap:focus-within{border-color:#e9d5ff;box-shadow:0 0 0 3px rgba(168,85,247,.35), 0 0 35px #a855f7}
-  #plus{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#c084fc,#a855f7);border:none;color:#fff;font-size:22px;cursor:pointer;flex-shrink:0}
-  #mic{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:16px;cursor:pointer;flex-shrink:0}
-  #mic.recording{background:#ef4444;animation:blink 0.6s infinite}
   #input{flex:1;background:transparent;border:none;color:#fff;padding:11px 4px;outline:none;font-size:15px}
   #input::placeholder{color:#c4b5fd}
   #send{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#6366f1,#22d3ee);border:none;color:#fff;font-size:19px;cursor:pointer;flex-shrink:0;box-shadow:0 0 16px #a855f7}
@@ -120,7 +113,7 @@
 <header>
   <div class="top-row">
     <div class="live"><i></i> En ligne</div>
-    <div class="badges"><span class="badge">V15</span><span class="badge-gold">👑 PRO</span><button class="icon-btn" id="themeBtn" title="Changer de thème">🌙</button><button class="icon-btn" id="newBtn" title="Nouveau chat">🔄</button></div>
+    <div class="badges"><span class="badge">V17</span><span class="badge-gold">👑 PRO</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
   </div>
   <div class="logo-wrap"><div class="ring"></div><div class="logo">L</div></div>
   <h1>Lumy<span>GPT</span></h1>
@@ -137,9 +130,7 @@
 
 <form id="form">
   <div class="input-wrap">
-    <button type="button" id="plus">+</button>
-    <input id="input" placeholder="Écris à LumyGPT... ou parle 🎤" autocomplete="off" />
-    <button type="button" id="mic">🎤</button>
+    <input id="input" placeholder="Écris à LumyGPT..." autocomplete="off" />
     <button id="send" type="submit">➤</button>
   </div>
 </form>
@@ -156,21 +147,9 @@ for(let i=0;i<22;i++){ const p=document.createElement('div'); p.className=i%2?'p
 for(let i=0;i<24;i++){ const c=document.createElement('div'); c.className='confetti'; c.style.left=Math.random()*100+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(0.9+Math.random()*0.8)+'s'; c.style.animationDuration=(1.6+Math.random())+'s'; splash.appendChild(c); }
 setTimeout(()=>{ splash.style.display='none'; },3300);
 
-// THÈME CLAIR / SOMBRE
 const themeBtn=document.getElementById('themeBtn');
 themeBtn.onclick=()=>{ document.body.classList.toggle('light'); themeBtn.textContent=document.body.classList.contains('light')?'🌞':'🌙'; };
-// NOUVEAU CHAT
 document.getElementById('newBtn').onclick=()=>{ chat.innerHTML=''; addMsg('Nouveau chat ! 👋 Je suis LumyGPT, que veux-tu faire ?', 'bot', true); };
-
-// MICRO - voix vers texte
-const mic=document.getElementById('mic');
-let rec=null;
-mic.onclick=()=>{
-  if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){ alert('Micro pas supporté sur ce navigateur, utilise Chrome bg'); return; }
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!rec){ rec=new SR(); rec.lang='fr-FR'; rec.onresult=(e)=>{ input.value=e.results[0][0].transcript; mic.classList.remove('recording'); }; rec.onend=()=>mic.classList.remove('recording'); }
-  mic.classList.add('recording'); rec.start();
-};
 
 function escapeHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function formatText(t){
@@ -181,19 +160,13 @@ function formatText(t){
   return s;
 }
 function timeNow(){ const d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
-
-// Effet machine à écrire
-function typeEffect(el, fullText, done){
+function typeEffect(el, fullText){
   let i=0; el.innerHTML='';
   const iv=setInterval(()=>{
-    i+=3;
-    const slice=fullText.slice(0,i);
-    el.innerHTML=formatText(slice)+'<span class="cursor"></span>';
-    chat.scrollTop=chat.scrollHeight;
-    if(i>=fullText.length){ clearInterval(iv); el.innerHTML=formatText(fullText); if(done) done(); }
+    i+=3; el.innerHTML=formatText(fullText.slice(0,i))+'<span class="cursor"></span>'; chat.scrollTop=chat.scrollHeight;
+    if(i>=fullText.length){ clearInterval(iv); el.innerHTML=formatText(fullText); }
   },18);
 }
-
 function addMsg(text, who, instant=false){
   const row=document.createElement('div'); row.className='row '+(who==='user'?'user':'');
   if(who==='bot'){
@@ -233,7 +206,6 @@ form.onsubmit=async(e)=>{
   }catch(err){ typingRow.remove(); addMsg('Erreur bg, réessaie.','bot'); }
   send.disabled=false;
 };
-document.getElementById('plus').onclick=()=>{ input.focus(); };
 </script>
 </body>
 </html>
