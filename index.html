@@ -2,124 +2,162 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LumyGPT</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
-  html{background:#0a0530;overscroll-behavior:none}
-  body{background:#0a0530;color:white;display:flex;flex-direction:column;height:100dvh;overflow:hidden;overscroll-behavior:none;padding-top:env(safe-area-inset-top)}
-  header{flex-shrink:0;height:76px;min-height:76px;padding:10px 14px;display:flex;align-items:center;gap:10px;background:#0a0530;z-index:20}
-  .logo{width:52px;height:52px;background:linear-gradient(135deg,#3b82f6,#a855f7);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:26px;line-height:1;flex-shrink:0}
-  .logo span{font-size:7px;letter-spacing:.5px}
-  .title{font-size:30px;font-weight:900;color:#7dd3fc;letter-spacing:1px;flex:1}
-  .badges{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
-  .badges-top{display:flex;gap:6px}
-  .v{background:#16a34a;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
-  .pro{background:#eab308;color:black;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800}
-  .gratuit{background:#2563eb;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
-  .online{font-size:12px;color:#22c55e;font-weight:700}
-  .chat{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:12px;display:flex;flex-direction:column;gap:12px}
-  .row{display:flex;gap:8px;align-items:flex-end}
-  .row.me{justify-content:flex-end}
-  .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
-  .avatar.me{border:2px solid #22d3ee;background:#0a0530}
-  .bubble{background:#1e1b4b;padding:12px 14px;border-radius:16px;max-width:82%;font-size:15px;line-height:1.45;word-break:break-word;overflow-wrap:break-word}
-  .bubble.me{background:linear-gradient(135deg,#7c3aed,#3b82f6)}
-  /* FILTRE - rendu propre des réponses */
-  .bubble pre{background:#0a0530;border:1px solid #7c3aed;border-radius:10px;padding:10px;margin:8px 0;overflow-x:auto;font-size:13px;line-height:1.4;white-space:pre-wrap;word-break:break-word}
-  .bubble code{background:#0a0530;padding:2px 6px;border-radius:6px;font-size:13px;word-break:break-word}
-  .bubble pre code{background:none;padding:0;font-size:13px}
-  .input-bar{flex-shrink:0;padding:12px;padding-bottom:max(12px, env(safe-area-inset-bottom));background:#0a0530;z-index:20;display:flex;gap:8px;align-items:center}
-  .input-wrap{flex:1;display:flex;align-items:center;gap:10px;background:#1e1b4b;border:2px solid #7c3aed;border-radius:999px;padding:6px 6px 6px 8px}
-  .plus{width:36px;height:36px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-  .input-wrap input{flex:1;background:transparent;border:none;outline:none;color:white;font-size:16px;min-width:0}
-  .input-wrap input::placeholder{color:#a78bfa}
-  .send{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#3b82f6);border:none;color:white;font-size:18px;cursor:pointer;flex-shrink:0}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:Arial,sans-serif;color:#fff;height:100dvh;display:flex;flex-direction:column;overflow:hidden;
+    background:#0a0018;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(168,85,247,.55), transparent 40%),
+      radial-gradient(circle at 85% 30%, rgba(139,92,246,.45), transparent 45%),
+      radial-gradient(circle at 50% 100%, rgba(168,85,247,.6), transparent 50%),
+      linear-gradient(180deg,#1a0033 0%, #0d001f 45%, #05000f 100%);
+  }
+  /* Vagues en bas en pur CSS */
+  body::after{
+    content:"";position:fixed;left:0;right:0;bottom:0;height:180px;pointer-events:none;opacity:.7;
+    background:
+      radial-gradient(ellipse 60% 100% at 10% 100%, rgba(168,85,247,.5), transparent 60%),
+      radial-gradient(ellipse 70% 100% at 90% 100%, rgba(124,58,237,.5), transparent 60%);
+  }
+  header{padding:14px 14px 6px;text-align:center;position:relative;z-index:2}
+  .top-row{display:flex;justify-content:flex-end;gap:8px;align-items:center}
+  .badge{background:#2a0a4a;border:1px solid #a855f7;color:#fff;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:bold}
+  .badge-gold{background:#3a2a00;border:1px solid #facc15;color:#facc15;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:bold}
+  .online{font-size:12px;color:#c084fc;margin-top:4px;text-align:right}
+  .online i{color:#22c55e;font-style:normal}
+  .logo-wrap{margin:6px auto 4px;width:68px;height:68px;position:relative}
+  .logo{
+    width:68px;height:68px;border-radius:18px;background:linear-gradient(135deg,#a855f7,#6d28d9);
+    display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;
+    box-shadow:0 0 25px #a855f7, 0 0 50px #7c3aed;border:2px solid #d8b4fe;
+  }
+  .ring{position:absolute;inset:-8px;border:2px solid rgba(216,180,254,.7);border-radius:24px;transform:rotate(12deg)}
+  header h1{font-size:32px;letter-spacing:.5px}
+  header h1 span{color:#c084fc}
+  .subtitle{font-size:14px;color:#e9d5ff;opacity:.9;margin-top:2px}
+  .subtitle::before,.subtitle::after{content:" — ";color:#a855f7}
+  #chat{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:14px;position:relative;z-index:2}
+  .row{display:flex;gap:10px;align-items:flex-end}
+  .row.user{justify-content:flex-end}
+  .avatar{
+    width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#6d28d9);
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;
+    border:2px solid #a855f7;box-shadow:0 0 12px #a855f7;flex-shrink:0;
+  }
+  .avatar.user-av{background:#111;border:2px solid #22d3ee;color:#fff;box-shadow:0 0 10px #22d3ee}
+  .msg{max-width:82%;padding:13px 15px;border-radius:18px;line-height:1.5;font-size:15px;white-space:pre-wrap;word-break:break-word}
+  .bot-msg{background:linear-gradient(135deg, rgba(88,28,135,.95), rgba(76,29,149,.95));border:1px solid #a855f7;box-shadow:0 0 18px rgba(168,85,247,.45);border-bottom-left-radius:6px}
+  .user-msg{background:linear-gradient(135deg,#7c3aed,#a855f7);border-bottom-right-radius:6px;box-shadow:0 0 15px rgba(168,85,247,.5)}
+  .bot-msg b{color:#fff}
+  .bot-msg code{background:#000;padding:2px 6px;border-radius:6px;font-size:13px}
+  .bot-msg pre{background:#000;padding:10px;border-radius:10px;overflow-x:auto;margin:8px 0;font-size:13px}
+  #form{display:flex;gap:10px;padding:12px;position:relative;z-index:2}
+  .input-wrap{
+    flex:1;display:flex;align-items:center;gap:10px;
+    background:rgba(20,0,40,.85);border:2px solid #a855f7;border-radius:999px;padding:6px 6px 6px 8px;
+    box-shadow:0 0 20px rgba(168,85,247,.6), inset 0 0 15px rgba(168,85,247,.25);
+  }
+  #plus{width:36px;height:36px;border-radius:50%;background:#a855f7;border:none;color:#fff;font-size:20px;cursor:pointer;flex-shrink:0}
+  #input{flex:1;background:transparent;border:none;color:#fff;padding:10px 4px;outline:none;font-size:15px}
+  #input::placeholder{color:#c4b5fd}
+  #send{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#6366f1);border:none;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;box-shadow:0 0 15px #a855f7}
+  #send:disabled{opacity:.5}
+  .typing{opacity:.7;font-style:italic}
 </style>
 </head>
 <body>
-
 <header>
-  <div class="logo">L<span>LumyGPT</span></div>
-  <div class="title">LUMYGPT</div>
-  <div class="badges">
-    <div class="badges-top"><span class="v">V12.3</span><span class="pro">PRO</span></div>
-    <div style="display:flex;gap:6px;align-items:center"><span class="gratuit">GRATUIT</span><span class="online">● En ligne</span></div>
+  <div class="top-row">
+    <span class="badge">V12.3</span>
+    <span class="badge-gold">👑 PRO</span>
   </div>
+  <div class="online"><i>●</i> En ligne</div>
+  <div class="logo-wrap"><div class="ring"></div><div class="logo">L</div></div>
+  <h1>Lumy<span>GPT</span></h1>
+  <div class="subtitle">Votre assistant intelligent</div>
 </header>
 
-<div class="chat" id="chat">
-  <div class="row"><div class="avatar">L</div><div class="bubble">Bonjour, je suis une intelligence artificielle, que puis-je faire pour vous ?</div></div>
-</div>
+<div id="chat"></div>
 
-<div class="input-bar">
+<form id="form">
   <div class="input-wrap">
-    <div class="plus">+</div>
+    <button type="button" id="plus">+</button>
     <input id="input" placeholder="Écris à LumyGPT..." autocomplete="off" />
-    <button class="send" onclick="send()">➤</button>
+    <button id="send" type="submit">➤</button>
   </div>
-</div>
+</form>
 
 <script>
 const chat = document.getElementById('chat');
+const form = document.getElementById('form');
 const input = document.getElementById('input');
+const send = document.getElementById('send');
 
-function escapeHtml(s){
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function escapeHtml(t){
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
-
-function formatReply(text){
-  let t = escapeHtml(text || '');
-  // Blocs de code ``` ... ```
-  t = t.replace(/```\w*\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-  t = t.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-  // Code inline `code`
-  t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
-  // Gras **texte**
-  t = t.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-  // Titres # ## ###
-  t = t.replace(/^### (.*)$/gm, '<b>$1</b>');
-  t = t.replace(/^## (.*)$/gm, '<b>$1</b>');
-  t = t.replace(/^# (.*)$/gm, '<b>$1</b>');
-  // Sauts de ligne
-  t = t.replace(/\n/g, '<br>');
-  return t;
+function formatText(t){
+  let s = escapeHtml(t);
+  s = s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+  s = s.replace(/```[\s\S]*?```/g, (m)=>{
+    const clean = m.replace(/```\w*/,'').replace(/```/,'').trim();
+    return '<pre>' + clean + '</pre>';
+  });
+  return s;
 }
-
-async function send(){
-  const txt = input.value.trim();
-  if(!txt) return;
-  chat.innerHTML += `<div class="row me"><div class="bubble me">${escapeHtml(txt)}</div><div class="avatar me">Z</div></div>`;
-  input.value = '';
-  chat.scrollTop = chat.scrollHeight;
-
-  const typingId = 'typing-' + Date.now();
-  chat.innerHTML += `<div class="row" id="${typingId}"><div class="avatar">L</div><div class="bubble">...</div></div>`;
-  chat.scrollTop = chat.scrollHeight;
-
-  try {
-    const rep = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ message: txt })
-    });
-    const data = await rep.json();
-    document.getElementById(typingId)?.remove();
-    chat.innerHTML += `<div class="row"><div class="avatar">L</div><div class="bubble">${formatReply(data.reply || 'Erreur, réessaie bg')}</div></div>`;
-  } catch(e) {
-    document.getElementById(typingId)?.remove();
-    chat.innerHTML += `<div class="row"><div class="avatar">L</div><div class="bubble">Erreur de connexion à GROQ, réessaie.</div></div>`;
+function addMsg(text, who){
+  const row = document.createElement('div');
+  row.className = 'row ' + (who === 'user' ? 'user' : '');
+  if(who === 'bot'){
+    const av = document.createElement('div');
+    av.className = 'avatar'; av.textContent = 'L';
+    const div = document.createElement('div');
+    div.className = 'msg bot-msg'; div.innerHTML = formatText(text);
+    row.appendChild(av); row.appendChild(div);
+  } else {
+    const div = document.createElement('div');
+    div.className = 'msg user-msg'; div.innerHTML = formatText(text);
+    const av = document.createElement('div');
+    av.className = 'avatar user-av'; av.textContent = 'Z';
+    row.appendChild(div); row.appendChild(av);
   }
+  chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
+  return row;
 }
-input.addEventListener('keydown', e=>{ if(e.key==='Enter') send(); });
 
-document.addEventListener('touchmove', e=>{
-  if(e.target.closest('.chat')) return;
-  if(e.target.closest('input')) return;
+addMsg('Bonjour, je suis une intelligence artificielle, que puis-je faire pour vous ?', 'bot');
+
+form.onsubmit = async (e)=>{
   e.preventDefault();
-}, {passive:false});
+  const text = input.value.trim();
+  if(!text) return;
+  addMsg(text, 'user');
+  input.value = '';
+  send.disabled = true;
+  const typingRow = addMsg('LumyGPT écrit...', 'bot');
+  typingRow.querySelector('.msg').classList.add('typing');
+  try{
+    const r = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({message:text})
+    });
+    const data = await r.json();
+    typingRow.remove();
+    addMsg(data.reply || 'Pas de réponse bg, réessaie.', 'bot');
+  }catch(err){
+    typingRow.remove();
+    addMsg('Erreur bg, réessaie.', 'bot');
+  }
+  send.disabled = false;
+  input.focus();
+};
+document.getElementById('plus').onclick = ()=>{ input.focus(); };
 </script>
-
 </body>
 </html>
