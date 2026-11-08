@@ -2,15 +2,15 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>LumyGPT</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
-  html,body{height:100%;overflow:hidden;overscroll-behavior:none;position:fixed;width:100%;background:#0a0530}
-  body{color:white;display:flex;flex-direction:column;height:100dvh;height:100vh}
+  html{background:#0a0530}
+  body{background:#0a0530;color:white;min-height:100dvh;display:flex;flex-direction:column}
 
-  /* HEADER FIXE - NE BOUGE PLUS */
-  header{flex-shrink:0;padding:14px 14px 10px;display:flex;align-items:center;gap:10px;background:#0a0530;z-index:10}
+  /* HEADER RESTE EN HAUT QUAND TU SCROLLS */
+  header{position:sticky;top:0;z-index:10;padding:14px 14px 10px;display:flex;align-items:center;gap:10px;background:#0a0530}
   .logo{width:52px;height:52px;background:linear-gradient(135deg,#3b82f6,#a855f7);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:26px;line-height:1}
   .logo span{font-size:7px;letter-spacing:.5px}
   .title{font-size:30px;font-weight:900;color:#7dd3fc;letter-spacing:1px;flex:1}
@@ -21,8 +21,8 @@
   .gratuit{background:#2563eb;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
   .online{font-size:12px;color:#22c55e;font-weight:700}
 
-  /* SEUL LE CHAT SCROLL */
-  .chat{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;display:flex;flex-direction:column;gap:12px}
+  /* CONV - TU PEUX SCROLLER POUR REVOIR */
+  .chat{flex:1;padding:12px;display:flex;flex-direction:column;gap:12px;padding-bottom:20px}
   .row{display:flex;gap:8px;align-items:flex-end}
   .row.me{justify-content:flex-end}
   .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
@@ -30,8 +30,8 @@
   .bubble{background:#1e1b4b;padding:12px 14px;border-radius:16px;max-width:82%;font-size:15px;line-height:1.45}
   .bubble.me{background:linear-gradient(135deg,#7c3aed,#3b82f6)}
 
-  /* BARRE FIXE EN BAS - NE BOUGE PLUS */
-  .input-bar{flex-shrink:0;padding:12px;padding-bottom:max(12px, env(safe-area-inset-bottom));background:#0a0530;display:flex;gap:8px;align-items:center}
+  /* BARRE D'ECRITURE RESTE EN BAS, ELLE DESCEND PLUS */
+  .input-bar{position:sticky;bottom:0;z-index:10;padding:12px;padding-bottom:max(12px, env(safe-area-inset-bottom));background:#0a0530;display:flex;gap:8px;align-items:center}
   .input-wrap{flex:1;display:flex;align-items:center;gap:10px;background:#1e1b4b;border:2px solid #7c3aed;border-radius:999px;padding:6px 6px 6px 8px}
   .plus{width:36px;height:36px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
   .input-wrap input{flex:1;background:transparent;border:none;outline:none;color:white;font-size:15px;min-width:0}
@@ -70,15 +70,13 @@ function send(){
   const chat = document.getElementById('chat');
   chat.innerHTML += `<div class="row me"><div class="bubble me">${txt}</div><div class="avatar me">Z</div></div>`;
   inp.value = '';
-  chat.scrollTop = chat.scrollHeight;
+  window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
   setTimeout(()=>{
     chat.innerHTML += `<div class="row"><div class="avatar">L</div><div class="bubble">Désolé, mais je ne peux pas répondre à cette demande.</div></div>`;
-    chat.scrollTop = chat.scrollHeight;
+    window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
   }, 600);
 }
 document.getElementById('input').addEventListener('keydown', e=>{ if(e.key==='Enter') send(); });
-// Bloque le rebond iPhone
-document.addEventListener('touchmove', function(e){ if(e.target.closest('.chat')) return; e.preventDefault(); }, {passive:false});
 </script>
 
 </body>
