@@ -10,16 +10,19 @@
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
   body{
     font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,Arial,sans-serif;color:#fff;
-    display:flex;flex-direction:column;height:100dvh;background:#08001a;overflow:hidden;transition:background .4s, color .4s;
+    display:flex;flex-direction:column;height:100dvh;background:#0a0018;overflow:hidden;transition:background .4s, color .4s;
   }
-  body::before{
-    content:"";position:fixed;inset:-50%;z-index:-1;
-    background:radial-gradient(circle at 20% 15%, rgba(192,38,211,.55), transparent 38%),radial-gradient(circle at 85% 20%, rgba(139,92,246,.55), transparent 42%),radial-gradient(circle at 50% 90%, rgba(217,70,239,.45), transparent 45%),radial-gradient(circle at 80% 85%, rgba(34,211,238,.28), transparent 40%),linear-gradient(180deg,#1e003a 0%, #0d001f 45%, #05000f 100%);
-    animation:aurora 14s ease-in-out infinite alternate;
-  }
-  @keyframes aurora{0%{transform:translate(0,0) scale(1) rotate(0deg)}50%{transform:translate(2%, -2%) scale(1.05) rotate(1deg)}100%{transform:translate(-2%, 2%) scale(1.08) rotate(-1deg)}}
-  body.light{color:#1a0033}
-  body.light::before{background:radial-gradient(circle at 20% 15%, rgba(168,85,247,.28), transparent 40%),radial-gradient(circle at 85% 20%, rgba(192,38,211,.22), transparent 42%),radial-gradient(circle at 50% 90%, rgba(217,70,239,.18), transparent 45%),linear-gradient(180deg,#ffffff 0%, #f3e8ff 60%, #e9d5ff 100%)}
+  /* ===== FOND VIOLET NUANCÉ QUI BOUGE - 3 BULLES ===== */
+  .bg-blob{position:fixed;border-radius:50%;filter:blur(70px);z-index:-1;opacity:.75;pointer-events:none}
+  .blob1{width:320px;height:320px;left:-80px;top:-40px;background:radial-gradient(circle,#c026d3,#7c3aed);animation:blob1 12s ease-in-out infinite alternate}
+  .blob2{width:280px;height:280px;right:-70px;top:18%;background:radial-gradient(circle,#8b5cf6,#3b82f6);animation:blob2 14s ease-in-out infinite alternate}
+  .blob3{width:340px;height:340px;left:18%;bottom:-120px;background:radial-gradient(circle,#a855f7,#ec4899);animation:blob3 16s ease-in-out infinite alternate}
+  .blob4{width:180px;height:180px;right:15%;bottom:22%;background:radial-gradient(circle,#22d3ee,#a855f7);opacity:.45;animation:blob1 10s ease-in-out infinite alternate-reverse}
+  @keyframes blob1{0%{transform:translate(0,0) scale(1)}100%{transform:translate(50px,60px) scale(1.25)}}
+  @keyframes blob2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-60px,40px) scale(1.18)}}
+  @keyframes blob3{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,-50px) scale(1.3)}}
+  body.light{background:#f5f0ff;color:#1a0033}
+  body.light .bg-blob{opacity:.38;filter:blur(80px)}
   body.light header{background:rgba(255,255,255,.72);border-bottom:1px solid rgba(168,85,247,.25);box-shadow:0 10px 30px rgba(168,85,247,.12)}
   body.light header h1{color:#1a0033;text-shadow:none}
   body.light .subtitle{color:#6d28d9}
@@ -58,7 +61,6 @@
   .splash-bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#a855f7,#facc15,#fff);border-radius:99px;animation:loading 1s ease 1.6s forwards}
   @keyframes loading{to{width:100%}} @keyframes fadeIn{to{opacity:1}} @keyframes splashOut{to{opacity:0;visibility:hidden}}
 
-  /* HEADER PLUS COMPACT V19 */
   header{flex-shrink:0;padding:10px 14px 12px;padding-top:calc(6px + env(safe-area-inset-top));text-align:center;background:rgba(255,255,255,.05);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid rgba(255,255,255,.1);box-shadow:0 12px 35px rgba(0,0,0,.35);opacity:0;animation:fadeIn .4s ease 2.9s forwards;position:relative}
   header::after{content:"";position:absolute;left:20%;right:20%;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,#a855f7,#e9d5ff,#22d3ee,transparent);background-size:200% 100%;animation:shineLine 3s linear infinite}
   @keyframes shineLine{to{background-position:200% 0}}
@@ -71,14 +73,23 @@
   .badge-gold{background:linear-gradient(135deg,#fde68a,#facc15,#f59e0b);color:#1a1000;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:900;box-shadow:0 0 16px rgba(250,204,21,.65), inset 0 1px 0 rgba(255,255,255,.7)}
   .icon-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
   .logo-wrap{margin:10px auto 4px;width:68px;height:68px;position:relative}
-  .ring{position:absolute;inset:-8px;border:2px solid rgba(216,180,254,.85);border-radius:24px;transform:rotate(12deg);animation:spinSlow 9s linear infinite;box-shadow:0 0 14px rgba(168,85,247,.5)}
-  .ring-out{position:absolute;inset:-16px;border:1.5px dashed rgba(34,211,238,.55);border-radius:28px;transform:rotate(-10deg);animation:spinSlowRev 14s linear infinite}
+  .ring{position:absolute;inset:-8px;border:2px solid rgba(216,180,254,.85);border-radius:24px;transform:rotate(12deg);animation:spinSlow 9s linear infinite;box-shadow:0 0 14px rgba(168,85,247,.5);transition:animation-duration .3s}
+  .ring-out{position:absolute;inset:-16px;border:1.5px dashed rgba(34,211,238,.55);border-radius:28px;transform:rotate(-10deg);animation:spinSlowRev 14s linear infinite;transition:animation-duration .3s}
   @keyframes spinSlow{to{transform:rotate(372deg)}}
   @keyframes spinSlowRev{to{transform:rotate(-370deg)}}
-  .logo{width:68px;height:68px;border-radius:22px;position:relative;overflow:hidden;background:linear-gradient(135deg,#f5d0fe 0%, #e9d5ff 15%, #a855f7 40%, #6d28d9 75%, #3b0a6d 100%);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;box-shadow:0 0 22px #fff, 0 0 38px #a855f7, 0 0 75px #7c3aed, inset 0 2px 0 rgba(255,255,255,.7), inset 0 -6px 14px rgba(0,0,0,.25);border:2px solid rgba(255,255,255,.95);animation:floatLogo 3s ease-in-out infinite}
+  .logo{width:68px;height:68px;border-radius:22px;position:relative;overflow:hidden;background:linear-gradient(135deg,#f5d0fe 0%, #e9d5ff 15%, #a855f7 40%, #6d28d9 75%, #3b0a6d 100%);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;box-shadow:0 0 22px #fff, 0 0 38px #a855f7, 0 0 75px #7c3aed, inset 0 2px 0 rgba(255,255,255,.7), inset 0 -6px 14px rgba(0,0,0,.25);border:2px solid rgba(255,255,255,.95);animation:floatLogo 3s ease-in-out infinite;transition:box-shadow .3s, transform .3s}
   .logo::after{content:"";position:absolute;top:-30%;left:-20%;width:70%;height:140%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);transform:rotate(12deg);animation:gloss 3.5s ease-in-out infinite}
   @keyframes gloss{0%,60%{transform:translateX(-120%) rotate(12deg)}100%{transform:translateX(260%) rotate(12deg)}}
   @keyframes floatLogo{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-5px) rotate(-1.5deg)}}
+  /* ===== LE L QUI SE RÉVEILLE QUAND TU TAPES ===== */
+  body.typing .logo{animation:logoWake .5s ease-in-out infinite;box-shadow:0 0 30px #fff, 0 0 60px #a855f7, 0 0 110px #e879f9, inset 0 2px 0 rgba(255,255,255,.8)}
+  @keyframes logoWake{0%,100%{transform:translateY(0) scale(1) rotate(-2deg)}50%{transform:translateY(-8px) scale(1.08) rotate(2deg)}}
+  body.typing .ring{animation-duration:1.2s !important;box-shadow:0 0 22px #e879f9;border-color:#fff}
+  body.typing .ring-out{animation-duration:1.8s !important;border-color:#22d3ee}
+  body.typing .live{box-shadow:0 0 18px rgba(34,197,94,.6)}
+  /* Quand Lumy répond, le L pulse aussi */
+  body.answering .logo{animation:logoWake .6s ease-in-out infinite}
+  body.answering .ring{animation-duration:1.5s !important}
   header h1{font-size:32px;letter-spacing:-.5px;line-height:1;font-weight:800}
   header h1 .grad{background:linear-gradient(90deg,#c084fc,#e9d5ff,#22d3ee,#f472b6,#c084fc);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite}
   @keyframes shine{to{background-position:300% 0}}
@@ -91,13 +102,13 @@
   .row{display:flex;gap:9px;align-items:flex-end;animation:msgIn .3s ease both}
   @keyframes msgIn{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
   .row.user{justify-content:flex-end}
-  .avatar{width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,#e9d5ff,#a855f7,#6d28d9);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;border:2px solid #fff;box-shadow:0 0 14px #a855f7, inset 0 1px 0 rgba(255,255,255,.6);flex-shrink:0}
+  .avatar{width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,#e9d5ff,#a855f7,#6d28d9);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;border:2px solid #fff;box-shadow:0 0 14px #a855f7, inset 0 1px 0 rgba(255,255,255,.6);flex-shrink:0;transition:box-shadow .3s}
+  body.typing .avatar{box-shadow:0 0 22px #e879f9, 0 0 35px #a855f7}
   .avatar.user-av{background:linear-gradient(135deg,#22d3ee,#0ea5e9);border:2px solid #a5f3fc;box-shadow:0 0 14px #22d3ee}
   .msg{max-width:82%;padding:13px 15px;border-radius:20px;line-height:1.6;font-size:15px;white-space:pre-wrap;word-break:break-word;position:relative}
   .bot-msg{background:linear-gradient(135deg, rgba(88,28,135,.92), rgba(76,29,149,.88));border:1px solid rgba(216,180,254,.65);box-shadow:0 10px 28px rgba(0,0,0,.35), 0 0 24px rgba(168,85,247,.4), inset 0 1px 0 rgba(255,255,255,.18);border-bottom-left-radius:6px;backdrop-filter:blur(12px)}
   .user-msg{background:linear-gradient(135deg,#8b5cf6,#a855f7,#7c3aed);border:1px solid rgba(255,255,255,.28);border-bottom-right-radius:6px;box-shadow:0 10px 24px rgba(168,85,247,.45), inset 0 1px 0 rgba(255,255,255,.25)}
   .bot-msg b{color:#fff} .bot-msg code{background:rgba(0,0,0,.45);padding:2px 6px;border-radius:6px;font-size:13px} .bot-msg pre{background:#000;padding:10px;border-radius:10px;overflow-x:auto;margin:8px 0;font-size:13px}
-  /* HEURE FIXÉE - PLUS DE DÉBORDEMENT */
   .time{font-size:10px;color:rgba(255,255,255,.55);margin-top:5px;text-align:left;padding-left:2px;letter-spacing:.2px}
   .actions{display:flex;gap:6px;margin-top:6px}
   .action-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:11px;padding:5px 9px;border-radius:999px;cursor:pointer;backdrop-filter:blur(8px)}
@@ -105,8 +116,8 @@
   .action-btn.active-red{background:#ef4444;border-color:#ef4444}
 
   #form{flex-shrink:0;padding:10px 12px 12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));opacity:0;animation:fadeIn .4s ease 3.1s forwards}
-  .input-wrap{display:flex;align-items:center;gap:10px;background:rgba(18,0,38,.85);backdrop-filter:blur(22px);border:1.5px solid rgba(216,180,254,.5);border-radius:999px;padding:6px 6px 6px 18px;box-shadow:0 14px 35px rgba(0,0,0,.55), 0 0 28px rgba(168,85,247,.5), inset 0 1px 0 rgba(255,255,255,.12)}
-  .input-wrap:focus-within{border-color:#e9d5ff;box-shadow:0 0 0 3px rgba(168,85,247,.32), 0 0 38px #a855f7}
+  .input-wrap{display:flex;align-items:center;gap:10px;background:rgba(18,0,38,.82);backdrop-filter:blur(22px);border:1.5px solid rgba(216,180,254,.5);border-radius:999px;padding:6px 6px 6px 18px;box-shadow:0 14px 35px rgba(0,0,0,.55), 0 0 28px rgba(168,85,247,.5), inset 0 1px 0 rgba(255,255,255,.12);transition:box-shadow .3s, border-color .3s}
+  body.typing .input-wrap{border-color:#f0abfc;box-shadow:0 0 0 3px rgba(217,70,239,.3), 0 0 42px #d946ef}
   #input{flex:1;background:transparent;border:none;color:#fff;padding:11px 4px;outline:none;font-size:15px;font-family:inherit}
   #input::placeholder{color:#c4b5fd}
   #send{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#c084fc,#a855f7,#6366f1,#22d3ee);background-size:200% 100%;border:none;color:#fff;font-size:19px;cursor:pointer;flex-shrink:0;box-shadow:0 0 18px #a855f7, inset 0 1px 0 rgba(255,255,255,.4);transition:transform .15s;animation:pulseSend 2.2s ease-in-out infinite}
@@ -118,6 +129,8 @@
 </head>
 <body>
 
+<div class="bg-blob blob1"></div><div class="bg-blob blob2"></div><div class="bg-blob blob3"></div><div class="bg-blob blob4"></div>
+
 <div id="splash">
   <div class="splash-center" id="splashCenter"><div class="halo"></div><div class="shock"></div><div class="ring2"></div><div class="ring1"></div><div class="splash-logo">L</div></div>
   <div class="splash-title"><span>L</span><span>u</span><span>m</span><span>y</span><span>G</span><span>P</span><span>T</span></div>
@@ -127,7 +140,7 @@
 <header>
   <div class="top-row">
     <div class="live"><i></i> En ligne</div>
-    <div class="badges"><span class="badge">V19</span><span class="badge-gold">👑 PRO</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
+    <div class="badges"><span class="badge">V20</span><span class="badge-gold">👑 PRO</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
   </div>
   <div class="logo-wrap"><div class="ring-out"></div><div class="ring"></div><div class="logo">L</div></div>
   <h1>Lumy<span class="grad">GPT</span></h1>
@@ -165,6 +178,20 @@ const themeBtn=document.getElementById('themeBtn');
 themeBtn.onclick=()=>{ document.body.classList.toggle('light'); themeBtn.textContent=document.body.classList.contains('light')?'🌞':'🌙'; };
 document.getElementById('newBtn').onclick=()=>{ chat.innerHTML=''; addMsg('Nouveau chat ! 👋 Je suis LumyGPT, que veux-tu faire ?', 'bot', true); };
 
+// ===== LE L QUI RÉAGIT QUAND TU TAPES =====
+let typingTimeout;
+input.addEventListener('focus', ()=>{ document.body.classList.add('typing'); });
+input.addEventListener('blur', ()=>{ if(!input.value) document.body.classList.remove('typing'); });
+input.addEventListener('input', ()=>{
+  if(input.value.trim().length > 0){
+    document.body.classList.add('typing');
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(()=>{ document.body.classList.remove('typing'); }, 1800);
+  } else {
+    document.body.classList.remove('typing');
+  }
+});
+
 function escapeHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function formatText(t){
   let s=escapeHtml(t);
@@ -178,7 +205,7 @@ function typeEffect(el, fullText){
   let i=0; el.innerHTML='';
   const iv=setInterval(()=>{
     i+=3; el.innerHTML=formatText(fullText.slice(0,i))+'<span class="cursor"></span>'; chat.scrollTop=chat.scrollHeight;
-    if(i>=fullText.length){ clearInterval(iv); el.innerHTML=formatText(fullText); }
+    if(i>=fullText.length){ clearInterval(iv); el.innerHTML=formatText(fullText); document.body.classList.remove('answering'); }
   },18);
 }
 function addMsg(text, who, instant=false){
@@ -198,7 +225,7 @@ function addMsg(text, who, instant=false){
     actions.append(copy,like,dislike);
     wrap.append(div); wrap.append(t); wrap.append(actions); row.append(av); row.append(wrap);
     chat.appendChild(row); chat.scrollTop=chat.scrollHeight;
-    if(instant){ div.innerHTML=formatText(text); } else { typeEffect(div, text); }
+    if(instant){ div.innerHTML=formatText(text); } else { document.body.classList.add('answering'); typeEffect(div, text); }
     return row;
   } else {
     const div=document.createElement('div'); div.className='msg user-msg'; div.innerHTML=formatText(text);
@@ -206,18 +233,20 @@ function addMsg(text, who, instant=false){
     row.append(div); row.append(av); chat.appendChild(row); chat.scrollTop=chat.scrollHeight; return row;
   }
 }
-function quickAsk(q){ input.value=q; form.dispatchEvent(new Event('submit')); }
+function quickAsk(q){ input.value=q; input.dispatchEvent(new Event('input')); form.dispatchEvent(new Event('submit')); }
 addMsg('Bonjour 👋 Je suis LumyGPT, ton assistant intelligent.\nQue veux-tu faire aujourd\'hui ?', 'bot', true);
 form.onsubmit=async(e)=>{
   e.preventDefault();
   const text=input.value.trim(); if(!text) return;
+  document.body.classList.remove('typing');
   addMsg(text,'user'); input.value=''; send.disabled=true;
   const typingRow=addMsg('LumyGPT écrit...','bot',true);
   typingRow.querySelector('.msg').classList.add('typing');
+  document.body.classList.add('answering');
   try{
     const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})});
-    const data=await r.json(); typingRow.remove(); addMsg(data.reply||'Pas de réponse bg, réessaie.','bot');
-  }catch(err){ typingRow.remove(); addMsg('Erreur bg, réessaie.','bot'); }
+    const data=await r.json(); typingRow.remove(); document.body.classList.remove('answering'); addMsg(data.reply||'Pas de réponse bg, réessaie.','bot');
+  }catch(err){ typingRow.remove(); document.body.classList.remove('answering'); addMsg('Erreur bg, réessaie.','bot'); }
   send.disabled=false;
 };
 </script>
