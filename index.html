@@ -32,7 +32,6 @@
   body.light #input{color:#1a0033}
   body.light #input::placeholder{color:#a78bfa}
 
-  /* NEIGE VIOLETTE - 10 FLOCONS, QUE TRANSFORM, ÇA NE RAME PAS */
   .snow{position:fixed;top:-10px;border-radius:50%;background:#e9d5ff;pointer-events:none;z-index:0;opacity:.7;animation:snowFall linear infinite}
   @keyframes snowFall{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:.8}90%{opacity:.6}100%{transform:translateY(105vh) translateX(30px);opacity:0}}
   .spark{position:fixed;width:4px;height:4px;background:#fff;border-radius:50%;z-index:0;pointer-events:none;opacity:0;animation:sparkle 3s ease-in-out infinite}
@@ -84,13 +83,10 @@
   .logo{width:68px;height:68px;border-radius:22px;position:relative;overflow:hidden;background:linear-gradient(135deg,#f5d0fe 0%, #e9d5ff 15%, #a855f7 40%, #6d28d9 75%, #3b0a6d 100%);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;box-shadow:0 0 22px #fff, 0 0 38px #a855f7, 0 0 70px #7c3aed, inset 0 2px 0 rgba(255,255,255,.7);border:2px solid rgba(255,255,255,.95);will-change:transform;transition:transform .25s, box-shadow .25s}
   .logo::after{content:"";position:absolute;top:-30%;left:-20%;width:70%;height:140%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.5),transparent);transform:rotate(12deg) translateX(-120%);animation:gloss 4s ease-in-out infinite}
   @keyframes gloss{0%,55%{transform:rotate(12deg) translateX(-120%)}100%{transform:rotate(12deg) translateX(280%)}}
-  /* ÉMOTION DU L - PETIT EMOJI SUR LE L */
-  .l-mood{position:absolute;right:-6px;bottom:-6px;width:26px;height:26px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;z-index:3;border:2px solid #e9d5ff;box-shadow:0 0 10px rgba(168,85,247,.8);transition:transform .25s}
   body.typing .logo{transform:scale(1.08) translateY(-4px) rotate(-2deg);box-shadow:0 0 32px #fff, 0 0 55px #e879f9}
   body.typing .ring{animation-duration:1.4s;border-color:#fff}
   body.typing .ring-out{animation-duration:2s}
   body.answering .logo{transform:scale(1.05) translateY(-2px)}
-  body.love .l-mood{transform:scale(1.25) rotate(-10deg)}
   header h1{font-size:32px;letter-spacing:-.5px;line-height:1;font-weight:800}
   header h1 .grad{background:linear-gradient(90deg,#c084fc,#e9d5ff,#22d3ee,#f472b6,#c084fc);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite}
   @keyframes shine{to{background-position:300% 0}}
@@ -101,11 +97,14 @@
   .chip-tiktok{background:linear-gradient(135deg, rgba(168,85,247,.45), rgba(217,70,239,.45));border-color:#f0abfc}
 
   #chat{flex:1;overflow-y:auto;padding:14px 12px 12px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch;position:relative;z-index:2;opacity:0;animation:fadeIn .35s ease 2.8s forwards}
-  .row{display:flex;gap:9px;align-items:flex-end}
+  .row{display:flex;gap:9px;align-items:flex-start}
   .row.user{justify-content:flex-end}
-  .avatar{width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,#e9d5ff,#a855f7,#6d28d9);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;border:2px solid #fff;flex-shrink:0}
+  /* COLONNE AVATAR : L EN HAUT, EMOJI EN DESSOUS */
+  .avatar-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
+  .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#e9d5ff,#a855f7,#6d28d9);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;border:2px solid #fff;flex-shrink:0}
   body.typing .avatar{box-shadow:0 0 16px #e879f9}
   .avatar.user-av{background:linear-gradient(135deg,#22d3ee,#0ea5e9);border:2px solid #a5f3fc}
+  .bot-mood{width:22px;height:22px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;border:1.5px solid #e9d5ff;box-shadow:0 0 8px rgba(168,85,247,.6)}
   .msg{max-width:82%;padding:13px 15px;border-radius:20px;line-height:1.6;font-size:15px;white-space:pre-wrap;word-break:break-word}
   .bot-msg{background:linear-gradient(135deg, rgba(88,28,135,.92), rgba(76,29,149,.88));border:1px solid rgba(216,180,254,.6);box-shadow:0 8px 22px rgba(0,0,0,.3), 0 0 18px rgba(168,85,247,.35);border-bottom-left-radius:6px}
   .user-msg{background:linear-gradient(135deg,#8b5cf6,#a855f7);border:1px solid rgba(255,255,255,.25);border-bottom-right-radius:6px}
@@ -126,7 +125,6 @@
   .typing{opacity:.7;font-style:italic}
   .cursor{display:inline-block;width:8px;height:15px;background:#e9d5ff;vertical-align:middle;margin-left:2px;animation:blink .7s infinite}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-  /* PAILLETTES CONCERT QUAND TU ENVOIES */
   .burst{position:fixed;width:6px;height:6px;border-radius:50%;pointer-events:none;z-index:99;animation:burstFly .6s ease-out forwards}
   @keyframes burstFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--bx), var(--by)) scale(0)}}
 </style>
@@ -145,9 +143,9 @@
 <header>
   <div class="top-row">
     <div class="live"><i></i> En ligne</div>
-    <div class="badges"><span class="badge">V23</span><span class="badge-gold">👑 PRO</span><span class="badge-fire" id="fireBadge">🔥 0</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
+    <div class="badges"><span class="badge">V24</span><span class="badge-gold">👑 PRO</span><span class="badge-fire" id="fireBadge">🔥 0</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
   </div>
-  <div class="logo-wrap"><div class="ring-out"></div><div class="ring"></div><div class="logo">L</div><div class="l-mood" id="lMood">😴</div></div>
+  <div class="logo-wrap"><div class="ring-out"></div><div class="ring"></div><div class="logo">L</div></div>
   <h1>Lumy<span class="grad">GPT</span></h1>
   <div class="subtitle" id="subtitle">Votre assistant intelligent ✨</div>
   <div class="chips" id="chips">
@@ -174,21 +172,18 @@ const input = document.getElementById('input');
 const send = document.getElementById('send');
 const splash = document.getElementById('splash');
 const splashCenter = document.getElementById('splashCenter');
-const lMood = document.getElementById('lMood');
 const fireBadge = document.getElementById('fireBadge');
 const subtitle = document.getElementById('subtitle');
+let currentMood = '😴';
 
-// NEIGE VIOLETTE - 10 flocons légers
 const snowZone = document.getElementById('snowZone');
 for(let i=0;i<10;i++){ const s=document.createElement('div'); s.className='snow'; const size=3+Math.random()*4; s.style.width=size+'px'; s.style.height=size+'px'; s.style.left=(Math.random()*100)+'%'; s.style.animationDuration=(7+Math.random()*6)+'s'; s.style.animationDelay=(Math.random()*7)+'s'; snowZone.appendChild(s); }
 
-// SPLASH CONFETTIS + PARTICULES
 const colors = ['#e9d5ff','#a855f7','#facc15','#22d3ee','#fff','#c084fc'];
 for(let i=0;i<14;i++){ const p=document.createElement('div'); p.className='particle'; const a=(i/14)*Math.PI*2; const d=110+Math.random()*70; p.style.setProperty('--x',Math.cos(a)*d+'px'); p.style.setProperty('--y',Math.sin(a)*d+'px'); splashCenter.appendChild(p); }
 for(let i=0;i<14;i++){ const c=document.createElement('div'); c.className='confetti'; c.style.left=Math.random()*100+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(0.9+Math.random()*0.6)+'s'; splash.appendChild(c); }
 setTimeout(()=>{ splash.style.display='none'; },3000);
 
-// BONJOUR SELON L'HEURE
 const hour = new Date().getHours();
 let greet = 'Bonjour ☀️', greetMsg = 'Bonjour 👋 Je suis LumyGPT, ton assistant intelligent.\nQue veux-tu faire aujourd\'hui ?';
 if(hour >= 6 && hour < 12){ greet='Bonjour ☀️'; greetMsg='Bonjour ☀️ Je suis LumyGPT, bien réveillé pour toi.\nOn fait quoi ce matin ?'; }
@@ -197,18 +192,17 @@ else if(hour >= 18 && hour < 23){ greet='Bonsoir 🌙'; greetMsg='Bonsoir 🌙 J
 else { greet='Bonne nuit 🌙'; greetMsg='Bonne nuit 🌙 Je suis LumyGPT, je veille pour toi.\nTu veux quoi ?'; }
 subtitle.textContent = greet + ' • Ton assistant intelligent ✨';
 
-// COMPTEUR 🔥 - gardé dans le téléphone
 let count = parseInt(localStorage.getItem('lumy_count') || '0');
 function updateFire(){ fireBadge.textContent = '🔥 ' + count; }
 updateFire();
 
-// LE L QUI A DES ÉMOTIONS
-function setMood(emoji){ lMood.textContent = emoji; }
-setMood('😴');
-// Il se réveille après le splash
+// L'ÉMOTION EST MAINTENANT SOUS LE L QUI RÉPOND, PAS SUR LE GROS L EN HAUT
+function setMood(emoji){
+  currentMood = emoji;
+  document.querySelectorAll('.bot-mood').forEach(el=>{ el.textContent = emoji; });
+}
 setTimeout(()=>{ setMood('👀'); }, 3200);
 
-// PETIT DING QUAND LUMY RÉPOND
 let audioCtx = null;
 function playDing(){
   try{
@@ -228,7 +222,6 @@ function playDing(){
   }catch(e){}
 }
 
-// CHIPS ALÉATOIRES - TIKTOK TOUJOURS EN PREMIER
 const pool = [
   {e:'📚', t:'Aide devoir', q:'Aide-moi pour mon devoir'},
   {e:'😂', t:'Blague', q:'Raconte-moi une blague'},
@@ -284,7 +277,10 @@ function typeEffect(el, fullText){
 function addMsg(text, who, instant=false){
   const row=document.createElement('div'); row.className='row '+(who==='user'?'user':'');
   if(who==='bot'){
+    const col=document.createElement('div'); col.className='avatar-col';
     const av=document.createElement('div'); av.className='avatar'; av.textContent='L';
+    const mood=document.createElement('div'); mood.className='bot-mood'; mood.textContent=currentMood;
+    col.append(av); col.append(mood);
     const wrap=document.createElement('div'); wrap.style.display='flex'; wrap.style.flexDirection='column'; wrap.style.maxWidth='84%';
     const div=document.createElement('div'); div.className='msg bot-msg';
     const t=document.createElement('div'); t.className='time'; t.textContent='LumyGPT • '+timeNow();
@@ -294,12 +290,12 @@ function addMsg(text, who, instant=false){
     const like=document.createElement('button'); like.className='action-btn'; like.textContent='❤️';
     like.onclick=()=>{ 
       like.classList.toggle('active'); dislike.classList.remove('active-red');
-      if(like.classList.contains('active')){ setMood('😍'); document.body.classList.add('love'); setTimeout(()=>{ document.body.classList.remove('love'); setMood('👀'); }, 1500); }
+      if(like.classList.contains('active')){ setMood('😍'); setTimeout(()=>setMood('👀'), 1500); }
     };
     const dislike=document.createElement('button'); dislike.className='action-btn'; dislike.textContent='👎';
     dislike.onclick=()=>{ dislike.classList.toggle('active-red'); like.classList.remove('active'); if(dislike.classList.contains('active-red')){ setMood('🥺'); setTimeout(()=>setMood('👀'), 1200); } };
     actions.append(copy,like,dislike);
-    wrap.append(div); wrap.append(t); wrap.append(actions); row.append(av); row.append(wrap);
+    wrap.append(div); wrap.append(t); wrap.append(actions); row.append(col); row.append(wrap);
     chat.appendChild(row); chat.scrollTop=chat.scrollHeight;
     if(instant){ div.innerHTML=formatText(text); } else { document.body.classList.add('answering'); setMood('🗣️'); typeEffect(div, text); playDing(); }
     return row;
@@ -312,7 +308,6 @@ function addMsg(text, who, instant=false){
 function quickAsk(q){ input.value=q; input.dispatchEvent(new Event('input')); form.dispatchEvent(new Event('submit')); }
 addMsg(greetMsg, 'bot', true);
 
-// EXPLOSION DE PAILLETTES QUAND TU ENVOIES
 function burst(x, y){
   for(let i=0;i<10;i++){
     const b=document.createElement('div'); b.className='burst';
