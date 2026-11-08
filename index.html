@@ -2,147 +2,115 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-visual">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>LumyGPT</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
   body{
     font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,Arial,sans-serif;color:#fff;
-    display:flex;flex-direction:column;height:100dvh;background:#0a0018;overflow:hidden;transition:background .4s, color .4s;
+    display:flex;flex-direction:column;height:100dvh;
+    /* FOND LÉGER QUI BOUGE - SANS BLUR, ÇA NE RAME PLUS */
+    background:linear-gradient(160deg,#2a0a5e 0%, #1a0033 30%, #4c1d95 55%, #0d001f 80%, #08001a 100%);
+    background-size:220% 220%;
+    animation:bgMove 18s ease-in-out infinite alternate;
+    overflow:hidden;
   }
-  /* ===== FOND VIOLET NUANCÉ QUI BOUGE - 3 BULLES ===== */
-  .bg-blob{position:fixed;border-radius:50%;filter:blur(70px);z-index:-1;opacity:.75;pointer-events:none}
-  .blob1{width:320px;height:320px;left:-80px;top:-40px;background:radial-gradient(circle,#c026d3,#7c3aed);animation:blob1 12s ease-in-out infinite alternate}
-  .blob2{width:280px;height:280px;right:-70px;top:18%;background:radial-gradient(circle,#8b5cf6,#3b82f6);animation:blob2 14s ease-in-out infinite alternate}
-  .blob3{width:340px;height:340px;left:18%;bottom:-120px;background:radial-gradient(circle,#a855f7,#ec4899);animation:blob3 16s ease-in-out infinite alternate}
-  .blob4{width:180px;height:180px;right:15%;bottom:22%;background:radial-gradient(circle,#22d3ee,#a855f7);opacity:.45;animation:blob1 10s ease-in-out infinite alternate-reverse}
-  @keyframes blob1{0%{transform:translate(0,0) scale(1)}100%{transform:translate(50px,60px) scale(1.25)}}
-  @keyframes blob2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-60px,40px) scale(1.18)}}
-  @keyframes blob3{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,-50px) scale(1.3)}}
-  body.light{background:#f5f0ff;color:#1a0033}
-  body.light .bg-blob{opacity:.38;filter:blur(80px)}
-  body.light header{background:rgba(255,255,255,.72);border-bottom:1px solid rgba(168,85,247,.25);box-shadow:0 10px 30px rgba(168,85,247,.12)}
+  @keyframes bgMove{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+  body.light{background:linear-gradient(160deg,#e9d5ff 0%, #ffffff 35%, #d8b4fe 60%, #f5f0ff 100%);background-size:220% 220%;color:#1a0033}
+  body.light header{background:rgba(255,255,255,.82);border-bottom:1px solid rgba(168,85,247,.25)}
   body.light header h1{color:#1a0033;text-shadow:none}
   body.light .subtitle{color:#6d28d9}
-  body.light .chip{background:#fff;color:#6d28d9;border:1px solid #e9d5ff;box-shadow:0 4px 14px rgba(168,85,247,.12)}
-  body.light .bot-msg{background:#fff;color:#1a0033;border:1px solid #e9d5ff;box-shadow:0 10px 25px rgba(168,85,247,.15)}
+  body.light .chip{background:#fff;color:#6d28d9;border:1px solid #e9d5ff}
+  body.light .bot-msg{background:#fff;color:#1a0033;border:1px solid #e9d5ff;box-shadow:0 8px 20px rgba(168,85,247,.14)}
   body.light .bot-msg b{color:#6d28d9}
   body.light .time{color:#a78bfa}
-  body.light .input-wrap{background:#fff;border:1.5px solid #d8b4fe;box-shadow:0 12px 30px rgba(168,85,247,.22)}
+  body.light .input-wrap{background:#fff;border:1.5px solid #d8b4fe;box-shadow:0 10px 25px rgba(168,85,247,.2)}
   body.light #input{color:#1a0033}
   body.light #input::placeholder{color:#a78bfa}
 
-  #splash{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 50%, #3b0a6d 0%, #1a0033 45%, #0a0018 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;overflow:hidden;animation:splashOut .4s ease 2.8s forwards;perspective:800px}
-  #splash::before{content:"";position:absolute;inset:0;background:#fff;opacity:0;animation:flash .3s ease .05s forwards, flash2 .25s ease 2.45s forwards}
-  @keyframes flash{0%{opacity:.95}100%{opacity:0}} @keyframes flash2{0%{opacity:.8}100%{opacity:0}}
-  .splash-center{position:relative;width:240px;height:240px;display:flex;align-items:center;justify-content:center}
-  .halo{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle, rgba(168,85,247,.8) 0%, transparent 65%);animation:haloPulse .8s ease-in-out infinite}
-  @keyframes haloPulse{0%,100%{transform:scale(.85);opacity:.6}50%{transform:scale(1.3);opacity:1}}
-  .shock{position:absolute;width:170px;height:170px;border-radius:50%;border:4px solid #e9d5ff;opacity:0;animation:shockWave 1s ease-out .45s forwards, shockWave 1s ease-out 1.6s forwards}
-  @keyframes shockWave{0%{transform:scale(.8);opacity:.9}100%{transform:scale(2.2);opacity:0}}
-  .ring1{position:absolute;width:210px;height:210px;border:3px dashed rgba(216,180,254,.9);border-radius:50%;animation:spin 3s linear infinite}
-  .ring2{position:absolute;width:260px;height:260px;border:2px solid rgba(168,85,247,.5);border-radius:50%;animation:spinRev 5s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}} @keyframes spinRev{to{transform:rotate(-360deg)}}
-  .splash-logo{position:relative;z-index:2;width:175px;height:175px;border-radius:44px;background:linear-gradient(135deg,#fff 0%, #d8b4fe 15%, #a855f7 40%, #6d28d9 75%, #4c1d95 100%);display:flex;align-items:center;justify-content:center;font-size:135px;font-weight:900;line-height:1;color:#fff;text-shadow:0 0 20px #fff, 0 0 40px #a855f7; border:4px solid #fff;box-shadow:0 0 30px #fff, 0 0 70px #a855f7, 0 0 140px #7c3aed;animation:logoMax 2.8s cubic-bezier(.2,1.4,.3,1) forwards}
-  @keyframes logoMax{0%{transform:scale(2.4) rotateY(180deg) rotate(-20deg);opacity:0;filter:blur(10px)}12%{transform:scale(1.25) rotateY(0deg) rotate(5deg);opacity:1;filter:blur(0)}22%{transform:scale(1) rotate(0deg)}32%{transform:translateY(0) scale(1.08,.92)}40%{transform:translateY(-35px) scale(.95,1.05)}48%{transform:translateY(0) scale(1.06,.94)}56%{transform:translateY(-18px) scale(.97,1.03)}64%{transform:translateY(0) scale(1)}72%{transform:translateY(-8px)}80%{transform:translateY(0) scale(1.05) rotate(-2deg)}90%{transform:scale(.95) rotate(3deg)}100%{transform:scale(0) rotate(360deg) translateY(-180px);opacity:0;filter:blur(6px)}}
-  .particle{position:absolute;width:8px;height:8px;border-radius:50%;background:#e9d5ff;box-shadow:0 0 12px #a855f7;animation:particleFly 1.1s ease-out .4s forwards;opacity:0}
-  .particle2{position:absolute;width:6px;height:6px;border-radius:50%;background:#facc15;box-shadow:0 0 10px #facc15;animation:particleFly 1.1s ease-out 1.6s forwards;opacity:0}
-  @keyframes particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--x), var(--y)) scale(0)}}
-  .confetti{position:absolute;top:-10px;width:8px;height:14px;border-radius:2px;opacity:0;animation:fall 2s ease-in 1s forwards}
-  @keyframes fall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(520px) rotate(720deg)}}
-  .splash-title{font-size:44px;font-weight:900;letter-spacing:2px;min-height:52px;display:flex;gap:1px}
-  .splash-title span{opacity:0;animation:letterPop .35s cubic-bezier(.2,1.8,.3,1) forwards;display:inline-block}
-  .splash-title span:nth-child(1){animation-delay:1s;color:#fff}.splash-title span:nth-child(2){animation-delay:1.1s;color:#e9d5ff}.splash-title span:nth-child(3){animation-delay:1.2s;color:#d8b4fe}.splash-title span:nth-child(4){animation-delay:1.3s;color:#c084fc}.splash-title span:nth-child(5){animation-delay:1.45s;color:#a855f7;text-shadow:0 0 15px #a855f7}.splash-title span:nth-child(6){animation-delay:1.6s;color:#c084fc}.splash-title span:nth-child(7){animation-delay:1.75s;color:#e9d5ff}
-  @keyframes letterPop{0%{opacity:0;transform:translateY(25px) scale(.5) rotate(-10deg)}100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
-  .splash-sub{font-size:13px;color:#e9d5ff;letter-spacing:3px;text-transform:uppercase;opacity:0;animation:fadeIn .5s ease 1.9s forwards}
-  .splash-bar{width:160px;height:6px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;opacity:0;animation:fadeIn .3s ease 1.6s forwards}
-  .splash-bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#a855f7,#facc15,#fff);border-radius:99px;animation:loading 1s ease 1.6s forwards}
-  @keyframes loading{to{width:100%}} @keyframes fadeIn{to{opacity:1}} @keyframes splashOut{to{opacity:0;visibility:hidden}}
+  /* SPLASH SIMPLIFIÉ - 1 SEULE ANIM */
+  #splash{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 40%, #3b0a6d 0%, #1a0033 50%, #0a0018 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;overflow:hidden;animation:splashOut .35s ease 2.2s forwards}
+  @keyframes splashOut{to{opacity:0;visibility:hidden}}
+  .splash-center{position:relative;width:210px;height:210px;display:flex;align-items:center;justify-content:center}
+  .halo{position:absolute;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle, rgba(168,85,247,.6) 0%, transparent 65%)}
+  .ring{position:absolute;width:190px;height:190px;border:2px dashed rgba(216,180,254,.7);border-radius:50%;animation:spin 6s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .splash-logo{position:relative;z-index:2;width:150px;height:150px;border-radius:38px;background:linear-gradient(135deg,#e9d5ff 0%, #a855f7 40%, #6d28d9 100%);display:flex;align-items:center;justify-content:center;font-size:110px;font-weight:900;line-height:1;color:#fff;text-shadow:0 0 20px rgba(255,255,255,.6);border:3px solid #fff;box-shadow:0 0 35px #a855f7;animation:logoIn 2.2s ease forwards}
+  @keyframes logoIn{0%{transform:scale(1.8);opacity:0}20%{transform:scale(1);opacity:1}80%{transform:scale(1)}100%{transform:scale(.5) translateY(-150px);opacity:0}}
+  .splash-title{font-size:40px;font-weight:900;letter-spacing:1px}
+  .splash-sub{font-size:12px;color:#e9d5ff;letter-spacing:3px;text-transform:uppercase}
+  .splash-bar{width:140px;height:5px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}
+  .splash-bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#a855f7,#fff);border-radius:99px;animation:loading 1.2s ease .6s forwards}
+  @keyframes loading{to{width:100%}} @keyframes fadeIn{to{opacity:1}}
 
-  header{flex-shrink:0;padding:10px 14px 12px;padding-top:calc(6px + env(safe-area-inset-top));text-align:center;background:rgba(255,255,255,.05);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid rgba(255,255,255,.1);box-shadow:0 12px 35px rgba(0,0,0,.35);opacity:0;animation:fadeIn .4s ease 2.9s forwards;position:relative}
-  header::after{content:"";position:absolute;left:20%;right:20%;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,#a855f7,#e9d5ff,#22d3ee,transparent);background-size:200% 100%;animation:shineLine 3s linear infinite}
-  @keyframes shineLine{to{background-position:200% 0}}
+  header{flex-shrink:0;padding:10px 14px 12px;padding-top:calc(6px + env(safe-area-inset-top));text-align:center;background:rgba(20,0,40,.55);border-bottom:1px solid rgba(255,255,255,.12);opacity:0;animation:fadeIn .35s ease 2.3s forwards}
   .top-row{display:flex;justify-content:space-between;align-items:center}
-  .live{display:flex;align-items:center;gap:6px;font-size:11px;color:#a7f3d0;background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.4);padding:5px 10px;border-radius:999px;font-weight:700;box-shadow:0 0 14px rgba(34,197,94,.25)}
-  .live i{width:7px;height:7px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e;animation:blink 1.2s infinite}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  .live{display:flex;align-items:center;gap:6px;font-size:11px;color:#a7f3d0;background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.4);padding:5px 10px;border-radius:999px;font-weight:700}
+  .live i{width:7px;height:7px;background:#22c55e;border-radius:50%}
   .badges{display:flex;gap:6px;align-items:center}
-  .badge{background:rgba(168,85,247,.22);border:1px solid rgba(216,180,254,.6);color:#fff;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800;backdrop-filter:blur(8px)}
-  .badge-gold{background:linear-gradient(135deg,#fde68a,#facc15,#f59e0b);color:#1a1000;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:900;box-shadow:0 0 16px rgba(250,204,21,.65), inset 0 1px 0 rgba(255,255,255,.7)}
-  .icon-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+  .badge{background:rgba(168,85,247,.25);border:1px solid rgba(216,180,254,.6);color:#fff;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800}
+  .badge-gold{background:linear-gradient(135deg,#fde68a,#facc15);color:#1a1000;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:900}
+  .icon-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .logo-wrap{margin:10px auto 4px;width:68px;height:68px;position:relative}
-  .ring{position:absolute;inset:-8px;border:2px solid rgba(216,180,254,.85);border-radius:24px;transform:rotate(12deg);animation:spinSlow 9s linear infinite;box-shadow:0 0 14px rgba(168,85,247,.5);transition:animation-duration .3s}
-  .ring-out{position:absolute;inset:-16px;border:1.5px dashed rgba(34,211,238,.55);border-radius:28px;transform:rotate(-10deg);animation:spinSlowRev 14s linear infinite;transition:animation-duration .3s}
+  /* 1 SEUL CARRÉ QUI TOURNE - PLUS LÉGER, PLUS FLUIDE */
+  .ring-head{position:absolute;inset:-8px;border:2px solid rgba(216,180,254,.7);border-radius:24px;transform:rotate(12deg);animation:spinSlow 10s linear infinite}
   @keyframes spinSlow{to{transform:rotate(372deg)}}
-  @keyframes spinSlowRev{to{transform:rotate(-370deg)}}
-  .logo{width:68px;height:68px;border-radius:22px;position:relative;overflow:hidden;background:linear-gradient(135deg,#f5d0fe 0%, #e9d5ff 15%, #a855f7 40%, #6d28d9 75%, #3b0a6d 100%);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;box-shadow:0 0 22px #fff, 0 0 38px #a855f7, 0 0 75px #7c3aed, inset 0 2px 0 rgba(255,255,255,.7), inset 0 -6px 14px rgba(0,0,0,.25);border:2px solid rgba(255,255,255,.95);animation:floatLogo 3s ease-in-out infinite;transition:box-shadow .3s, transform .3s}
-  .logo::after{content:"";position:absolute;top:-30%;left:-20%;width:70%;height:140%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);transform:rotate(12deg);animation:gloss 3.5s ease-in-out infinite}
-  @keyframes gloss{0%,60%{transform:translateX(-120%) rotate(12deg)}100%{transform:translateX(260%) rotate(12deg)}}
-  @keyframes floatLogo{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-5px) rotate(-1.5deg)}}
-  /* ===== LE L QUI SE RÉVEILLE QUAND TU TAPES ===== */
-  body.typing .logo{animation:logoWake .5s ease-in-out infinite;box-shadow:0 0 30px #fff, 0 0 60px #a855f7, 0 0 110px #e879f9, inset 0 2px 0 rgba(255,255,255,.8)}
-  @keyframes logoWake{0%,100%{transform:translateY(0) scale(1) rotate(-2deg)}50%{transform:translateY(-8px) scale(1.08) rotate(2deg)}}
-  body.typing .ring{animation-duration:1.2s !important;box-shadow:0 0 22px #e879f9;border-color:#fff}
-  body.typing .ring-out{animation-duration:1.8s !important;border-color:#22d3ee}
-  body.typing .live{box-shadow:0 0 18px rgba(34,197,94,.6)}
-  /* Quand Lumy répond, le L pulse aussi */
-  body.answering .logo{animation:logoWake .6s ease-in-out infinite}
-  body.answering .ring{animation-duration:1.5s !important}
+  .logo{width:68px;height:68px;border-radius:22px;background:linear-gradient(135deg,#e9d5ff 0%, #a855f7 40%, #6d28d9 100%);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;box-shadow:0 0 25px rgba(168,85,247,.7);border:2px solid rgba(255,255,255,.95);will-change:transform}
+  /* LE L QUI RÉAGIT QUAND TU TAPES - EN TRANSFORM SEULEMENT, ÇA NE RAME PAS */
+  body.typing .logo{transform:scale(1.08) translateY(-4px) rotate(-2deg);box-shadow:0 0 35px #e879f9}
+  body.typing .ring-head{animation-duration:1.4s;border-color:#fff}
+  body.answering .logo{transform:scale(1.05) translateY(-2px)}
   header h1{font-size:32px;letter-spacing:-.5px;line-height:1;font-weight:800}
-  header h1 .grad{background:linear-gradient(90deg,#c084fc,#e9d5ff,#22d3ee,#f472b6,#c084fc);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite}
+  header h1 .grad{background:linear-gradient(90deg,#c084fc,#e9d5ff,#22d3ee,#f472b6,#c084fc);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}
   @keyframes shine{to{background-position:300% 0}}
-  .subtitle{font-size:12.5px;color:#d8b4fe;margin-top:4px;letter-spacing:.2px;opacity:.95}
+  .subtitle{font-size:12.5px;color:#d8b4fe;margin-top:4px}
   .chips{display:flex;gap:7px;justify-content:center;margin-top:10px;flex-wrap:wrap}
-  .chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#fff;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);box-shadow:0 4px 14px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.15);transition:transform .15s, box-shadow .15s}
-  .chip:active{transform:scale(.94);box-shadow:0 0 18px rgba(168,85,247,.6)}
+  .chip{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);color:#fff;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer}
+  .chip:active{transform:scale(.96)}
 
-  #chat{flex:1;overflow-y:auto;padding:14px 12px 12px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch;opacity:0;animation:fadeIn .4s ease 3s forwards}
-  .row{display:flex;gap:9px;align-items:flex-end;animation:msgIn .3s ease both}
-  @keyframes msgIn{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+  #chat{flex:1;overflow-y:auto;padding:14px 12px 12px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch;opacity:0;animation:fadeIn .35s ease 2.4s forwards}
+  .row{display:flex;gap:9px;align-items:flex-end}
   .row.user{justify-content:flex-end}
-  .avatar{width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,#e9d5ff,#a855f7,#6d28d9);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;border:2px solid #fff;box-shadow:0 0 14px #a855f7, inset 0 1px 0 rgba(255,255,255,.6);flex-shrink:0;transition:box-shadow .3s}
-  body.typing .avatar{box-shadow:0 0 22px #e879f9, 0 0 35px #a855f7}
-  .avatar.user-av{background:linear-gradient(135deg,#22d3ee,#0ea5e9);border:2px solid #a5f3fc;box-shadow:0 0 14px #22d3ee}
-  .msg{max-width:82%;padding:13px 15px;border-radius:20px;line-height:1.6;font-size:15px;white-space:pre-wrap;word-break:break-word;position:relative}
-  .bot-msg{background:linear-gradient(135deg, rgba(88,28,135,.92), rgba(76,29,149,.88));border:1px solid rgba(216,180,254,.65);box-shadow:0 10px 28px rgba(0,0,0,.35), 0 0 24px rgba(168,85,247,.4), inset 0 1px 0 rgba(255,255,255,.18);border-bottom-left-radius:6px;backdrop-filter:blur(12px)}
-  .user-msg{background:linear-gradient(135deg,#8b5cf6,#a855f7,#7c3aed);border:1px solid rgba(255,255,255,.28);border-bottom-right-radius:6px;box-shadow:0 10px 24px rgba(168,85,247,.45), inset 0 1px 0 rgba(255,255,255,.25)}
+  .avatar{width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,#e9d5ff,#a855f7,#6d28d9);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;border:2px solid #fff;flex-shrink:0}
+  .avatar.user-av{background:linear-gradient(135deg,#22d3ee,#0ea5e9);border:2px solid #a5f3fc}
+  .msg{max-width:82%;padding:13px 15px;border-radius:20px;line-height:1.6;font-size:15px;white-space:pre-wrap;word-break:break-word}
+  .bot-msg{background:linear-gradient(135deg, rgba(88,28,135,.92), rgba(76,29,149,.88));border:1px solid rgba(216,180,254,.55);box-shadow:0 8px 20px rgba(0,0,0,.3);border-bottom-left-radius:6px}
+  .user-msg{background:linear-gradient(135deg,#8b5cf6,#a855f7);border:1px solid rgba(255,255,255,.25);border-bottom-right-radius:6px}
   .bot-msg b{color:#fff} .bot-msg code{background:rgba(0,0,0,.45);padding:2px 6px;border-radius:6px;font-size:13px} .bot-msg pre{background:#000;padding:10px;border-radius:10px;overflow-x:auto;margin:8px 0;font-size:13px}
-  .time{font-size:10px;color:rgba(255,255,255,.55);margin-top:5px;text-align:left;padding-left:2px;letter-spacing:.2px}
+  .time{font-size:10px;color:rgba(255,255,255,.55);margin-top:5px;text-align:left;padding-left:2px}
   .actions{display:flex;gap:6px;margin-top:6px}
-  .action-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:11px;padding:5px 9px;border-radius:999px;cursor:pointer;backdrop-filter:blur(8px)}
+  .action-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:11px;padding:5px 9px;border-radius:999px;cursor:pointer}
   .action-btn.active{background:#22c55e;border-color:#22c55e}
   .action-btn.active-red{background:#ef4444;border-color:#ef4444}
 
-  #form{flex-shrink:0;padding:10px 12px 12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));opacity:0;animation:fadeIn .4s ease 3.1s forwards}
-  .input-wrap{display:flex;align-items:center;gap:10px;background:rgba(18,0,38,.82);backdrop-filter:blur(22px);border:1.5px solid rgba(216,180,254,.5);border-radius:999px;padding:6px 6px 6px 18px;box-shadow:0 14px 35px rgba(0,0,0,.55), 0 0 28px rgba(168,85,247,.5), inset 0 1px 0 rgba(255,255,255,.12);transition:box-shadow .3s, border-color .3s}
-  body.typing .input-wrap{border-color:#f0abfc;box-shadow:0 0 0 3px rgba(217,70,239,.3), 0 0 42px #d946ef}
-  #input{flex:1;background:transparent;border:none;color:#fff;padding:11px 4px;outline:none;font-size:15px;font-family:inherit}
+  #form{flex-shrink:0;padding:10px 12px 12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));opacity:0;animation:fadeIn .35s ease 2.5s forwards}
+  .input-wrap{display:flex;align-items:center;gap:10px;background:rgba(18,0,38,.9);border:1.5px solid rgba(216,180,254,.5);border-radius:999px;padding:6px 6px 6px 18px;box-shadow:0 10px 25px rgba(0,0,0,.4)}
+  body.typing .input-wrap{border-color:#f0abfc;box-shadow:0 0 22px rgba(217,70,239,.5)}
+  #input{flex:1;background:transparent;border:none;color:#fff;padding:11px 4px;outline:none;font-size:16px;font-family:inherit}
   #input::placeholder{color:#c4b5fd}
-  #send{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#c084fc,#a855f7,#6366f1,#22d3ee);background-size:200% 100%;border:none;color:#fff;font-size:19px;cursor:pointer;flex-shrink:0;box-shadow:0 0 18px #a855f7, inset 0 1px 0 rgba(255,255,255,.4);transition:transform .15s;animation:pulseSend 2.2s ease-in-out infinite}
-  @keyframes pulseSend{0%,100%{box-shadow:0 0 14px #a855f7, inset 0 1px 0 rgba(255,255,255,.4)}50%{box-shadow:0 0 26px #a855f7, 0 0 40px rgba(168,85,247,.6), inset 0 1px 0 rgba(255,255,255,.4)}}
-  #send:active{transform:scale(.9) rotate(-10deg)} #send:disabled{opacity:.5;animation:none}
+  #send{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#6366f1);border:none;color:#fff;font-size:19px;cursor:pointer;flex-shrink:0;box-shadow:0 0 14px #a855f7}
+  #send:active{transform:scale(.92)} #send:disabled{opacity:.5}
   .typing{opacity:.7;font-style:italic}
   .cursor{display:inline-block;width:8px;height:15px;background:#e9d5ff;vertical-align:middle;margin-left:2px;animation:blink .7s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 </style>
 </head>
 <body>
 
-<div class="bg-blob blob1"></div><div class="bg-blob blob2"></div><div class="bg-blob blob3"></div><div class="bg-blob blob4"></div>
-
 <div id="splash">
-  <div class="splash-center" id="splashCenter"><div class="halo"></div><div class="shock"></div><div class="ring2"></div><div class="ring1"></div><div class="splash-logo">L</div></div>
-  <div class="splash-title"><span>L</span><span>u</span><span>m</span><span>y</span><span>G</span><span>P</span><span>T</span></div>
+  <div class="splash-center" id="splashCenter"><div class="halo"></div><div class="ring"></div><div class="splash-logo">L</div></div>
+  <div class="splash-title">LumyGPT</div>
   <div class="splash-sub">Votre assistant intelligent</div><div class="splash-bar"><i></i></div>
 </div>
 
 <header>
   <div class="top-row">
     <div class="live"><i></i> En ligne</div>
-    <div class="badges"><span class="badge">V20</span><span class="badge-gold">👑 PRO</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
+    <div class="badges"><span class="badge">V21</span><span class="badge-gold">👑 PRO</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
   </div>
-  <div class="logo-wrap"><div class="ring-out"></div><div class="ring"></div><div class="logo">L</div></div>
+  <div class="logo-wrap"><div class="ring-head"></div><div class="logo">L</div></div>
   <h1>Lumy<span class="grad">GPT</span></h1>
   <div class="subtitle">Votre assistant intelligent ✨</div>
   <div class="chips">
@@ -168,17 +136,12 @@ const form = document.getElementById('form');
 const input = document.getElementById('input');
 const send = document.getElementById('send');
 const splash = document.getElementById('splash');
-const splashCenter = document.getElementById('splashCenter');
-const colors = ['#e9d5ff','#a855f7','#facc15','#22d3ee','#fff','#c084fc'];
-for(let i=0;i<22;i++){ const p=document.createElement('div'); p.className=i%2?'particle':'particle2'; const a=(i/22)*Math.PI*2; const d=120+Math.random()*90; p.style.setProperty('--x',Math.cos(a)*d+'px'); p.style.setProperty('--y',Math.sin(a)*d+'px'); p.style.width=(4+Math.random()*9)+'px'; p.style.height=p.style.width; splashCenter.appendChild(p); }
-for(let i=0;i<24;i++){ const c=document.createElement('div'); c.className='confetti'; c.style.left=Math.random()*100+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(0.9+Math.random()*0.8)+'s'; c.style.animationDuration=(1.6+Math.random())+'s'; splash.appendChild(c); }
-setTimeout(()=>{ splash.style.display='none'; },3300);
+setTimeout(()=>{ splash.style.display='none'; },2600);
 
 const themeBtn=document.getElementById('themeBtn');
 themeBtn.onclick=()=>{ document.body.classList.toggle('light'); themeBtn.textContent=document.body.classList.contains('light')?'🌞':'🌙'; };
 document.getElementById('newBtn').onclick=()=>{ chat.innerHTML=''; addMsg('Nouveau chat ! 👋 Je suis LumyGPT, que veux-tu faire ?', 'bot', true); };
 
-// ===== LE L QUI RÉAGIT QUAND TU TAPES =====
 let typingTimeout;
 input.addEventListener('focus', ()=>{ document.body.classList.add('typing'); });
 input.addEventListener('blur', ()=>{ if(!input.value) document.body.classList.remove('typing'); });
@@ -187,9 +150,7 @@ input.addEventListener('input', ()=>{
     document.body.classList.add('typing');
     clearTimeout(typingTimeout);
     typingTimeout = setTimeout(()=>{ document.body.classList.remove('typing'); }, 1800);
-  } else {
-    document.body.classList.remove('typing');
-  }
+  } else { document.body.classList.remove('typing'); }
 });
 
 function escapeHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -204,9 +165,9 @@ function timeNow(){ const d=new Date(); return String(d.getHours()).padStart(2,'
 function typeEffect(el, fullText){
   let i=0; el.innerHTML='';
   const iv=setInterval(()=>{
-    i+=3; el.innerHTML=formatText(fullText.slice(0,i))+'<span class="cursor"></span>'; chat.scrollTop=chat.scrollHeight;
+    i+=4; el.innerHTML=formatText(fullText.slice(0,i))+'<span class="cursor"></span>'; chat.scrollTop=chat.scrollHeight;
     if(i>=fullText.length){ clearInterval(iv); el.innerHTML=formatText(fullText); document.body.classList.remove('answering'); }
-  },18);
+  },16);
 }
 function addMsg(text, who, instant=false){
   const row=document.createElement('div'); row.className='row '+(who==='user'?'user':'');
