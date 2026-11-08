@@ -11,7 +11,6 @@
   body{
     font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,Arial,sans-serif;color:#fff;
     display:flex;flex-direction:column;height:100dvh;overflow:hidden;
-    /* FOND VIOLET NUANCÉ QUI BOUGE UN TOUT PETIT PEU - SANS BULES, SANS BLUR */
     background:
       radial-gradient(circle at 15% 5%, rgba(192,38,211,.45) 0%, transparent 40%),
       radial-gradient(circle at 90% 15%, rgba(139,92,246,.45) 0%, transparent 42%),
@@ -33,12 +32,13 @@
   body.light #input{color:#1a0033}
   body.light #input::placeholder{color:#a78bfa}
 
-  /* PETITES PAILLETTES QUI SCINTILLENT DANS LE FOND - LÉGER, QUE TRANSFORM + OPACITY */
+  /* NEIGE VIOLETTE - 10 FLOCONS, QUE TRANSFORM, ÇA NE RAME PAS */
+  .snow{position:fixed;top:-10px;border-radius:50%;background:#e9d5ff;pointer-events:none;z-index:0;opacity:.7;animation:snowFall linear infinite}
+  @keyframes snowFall{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:.8}90%{opacity:.6}100%{transform:translateY(105vh) translateX(30px);opacity:0}}
   .spark{position:fixed;width:4px;height:4px;background:#fff;border-radius:50%;z-index:0;pointer-events:none;opacity:0;animation:sparkle 3s ease-in-out infinite}
   @keyframes sparkle{0%,100%{opacity:0;transform:translateY(0) scale(.5)}50%{opacity:.9;transform:translateY(-12px) scale(1.2)}}
-  .spark.s1{left:12%;top:22%}.spark.s2{left:88%;top:18%;animation-delay:.6s}.spark.s3{left:78%;top:55%;animation-delay:1.1s}.spark.s4{left:8%;top:62%;animation-delay:1.5s}.spark.s5{left:48%;top:12%;animation-delay:.3s;width:3px;height:3px}.spark.s6{left:65%;top:78%;animation-delay:2s}.spark.s7{left:28%;top:82%;animation-delay:.9s;width:3px;height:3px}.spark.s8{left:92%;top:42%;animation-delay:1.8s}
+  .spark.s1{left:12%;top:22%}.spark.s2{left:88%;top:18%;animation-delay:.6s}.spark.s3{left:78%;top:55%;animation-delay:1.1s}.spark.s4{left:8%;top:62%;animation-delay:1.5s}.spark.s5{left:48%;top:12%;animation-delay:.3s;width:3px;height:3px}.spark.s6{left:65%;top:78%;animation-delay:2s}
 
-  /* SPLASH - ON REMET LES CONFETTIS */
   #splash{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 50%, #3b0a6d 0%, #1a0033 45%, #0a0018 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;overflow:hidden;animation:splashOut .4s ease 2.6s forwards}
   #splash::before{content:"";position:absolute;inset:0;background:#fff;opacity:0;animation:flash .3s ease .05s forwards}
   @keyframes flash{0%{opacity:.9}100%{opacity:0}} @keyframes splashOut{to{opacity:0;visibility:hidden}}
@@ -74,29 +74,31 @@
   .badges{display:flex;gap:6px;align-items:center}
   .badge{background:rgba(168,85,247,.25);border:1px solid rgba(216,180,254,.6);color:#fff;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800}
   .badge-gold{background:linear-gradient(135deg,#fde68a,#facc15,#f59e0b);color:#1a1000;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:900;box-shadow:0 0 14px rgba(250,204,21,.55)}
+  .badge-fire{background:rgba(0,0,0,.35);border:1px solid rgba(251,146,60,.6);color:#fdba74;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800}
   .icon-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .logo-wrap{margin:10px auto 4px;width:68px;height:68px;position:relative}
-  /* ON REMET LE DOUBLE CARRÉ QUI TOURNE */
   .ring{position:absolute;inset:-8px;border:2px solid rgba(216,180,254,.85);border-radius:24px;transform:rotate(12deg);animation:spinSlow 9s linear infinite;box-shadow:0 0 12px rgba(168,85,247,.45)}
   .ring-out{position:absolute;inset:-16px;border:1.5px dashed rgba(34,211,238,.55);border-radius:28px;transform:rotate(-10deg);animation:spinSlowRev 14s linear infinite}
   @keyframes spinSlow{to{transform:rotate(372deg)}}
   @keyframes spinSlowRev{to{transform:rotate(-370deg)}}
-  .logo{width:68px;height:68px;border-radius:22px;position:relative;overflow:hidden;background:linear-gradient(135deg,#f5d0fe 0%, #e9d5ff 15%, #a855f7 40%, #6d28d9 75%, #3b0a6d 100%);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;box-shadow:0 0 22px #fff, 0 0 38px #a855f7, 0 0 70px #7c3aed, inset 0 2px 0 rgba(255,255,255,.7);border:2px solid rgba(255,255,255,.95);will-change:transform}
-  /* REFLET VERRE - QUE EN TRANSFORM, PAS DE BLUR */
+  .logo{width:68px;height:68px;border-radius:22px;position:relative;overflow:hidden;background:linear-gradient(135deg,#f5d0fe 0%, #e9d5ff 15%, #a855f7 40%, #6d28d9 75%, #3b0a6d 100%);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;box-shadow:0 0 22px #fff, 0 0 38px #a855f7, 0 0 70px #7c3aed, inset 0 2px 0 rgba(255,255,255,.7);border:2px solid rgba(255,255,255,.95);will-change:transform;transition:transform .25s, box-shadow .25s}
   .logo::after{content:"";position:absolute;top:-30%;left:-20%;width:70%;height:140%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.5),transparent);transform:rotate(12deg) translateX(-120%);animation:gloss 4s ease-in-out infinite}
   @keyframes gloss{0%,55%{transform:rotate(12deg) translateX(-120%)}100%{transform:rotate(12deg) translateX(280%)}}
-  /* LE L QUI RÉAGIT QUAND TU TAPES - JUSTE TRANSFORM */
+  /* ÉMOTION DU L - PETIT EMOJI SUR LE L */
+  .l-mood{position:absolute;right:-6px;bottom:-6px;width:26px;height:26px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;z-index:3;border:2px solid #e9d5ff;box-shadow:0 0 10px rgba(168,85,247,.8);transition:transform .25s}
   body.typing .logo{transform:scale(1.08) translateY(-4px) rotate(-2deg);box-shadow:0 0 32px #fff, 0 0 55px #e879f9}
   body.typing .ring{animation-duration:1.4s;border-color:#fff}
   body.typing .ring-out{animation-duration:2s}
   body.answering .logo{transform:scale(1.05) translateY(-2px)}
+  body.love .l-mood{transform:scale(1.25) rotate(-10deg)}
   header h1{font-size:32px;letter-spacing:-.5px;line-height:1;font-weight:800}
   header h1 .grad{background:linear-gradient(90deg,#c084fc,#e9d5ff,#22d3ee,#f472b6,#c084fc);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite}
   @keyframes shine{to{background-position:300% 0}}
   .subtitle{font-size:12.5px;color:#d8b4fe;margin-top:4px}
-  .chips{display:flex;gap:7px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+  .chips{display:flex;gap:7px;justify-content:center;margin-top:10px;flex-wrap:wrap;min-height:32px}
   .chip{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);color:#fff;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer}
   .chip:active{transform:scale(.96)}
+  .chip-tiktok{background:linear-gradient(135deg, rgba(168,85,247,.45), rgba(217,70,239,.45));border-color:#f0abfc}
 
   #chat{flex:1;overflow-y:auto;padding:14px 12px 12px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch;position:relative;z-index:2;opacity:0;animation:fadeIn .35s ease 2.8s forwards}
   .row{display:flex;gap:9px;align-items:flex-end}
@@ -124,11 +126,15 @@
   .typing{opacity:.7;font-style:italic}
   .cursor{display:inline-block;width:8px;height:15px;background:#e9d5ff;vertical-align:middle;margin-left:2px;animation:blink .7s infinite}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  /* PAILLETTES CONCERT QUAND TU ENVOIES */
+  .burst{position:fixed;width:6px;height:6px;border-radius:50%;pointer-events:none;z-index:99;animation:burstFly .6s ease-out forwards}
+  @keyframes burstFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--bx), var(--by)) scale(0)}}
 </style>
 </head>
 <body>
 
-<div class="spark s1"></div><div class="spark s2"></div><div class="spark s3"></div><div class="spark s4"></div><div class="spark s5"></div><div class="spark s6"></div><div class="spark s7"></div><div class="spark s8"></div>
+<div class="spark s1"></div><div class="spark s2"></div><div class="spark s3"></div><div class="spark s4"></div><div class="spark s5"></div><div class="spark s6"></div>
+<div id="snowZone"></div>
 
 <div id="splash">
   <div class="splash-center" id="splashCenter"><div class="halo"></div><div class="shock"></div><div class="ring2"></div><div class="ring1"></div><div class="splash-logo">L</div></div>
@@ -139,13 +145,13 @@
 <header>
   <div class="top-row">
     <div class="live"><i></i> En ligne</div>
-    <div class="badges"><span class="badge">V22</span><span class="badge-gold">👑 PRO</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
+    <div class="badges"><span class="badge">V23</span><span class="badge-gold">👑 PRO</span><span class="badge-fire" id="fireBadge">🔥 0</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div>
   </div>
-  <div class="logo-wrap"><div class="ring-out"></div><div class="ring"></div><div class="logo">L</div></div>
+  <div class="logo-wrap"><div class="ring-out"></div><div class="ring"></div><div class="logo">L</div><div class="l-mood" id="lMood">😴</div></div>
   <h1>Lumy<span class="grad">GPT</span></h1>
-  <div class="subtitle">Votre assistant intelligent ✨</div>
-  <div class="chips">
-    <button class="chip" onclick="quickAsk('Donne-moi une idée de vidéo TikTok')">💡 Idée TikTok</button>
+  <div class="subtitle" id="subtitle">Votre assistant intelligent ✨</div>
+  <div class="chips" id="chips">
+    <button class="chip chip-tiktok" onclick="quickAsk('Donne-moi une idée de vidéo TikTok')">💡 Idée TikTok</button>
     <button class="chip" onclick="quickAsk('Aide-moi pour mon devoir')">📚 Aide devoir</button>
     <button class="chip" onclick="quickAsk('Raconte-moi une blague')">😂 Blague</button>
     <button class="chip" onclick="quickAsk('Fais-moi un planning de révision')">📅 Planning</button>
@@ -168,24 +174,95 @@ const input = document.getElementById('input');
 const send = document.getElementById('send');
 const splash = document.getElementById('splash');
 const splashCenter = document.getElementById('splashCenter');
+const lMood = document.getElementById('lMood');
+const fireBadge = document.getElementById('fireBadge');
+const subtitle = document.getElementById('subtitle');
+
+// NEIGE VIOLETTE - 10 flocons légers
+const snowZone = document.getElementById('snowZone');
+for(let i=0;i<10;i++){ const s=document.createElement('div'); s.className='snow'; const size=3+Math.random()*4; s.style.width=size+'px'; s.style.height=size+'px'; s.style.left=(Math.random()*100)+'%'; s.style.animationDuration=(7+Math.random()*6)+'s'; s.style.animationDelay=(Math.random()*7)+'s'; snowZone.appendChild(s); }
+
+// SPLASH CONFETTIS + PARTICULES
 const colors = ['#e9d5ff','#a855f7','#facc15','#22d3ee','#fff','#c084fc'];
 for(let i=0;i<14;i++){ const p=document.createElement('div'); p.className='particle'; const a=(i/14)*Math.PI*2; const d=110+Math.random()*70; p.style.setProperty('--x',Math.cos(a)*d+'px'); p.style.setProperty('--y',Math.sin(a)*d+'px'); splashCenter.appendChild(p); }
 for(let i=0;i<14;i++){ const c=document.createElement('div'); c.className='confetti'; c.style.left=Math.random()*100+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(0.9+Math.random()*0.6)+'s'; splash.appendChild(c); }
 setTimeout(()=>{ splash.style.display='none'; },3000);
 
+// BONJOUR SELON L'HEURE
+const hour = new Date().getHours();
+let greet = 'Bonjour ☀️', greetMsg = 'Bonjour 👋 Je suis LumyGPT, ton assistant intelligent.\nQue veux-tu faire aujourd\'hui ?';
+if(hour >= 6 && hour < 12){ greet='Bonjour ☀️'; greetMsg='Bonjour ☀️ Je suis LumyGPT, bien réveillé pour toi.\nOn fait quoi ce matin ?'; }
+else if(hour >= 12 && hour < 18){ greet='Bon après-midi ✨'; greetMsg='Bon après-midi ✨ Je suis LumyGPT.\nQue veux-tu faire ?'; }
+else if(hour >= 18 && hour < 23){ greet='Bonsoir 🌙'; greetMsg='Bonsoir 🌙 Je suis LumyGPT.\nOn finit la journée en beauté ?'; }
+else { greet='Bonne nuit 🌙'; greetMsg='Bonne nuit 🌙 Je suis LumyGPT, je veille pour toi.\nTu veux quoi ?'; }
+subtitle.textContent = greet + ' • Ton assistant intelligent ✨';
+
+// COMPTEUR 🔥 - gardé dans le téléphone
+let count = parseInt(localStorage.getItem('lumy_count') || '0');
+function updateFire(){ fireBadge.textContent = '🔥 ' + count; }
+updateFire();
+
+// LE L QUI A DES ÉMOTIONS
+function setMood(emoji){ lMood.textContent = emoji; }
+setMood('😴');
+// Il se réveille après le splash
+setTimeout(()=>{ setMood('👀'); }, 3200);
+
+// PETIT DING QUAND LUMY RÉPOND
+let audioCtx = null;
+function playDing(){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value = 880; o.type = 'sine';
+    g.gain.setValueAtTime(0.12, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+    o.start(); o.stop(audioCtx.currentTime + 0.45);
+    const o2 = audioCtx.createOscillator(); const g2 = audioCtx.createGain();
+    o2.connect(g2); g2.connect(audioCtx.destination);
+    o2.frequency.value = 1320; o2.type = 'sine';
+    g2.gain.setValueAtTime(0.08, audioCtx.currentTime + 0.08);
+    g2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    o2.start(audioCtx.currentTime + 0.08); o2.stop(audioCtx.currentTime + 0.5);
+  }catch(e){}
+}
+
+// CHIPS ALÉATOIRES - TIKTOK TOUJOURS EN PREMIER
+const pool = [
+  {e:'📚', t:'Aide devoir', q:'Aide-moi pour mon devoir'},
+  {e:'😂', t:'Blague', q:'Raconte-moi une blague'},
+  {e:'📅', t:'Planning', q:'Fais-moi un planning de révision'},
+  {e:'🍕', t:'Idée repas', q:'Donne-moi une idée de repas'},
+  {e:'💘', t:'Aide à draguer', q:'Aide-moi à draguer'},
+  {e:'🎮', t:'Idée jeu', q:'Donne-moi une idée de jeu'},
+  {e:'📖', t:'Histoire', q:'Raconte-moi une histoire'},
+  {e:'🧠', t:'Quiz', q:'Fais-moi un quiz'},
+  {e:'🎵', t:'Musique', q:'Conseille-moi une musique'},
+  {e:'✍️', t:'Aide texte', q:'Aide-moi à écrire un texte'},
+  {e:'💪', t:'Motivation', q:'Motive-moi'},
+  {e:'🤔', t:'Devinette', q:'Dis-moi une devinette'},
+];
+const chipsEl = document.getElementById('chips');
+function rotateChips(){
+  const shuffled = [...pool].sort(()=>Math.random()-0.5).slice(0,3);
+  chipsEl.innerHTML = '<button class="chip chip-tiktok" onclick="quickAsk(\'Donne-moi une idée de vidéo TikTok\')">💡 Idée TikTok</button>' + shuffled.map(c=>`<button class="chip" onclick="quickAsk('${c.q.replace(/'/g,"\\'")}')">${c.e} ${c.t}</button>`).join('');
+}
+setInterval(rotateChips, 10000);
+
 const themeBtn=document.getElementById('themeBtn');
 themeBtn.onclick=()=>{ document.body.classList.toggle('light'); themeBtn.textContent=document.body.classList.contains('light')?'🌞':'🌙'; };
-document.getElementById('newBtn').onclick=()=>{ chat.innerHTML=''; addMsg('Nouveau chat ! 👋 Je suis LumyGPT, que veux-tu faire ?', 'bot', true); };
+document.getElementById('newBtn').onclick=()=>{ chat.innerHTML=''; setMood('👀'); addMsg(greetMsg, 'bot', true); };
 
 let typingTimeout;
-input.addEventListener('focus', ()=>{ document.body.classList.add('typing'); });
-input.addEventListener('blur', ()=>{ if(!input.value) document.body.classList.remove('typing'); });
+input.addEventListener('focus', ()=>{ document.body.classList.add('typing'); setMood('👀'); });
+input.addEventListener('blur', ()=>{ if(!input.value){ document.body.classList.remove('typing'); setMood('😴'); } });
 input.addEventListener('input', ()=>{
   if(input.value.trim().length > 0){
-    document.body.classList.add('typing');
+    document.body.classList.add('typing'); setMood('👀');
     clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(()=>{ document.body.classList.remove('typing'); }, 1800);
-  } else { document.body.classList.remove('typing'); }
+    typingTimeout = setTimeout(()=>{ document.body.classList.remove('typing'); setMood('😴'); }, 1800);
+  } else { document.body.classList.remove('typing'); setMood('😴'); }
 });
 
 function escapeHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -201,7 +278,7 @@ function typeEffect(el, fullText){
   let i=0; el.innerHTML='';
   const iv=setInterval(()=>{
     i+=4; el.innerHTML=formatText(fullText.slice(0,i))+'<span class="cursor"></span>'; chat.scrollTop=chat.scrollHeight;
-    if(i>=fullText.length){ clearInterval(iv); el.innerHTML=formatText(fullText); document.body.classList.remove('answering'); }
+    if(i>=fullText.length){ clearInterval(iv); el.innerHTML=formatText(fullText); document.body.classList.remove('answering'); setMood('👀'); }
   },16);
 }
 function addMsg(text, who, instant=false){
@@ -215,13 +292,16 @@ function addMsg(text, who, instant=false){
     const copy=document.createElement('button'); copy.className='action-btn'; copy.textContent='📋 Copier';
     copy.onclick=()=>{ navigator.clipboard.writeText(text); copy.textContent='✅ Copié !'; setTimeout(()=>copy.textContent='📋 Copier',1500); };
     const like=document.createElement('button'); like.className='action-btn'; like.textContent='❤️';
-    like.onclick=()=>{ like.classList.toggle('active'); dislike.classList.remove('active-red'); };
+    like.onclick=()=>{ 
+      like.classList.toggle('active'); dislike.classList.remove('active-red');
+      if(like.classList.contains('active')){ setMood('😍'); document.body.classList.add('love'); setTimeout(()=>{ document.body.classList.remove('love'); setMood('👀'); }, 1500); }
+    };
     const dislike=document.createElement('button'); dislike.className='action-btn'; dislike.textContent='👎';
-    dislike.onclick=()=>{ dislike.classList.toggle('active-red'); like.classList.remove('active'); };
+    dislike.onclick=()=>{ dislike.classList.toggle('active-red'); like.classList.remove('active'); if(dislike.classList.contains('active-red')){ setMood('🥺'); setTimeout(()=>setMood('👀'), 1200); } };
     actions.append(copy,like,dislike);
     wrap.append(div); wrap.append(t); wrap.append(actions); row.append(av); row.append(wrap);
     chat.appendChild(row); chat.scrollTop=chat.scrollHeight;
-    if(instant){ div.innerHTML=formatText(text); } else { document.body.classList.add('answering'); typeEffect(div, text); }
+    if(instant){ div.innerHTML=formatText(text); } else { document.body.classList.add('answering'); setMood('🗣️'); typeEffect(div, text); playDing(); }
     return row;
   } else {
     const div=document.createElement('div'); div.className='msg user-msg'; div.innerHTML=formatText(text);
@@ -230,11 +310,29 @@ function addMsg(text, who, instant=false){
   }
 }
 function quickAsk(q){ input.value=q; input.dispatchEvent(new Event('input')); form.dispatchEvent(new Event('submit')); }
-addMsg('Bonjour 👋 Je suis LumyGPT, ton assistant intelligent.\nQue veux-tu faire aujourd\'hui ?', 'bot', true);
+addMsg(greetMsg, 'bot', true);
+
+// EXPLOSION DE PAILLETTES QUAND TU ENVOIES
+function burst(x, y){
+  for(let i=0;i<10;i++){
+    const b=document.createElement('div'); b.className='burst';
+    b.style.left=x+'px'; b.style.top=y+'px';
+    b.style.background=colors[i%colors.length];
+    const ang=(i/10)*Math.PI*2; const dist=35+Math.random()*35;
+    b.style.setProperty('--bx', Math.cos(ang)*dist+'px');
+    b.style.setProperty('--by', Math.sin(ang)*dist+'px');
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(), 650);
+  }
+}
+
 form.onsubmit=async(e)=>{
   e.preventDefault();
   const text=input.value.trim(); if(!text) return;
-  document.body.classList.remove('typing');
+  const rect = send.getBoundingClientRect();
+  burst(rect.left + 23, rect.top + 23);
+  document.body.classList.remove('typing'); setMood('🗣️');
+  count++; localStorage.setItem('lumy_count', count); updateFire();
   addMsg(text,'user'); input.value=''; send.disabled=true;
   const typingRow=addMsg('LumyGPT écrit...','bot',true);
   typingRow.querySelector('.msg').classList.add('typing');
