@@ -55,7 +55,6 @@
   .typing{opacity:.7} .cursor{display:inline-block;width:8px;height:15px;background:#e9d5ff;vertical-align:middle;margin-left:2px;animation:blink .7s infinite} @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
   .burst{position:fixed;width:6px;height:6px;border-radius:50%;pointer-events:none;z-index:99;animation:burstFly .6s ease-out forwards} @keyframes burstFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--bx), var(--by)) scale(0)}}
   .fav-drawer{position:fixed;left:12px;right:12px;bottom:90px;z-index:50;background:#1a0033;border:1px solid #a855f7;border-radius:18px;padding:14px;max-height:50vh;overflow:auto;display:none} .fav-drawer h3{font-size:15px;margin-bottom:8px} .fav-item{background:rgba(255,255,255,.08);padding:10px;border-radius:12px;margin-bottom:8px;font-size:13px;line-height:1.5}
-  /* --- CLASSEMENT V2.5 SAISON 3 MOIS --- */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:60;display:none;align-items:flex-end;justify-content:center}
   .overlay.open{display:flex}
   .leader-card{background:linear-gradient(180deg,#2a0a5a,#12002b);width:100%;max-width:520px;max-height:86dvh;overflow:auto;border-radius:24px 24px 0 0;border:1px solid #a855f7;padding:16px 16px 24px;position:relative;animation:slideUp .25s ease}
@@ -68,11 +67,8 @@
   .rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
   .rank-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:9px 10px;font-size:12px;line-height:1.4} .rank-chip.active{border-color:#facc15;background:rgba(250,204,21,.18)}
   .rank-chip b{display:block;font-size:13px}
-  .leader-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:11px 12px;border-radius:14px;margin-bottom:8px}
-  .leader-row.me{border-color:#facc15;background:rgba(250,204,21,.15)} .leader-row.pro{border-color:#facc15;background:linear-gradient(135deg,rgba(250,204,21,.25),rgba(249,115,22,.15))}
-  .leader-pos{font-weight:900;width:32px;text-align:center;font-size:16px} .leader-name{flex:1;font-weight:800;font-size:14px} .leader-name small{display:block;color:#d8b4fe;font-size:11px;font-weight:700} .leader-score{font-weight:900;color:#fdba74}
-  .pseudo-box{display:flex;gap:8px;margin:10px 0} .pseudo-box input{flex:1;background:#fff;color:#000;border:none;border-radius:12px;padding:11px 12px;font-weight:800;font-family:inherit;outline:none} .pseudo-box button{background:#fff;color:#000;border:none;border-radius:12px;padding:11px 14px;font-weight:900;cursor:pointer}
   .month-note{text-align:center;font-size:11px;color:#d8b4fe;margin-top:10px;line-height:1.5}
+  .pseudo-box{display:flex;gap:8px;margin-top:8px} .pseudo-box input{flex:1;background:#fff;color:#000;border:none;border-radius:12px;padding:11px 12px;font-weight:800;font-family:inherit;outline:none} .pseudo-box button{background:#fff;color:#000;border:none;border-radius:12px;padding:11px 14px;font-weight:900;cursor:pointer}
 </style>
 </head>
 <body>
@@ -90,15 +86,14 @@
 <form id="form"><div class="input-wrap"><button type="button" class="mini-btn" id="modeBtn">⚡</button><button type="button" class="mini-btn" id="photoBtn">📸</button><input type="file" id="photoInput" accept="image/*" hidden><input id="input" placeholder="Écris à LumyGPT..." autocomplete="off" autocorrect="off" autocapitalize="sentences" enterkeyhint="send" /><button id="send" type="submit">➤</button></div></form>
 <div class="fav-drawer" id="favDrawer"><h3>⭐ Mes favoris</h3><div id="favList"></div><button class="action-btn" onclick="document.getElementById('favDrawer').style.display='none'">Fermer</button></div>
 
-<!-- CLASSEMENT SAISON -->
+<!-- TON RANG PERSO + PSEUDO - PLUS DE CLASSEMENT MONDIAL -->
 <div class="overlay" id="leaderOverlay"><div class="leader-card">
   <button class="close-x" onclick="closeLeader()">✕</button>
-  <h2>🏆 Classement Mondial 🔥</h2><div class="leader-sub" id="leaderMonth">Saison en cours • Reset tous les 3 mois</div>
-  <div id="pseudoZone"></div>
+  <h2>🏆 Ton Rang</h2><div class="leader-sub" id="leaderMonth">Ton niveau perso</div>
+  <div id="pseudoZone" style="text-align:center;margin-bottom:12px"></div>
   <div class="my-rank" id="myRankBox"><b id="myRankTitle">🥉 BRONZE</b><span id="myRankSub">0 question cette saison</span><div class="progress"><i id="myProgress" style="width:0%"></i></div><span id="myNext">Plus que 30 pour passer Argent 🥈</span></div>
   <div class="rank-grid" id="rankGrid"></div>
-  <div id="leaderList"></div>
-  <div class="month-note">🌟 <b>PRO = Top 10 de la SAISON</b><br>Les 10 premiers de la saison ont le badge PRO doré.<br>Fin de saison : tout le monde repart à 0. À toi de remonter.</div>
+  <div class="month-note">🌟 <b>PRO = 600 questions</b><br>C'est juste ton niveau à toi, personne d'autre le voit.<br>Fin de saison : tout repart à 0.</div>
 </div></div>
 
 <script>
@@ -116,11 +111,11 @@ let greet='Bonjour ☀️', greetMsg="Bonjour 👋 Je suis LumyGPT, ton assistan
 if(hour>=6&&hour<12){greet='Bonjour ☀️'; greetMsg='Bonjour ☀️ Je suis LumyGPT, bien réveillé pour toi.\nOn fait quoi ce matin ?';} else if(hour>=12&&hour<18){greet='Bon après-midi ✨'; greetMsg='Bon après-midi ✨ Je suis LumyGPT.\nQue veux-tu faire ?';} else if(hour>=18&&hour<23){greet='Bonsoir 🌙'; greetMsg='Bonsoir 🌙 Je suis LumyGPT.\nOn finit la journée en beauté ?';} else {greet='Bonne nuit 🌙'; greetMsg='Bonne nuit 🌙 Je suis LumyGPT, je veille pour toi.\nTu veux quoi ?';}
 subtitle.textContent=greet+' • Ton assistant intelligent ✨';
 
-// --- RANGS + SAISON 3 MOIS - SEUL TRUC CHANGE EN V2.5 ---
-const RANKS=[{name:'BRONZE',emoji:'🥉',min:0,max:29},{name:'ARGENT',emoji:'🥈',min:30,max:89},{name:'OR',emoji:'🥇',min:90,max:179},{name:'PLATINE',emoji:'💎',min:180,max:299},{name:'DIAMANT',emoji:'🔷',min:300,max:599},{name:'ÉLITE',emoji:'👑',min:600,max:999},{name:'CHAMPION',emoji:'🔥',min:1000,max:1499},{name:'PRO',emoji:'🌟',min:1500,max:999999}];
+// --- RANGS PERSO BRONZE -> PRO ---
+const RANKS=[{name:'BRONZE',emoji:'🥉',min:0,max:29},{name:'ARGENT',emoji:'🥈',min:30,max:89},{name:'OR',emoji:'🥇',min:90,max:179},{name:'PLATINE',emoji:'💎',min:180,max:299},{name:'DIAMANT',emoji:'🔷',min:300,max:599},{name:'PRO',emoji:'🌟',min:600,max:999999}];
 function seasonKey(){const d=new Date(); const year=d.getFullYear(); const m=d.getMonth()+1; const season=Math.ceil(m/3); return year+'-S'+season;}
 function seasonLabel(){const d=new Date(); const m=d.getMonth()+1; const season=Math.ceil(m/3); const labels={1:'Janvier - Février - Mars',2:'Avril - Mai - Juin',3:'Juillet - Août - Septembre',4:'Octobre - Novembre - Décembre'}; return 'Saison '+season+' • '+labels[season]+' • Reset en fin de saison';}
-function getRank(score, isTop10){ if(isTop10) return RANKS[7]; for(let r of RANKS){ if(score>=r.min&&score<=r.max) return r; } return RANKS[0]; }
+function getRank(score){ for(let r of RANKS){ if(score>=r.min&&score<=r.max) return r; } return RANKS[0]; }
 function getNextRank(score){ for(let r of RANKS){ if(score<r.min) return r; } return null; }
 let storedSeason=localStorage.getItem('lumy_season');
 if(storedSeason!==seasonKey()){ localStorage.setItem('lumy_season',seasonKey()); localStorage.setItem('lumy_count_season','0'); }
@@ -131,8 +126,7 @@ function updateFire(){ fireBadge.textContent='🔥 '+countMonth; } updateFire();
 let favs=JSON.parse(localStorage.getItem('lumy_favs')||'[]'); function updateFavBadge(){ favBadge.textContent='⭐ '+favs.length; } updateFavBadge();
 favBadge.onclick=()=>{const d=document.getElementById('favDrawer'); const list=document.getElementById('favList'); list.innerHTML=favs.length?favs.map(f=>`<div class="fav-item">${f.replace(/</g,'&lt;')}</div>`).join(''):'<div class="fav-item">Aucun favori pour l\'instant. Clique sur ⭐ sous une réponse.</div>'; d.style.display=d.style.display==='block'?'none':'block';};
 
-// --- CLASSEMENT SAISON ---
-const DEMO=[{name:'Zennox69',score:1240,rank:'PRO'},{name:'Lina',score:1120,rank:'PRO'},{name:'Rayan',score:980,rank:'PRO'},{name:'Léa',score:840,rank:'ÉLITE'},{name:'Noa',score:640,rank:'ÉLITE'},{name:'Adam',score:420,rank:'DIAMANT'},{name:'Ines',score:280,rank:'PLATINE'},{name:'Hugo',score:190,rank:'PLATINE'},{name:'Mia',score:110,rank:'OR'},{name:'Tom',score:45,rank:'ARGENT'}];
+// --- TON RANG PERSO + PSEUDO ---
 function openLeader(){ renderLeader(); document.getElementById('leaderOverlay').classList.add('open'); }
 function closeLeader(){ document.getElementById('leaderOverlay').classList.remove('open'); }
 fireBadge.onclick=openLeader;
@@ -141,27 +135,17 @@ function savePseudo(){ const v=document.getElementById('pseudoInput').value.trim
 function renderLeader(){
   document.getElementById('leaderMonth').textContent=seasonLabel();
   const pz=document.getElementById('pseudoZone');
-  if(!pseudo){ pz.innerHTML=`<div style="background:rgba(255,255,255,.1);border-radius:14px;padding:12px;margin-bottom:12px;text-align:center;font-size:13px">Choisis ton pseudo pour le classement mondial 👇<div class="pseudo-box"><input id="pseudoInput" placeholder="Ex: Zennox69" maxlength="15"><button onclick="savePseudo()">OK</button></div></div>`; }
-  else { pz.innerHTML=`<div style="text-align:center;font-size:13px;margin-bottom:10px">Ton pseudo : <b>@${pseudo}</b> • <span style="color:#facc15;cursor:pointer;text-decoration:underline" onclick="localStorage.removeItem('lumy_pseudo');pseudo='';renderLeader()">changer</span></div>`; }
-  let all=[...DEMO];
-  if(pseudo){ all.push({name:pseudo,score:countMonth,me:true}); }
-  all.sort((a,b)=>b.score-a.score);
-  all.forEach((p,i)=>{ p.isPro=i<10; });
-  let me=all.find(p=>p.me);
-  let myRankObj = me ? getRank(countMonth, me.isPro) : getRank(countMonth,false);
-  document.getElementById('myRankTitle').textContent=myRankObj.emoji+' '+myRankObj.name+(myRankObj.name==='PRO'?' • TOP 10 SAISON':'');
+  if(!pseudo){ pz.innerHTML=`<div style="background:rgba(255,255,255,.1);border-radius:14px;padding:12px;font-size:13px">Choisis ton pseudo 👇<div class="pseudo-box"><input id="pseudoInput" placeholder="Ex: Zennox69" maxlength="15"><button onclick="savePseudo()">OK</button></div></div>`; }
+  else { pz.innerHTML=`<div style="font-size:13px">Ton pseudo : <b>@${pseudo}</b> • <span style="color:#facc15;cursor:pointer;text-decoration:underline" onclick="localStorage.removeItem('lumy_pseudo');pseudo='';renderLeader()">changer</span></div>`; }
+  let myRankObj = getRank(countMonth);
+  document.getElementById('myRankTitle').textContent=myRankObj.emoji+' '+myRankObj.name;
   document.getElementById('myRankSub').textContent=(pseudo? '@'+pseudo+' • ' : '')+countMonth+' question'+(countMonth>1?'s':'')+' cette saison • Total : '+countTotal;
   let next=getNextRank(countMonth);
   let prog=0, nextTxt='';
-  if(myRankObj.name==='PRO'){ prog=100; nextTxt='Tu es PRO 🌟 Reste dans le Top 10 !'; }
+  if(myRankObj.name==='PRO'){ prog=100; nextTxt='Tu es PRO 🌟 T\'es au max !'; }
   else if(next){ prog=Math.min(100, Math.round((countMonth - myRankObj.min)/(next.min - myRankObj.min)*100)); nextTxt='Plus que '+(next.min-countMonth)+' pour passer '+next.emoji+' '+next.name; }
   document.getElementById('myProgress').style.width=prog+'%'; document.getElementById('myNext').textContent=nextTxt;
-  document.getElementById('rankGrid').innerHTML=RANKS.map(r=>`<div class="rank-chip ${r.name===myRankObj.name?'active':''}"><b>${r.emoji} ${r.name}</b>${r.name==='PRO'?'Top 10 de la saison':r.min+' - '+r.max+' quest.'}</div>`).join('');
-  document.getElementById('leaderList').innerHTML='<h3 style="font-size:15px;margin:10px 0 8px">🏆 Top 10 Mondial de la Saison</h3>'+all.slice(0,10).map((p,i)=>{
-    let medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'.';
-    let rankTxt=p.isPro?'🌟 PRO':getRank(p.score,false).emoji+' '+getRank(p.score,false).name;
-    return `<div class="leader-row ${p.me?'me':''} ${p.isPro?'pro':''}"><div class="leader-pos">${medal}</div><div class="leader-name">${p.name} ${p.me?'(TOI)':''}<small>${rankTxt}</small></div><div class="leader-score">🔥 ${p.score}</div></div>`;
-  }).join('')+(me && all.indexOf(me)>=10 ? `<div style="text-align:center;font-size:12px;color:#d8b4fe;margin-top:8px">Ton rang : <b>${all.indexOf(me)+1}ème</b> • 🔥 ${countMonth}</div>` : '');
+  document.getElementById('rankGrid').innerHTML=RANKS.map(r=>`<div class="rank-chip ${r.name===myRankObj.name?'active':''}"><b>${r.emoji} ${r.name}</b>${r.name==='PRO'?'600+ quest.':r.min+' - '+r.max+' quest.'}</div>`).join('');
 }
 function setMood(e){ currentMood=e; document.querySelectorAll('.bot-mood').forEach(el=>el.textContent=e); } setTimeout(()=>setMood('👀'),3200);
 let audioCtx=null; function playDing(){ try{ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination); o.frequency.value=880; o.type='sine'; g.gain.setValueAtTime(0.12,audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.45); o.start(); o.stop(audioCtx.currentTime+0.45); }catch(e){} }
