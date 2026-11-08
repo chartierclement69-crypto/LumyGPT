@@ -7,14 +7,7 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
   html{background:#0a0530;overscroll-behavior:none}
-  body{
-    background:#0a0530;color:white;
-    display:flex;flex-direction:column;
-    height:100dvh;
-    overflow:hidden;
-    overscroll-behavior:none;
-    padding-top:env(safe-area-inset-top);
-  }
+  body{background:#0a0530;color:white;display:flex;flex-direction:column;height:100dvh;overflow:hidden;overscroll-behavior:none;padding-top:env(safe-area-inset-top)}
   header{flex-shrink:0;height:76px;min-height:76px;padding:10px 14px;display:flex;align-items:center;gap:10px;background:#0a0530;z-index:20}
   .logo{width:52px;height:52px;background:linear-gradient(135deg,#3b82f6,#a855f7);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:26px;line-height:1;flex-shrink:0}
   .logo span{font-size:7px;letter-spacing:.5px}
@@ -30,8 +23,12 @@
   .row.me{justify-content:flex-end}
   .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
   .avatar.me{border:2px solid #22d3ee;background:#0a0530}
-  .bubble{background:#1e1b4b;padding:12px 14px;border-radius:16px;max-width:82%;font-size:15px;line-height:1.45;word-break:break-word}
+  .bubble{background:#1e1b4b;padding:12px 14px;border-radius:16px;max-width:82%;font-size:15px;line-height:1.45;word-break:break-word;overflow-wrap:break-word}
   .bubble.me{background:linear-gradient(135deg,#7c3aed,#3b82f6)}
+  /* FILTRE - rendu propre des réponses */
+  .bubble pre{background:#0a0530;border:1px solid #7c3aed;border-radius:10px;padding:10px;margin:8px 0;overflow-x:auto;font-size:13px;line-height:1.4;white-space:pre-wrap;word-break:break-word}
+  .bubble code{background:#0a0530;padding:2px 6px;border-radius:6px;font-size:13px;word-break:break-word}
+  .bubble pre code{background:none;padding:0;font-size:13px}
   .input-bar{flex-shrink:0;padding:12px;padding-bottom:max(12px, env(safe-area-inset-bottom));background:#0a0530;z-index:20;display:flex;gap:8px;align-items:center}
   .input-wrap{flex:1;display:flex;align-items:center;gap:10px;background:#1e1b4b;border:2px solid #7c3aed;border-radius:999px;padding:6px 6px 6px 8px}
   .plus{width:36px;height:36px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
@@ -67,14 +64,35 @@
 const chat = document.getElementById('chat');
 const input = document.getElementById('input');
 
+function escapeHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function formatReply(text){
+  let t = escapeHtml(text || '');
+  // Blocs de code ``` ... ```
+  t = t.replace(/```\w*\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+  t = t.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+  // Code inline `code`
+  t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
+  // Gras **texte**
+  t = t.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+  // Titres # ## ###
+  t = t.replace(/^### (.*)$/gm, '<b>$1</b>');
+  t = t.replace(/^## (.*)$/gm, '<b>$1</b>');
+  t = t.replace(/^# (.*)$/gm, '<b>$1</b>');
+  // Sauts de ligne
+  t = t.replace(/\n/g, '<br>');
+  return t;
+}
+
 async function send(){
   const txt = input.value.trim();
   if(!txt) return;
-  chat.innerHTML += `<div class="row me"><div class="bubble me">${txt}</div><div class="avatar me">Z</div></div>`;
+  chat.innerHTML += `<div class="row me"><div class="bubble me">${escapeHtml(txt)}</div><div class="avatar me">Z</div></div>`;
   input.value = '';
   chat.scrollTop = chat.scrollHeight;
 
-  // Petit message "en train d'écrire..."
   const typingId = 'typing-' + Date.now();
   chat.innerHTML += `<div class="row" id="${typingId}"><div class="avatar">L</div><div class="bubble">...</div></div>`;
   chat.scrollTop = chat.scrollHeight;
@@ -87,7 +105,7 @@ async function send(){
     });
     const data = await rep.json();
     document.getElementById(typingId)?.remove();
-    chat.innerHTML += `<div class="row"><div class="avatar">L</div><div class="bubble">${data.reply || 'Erreur, réessaie bg'}</div></div>`;
+    chat.innerHTML += `<div class="row"><div class="avatar">L</div><div class="bubble">${formatReply(data.reply || 'Erreur, réessaie bg')}</div></div>`;
   } catch(e) {
     document.getElementById(typingId)?.remove();
     chat.innerHTML += `<div class="row"><div class="avatar">L</div><div class="bubble">Erreur de connexion à GROQ, réessaie.</div></div>`;
