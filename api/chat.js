@@ -46,10 +46,22 @@ const send = document.getElementById('send');
 const clearBtn = document.getElementById('clearBtn');
 
 // --- HISTORIQUE : ça reste même si tu recharges ---
-let history = JSON.parse(localStorage.getItem('lumy_history') || '[]');
+let history = [];
+try {
+  history = JSON.parse(localStorage.getItem('lumy_history') || '[]');
+} catch(e) {
+  history = [];
+}
 
 function saveHistory(){
-  localStorage.setItem('lumy_history', JSON.stringify(history.slice(-50)));
+  try{
+    // On garde que les 50 derniers, donc ça déborde JAMAIS
+    localStorage.setItem('lumy_history', JSON.stringify(history.slice(-50)));
+  }catch(e){
+    // Si le stockage est plein, on garde que les 20 derniers et on réessaie
+    history = history.slice(-20);
+    try{ localStorage.setItem('lumy_history', JSON.stringify(history)); }catch(e2){}
+  }
 }
 
 function escapeHtml(t){
@@ -58,11 +70,8 @@ function escapeHtml(t){
 
 function formatText(t){
   let s = escapeHtml(t);
-  // **gras** -> <b>
   s = s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-  // `code` -> <code>
   s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
-  // Si y'a un bloc ``` on l'enlève, on affiche propre
   s = s.replace(/```[\s\S]*?```/g, (m)=>{
     const clean = m.replace(/```\w*/,'').replace(/```/,'').trim();
     return '<pre>' + clean + '</pre>';
@@ -90,7 +99,7 @@ if(history.length === 0){
 clearBtn.onclick = ()=>{
   if(!confirm('Tu veux vraiment effacer toute la conv ?')) return;
   history = [];
-  localStorage.removeItem('lumy_history');
+  try{ localStorage.removeItem('lumy_history'); }catch(e){}
   chat.innerHTML = '';
   addMsg('Salut bg ! Je suis LumyGPT, créé par l\'équipe LumyGPT. Pose-moi une question, je suis là.', 'bot');
 };
