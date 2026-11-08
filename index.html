@@ -5,39 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
 <title>LumyGPT</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
-  html,body{height:100%;background:#0a0530;overflow:hidden}
-  body{
-    color:white;
-    display:flex;flex-direction:column;
-    height:100dvh; /* ça c'est la clé sur iPhone, ça bloque la barre Safari */
-    height:100svh;
+  *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+  html,body{
+    height:100%;background:#0a0530;
     overflow:hidden;
+    overscroll-behavior:none; /* <- BLOQUE LE REFRESH */
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    touch-action:none; /* <- interdit le tirer pour actualiser */
   }
+  body{color:white;display:flex;flex-direction:column}
 
-  /* 1. HAUT BLOQUÉ */
-  header{flex-shrink:0;flex-grow:0;padding:14px 14px 10px;display:flex;align-items:center;gap:10px;background:#0a0530;border-bottom:1px solid rgba(255,255,255,0.08)}
-  .logo{width:52px;height:52px;background:linear-gradient(135deg,#3b82f6,#a855f7);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:26px;line-height:1}
+  /* HAUT FIXE */
+  header{flex-shrink:0;height:76px;padding:14px 14px 10px;display:flex;align-items:center;gap:10px;background:#0a0530;z-index:20}
+  .logo{width:52px;height:52px;background:linear-gradient(135deg,#3b82f6,#a855f7);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:26px;line-height:1;flex-shrink:0}
   .logo span{font-size:7px;letter-spacing:.5px}
   .title{font-size:30px;font-weight:900;color:#7dd3fc;letter-spacing:1px;flex:1}
-  .badges{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+  .badges{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
   .badges-top{display:flex;gap:6px}
   .v{background:#16a34a;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
   .pro{background:#eab308;color:black;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800}
   .gratuit{background:#2563eb;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
   .online{font-size:12px;color:#22c55e;font-weight:700}
 
-  /* 2. MILIEU = SEUL TRUC QUI BOUGE */
-  .chat{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;display:flex;flex-direction:column;gap:12px;overscroll-behavior:contain}
+  /* MILIEU = LE SEUL QUI PEUT SCROLLER */
+  .chat{
+    flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    touch-action:pan-y; /* <- le seul endroit où tu as le droit de scroller */
+    padding:12px;display:flex;flex-direction:column;gap:12px;
+  }
   .row{display:flex;gap:8px;align-items:flex-end}
   .row.me{justify-content:flex-end}
   .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ec4899,#a855f7);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
   .avatar.me{border:2px solid #22d3ee;background:#0a0530}
-  .bubble{background:#1e1b4b;padding:12px 14px;border-radius:16px;max-width:82%;font-size:15px;line-height:1.45}
+  .bubble{background:#1e1b4b;padding:12px 14px;border-radius:16px;max-width:82%;font-size:15px;line-height:1.45;word-break:break-word}
   .bubble.me{background:linear-gradient(135deg,#7c3aed,#3b82f6)}
 
-  /* 3. BAS BLOQUÉ - RESTE AU DESSUS DU CLAVIER */
-  .input-bar{flex-shrink:0;flex-grow:0;padding:12px;padding-bottom:max(12px, env(safe-area-inset-bottom));background:#0a0530;border-top:1px solid rgba(255,255,255,0.08);display:flex;gap:8px;align-items:center}
+  /* BAS FIXE */
+  .input-bar{flex-shrink:0;padding:12px;padding-bottom:max(12px, env(safe-area-inset-bottom));background:#0a0530;z-index:20;display:flex;gap:8px;align-items:center}
   .input-wrap{flex:1;display:flex;align-items:center;gap:10px;background:#1e1b4b;border:2px solid #7c3aed;border-radius:999px;padding:6px 6px 6px 8px}
   .plus{width:36px;height:36px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
   .input-wrap input{flex:1;background:transparent;border:none;outline:none;color:white;font-size:16px;min-width:0}
@@ -63,32 +69,46 @@
 <div class="input-bar">
   <div class="input-wrap">
     <div class="plus">+</div>
-    <input id="input" placeholder="Écris à LumyGPT..." />
+    <input id="input" placeholder="Écris à LumyGPT..." autocomplete="off" />
     <button class="send" onclick="send()">➤</button>
   </div>
 </div>
 
 <script>
 const chat = document.getElementById('chat');
+const input = document.getElementById('input');
+
 function send(){
-  const inp = document.getElementById('input');
-  const txt = inp.value.trim();
+  const txt = input.value.trim();
   if(!txt) return;
   chat.innerHTML += `<div class="row me"><div class="bubble me">${txt}</div><div class="avatar me">Z</div></div>`;
-  inp.value = '';
+  input.value = '';
   chat.scrollTop = chat.scrollHeight;
   setTimeout(()=>{
     chat.innerHTML += `<div class="row"><div class="avatar">L</div><div class="bubble">Désolé, mais je ne peux pas répondre à cette demande.</div></div>`;
     chat.scrollTop = chat.scrollHeight;
   }, 600);
 }
-document.getElementById('input').addEventListener('keydown', e=>{ if(e.key==='Enter') send(); });
+input.addEventListener('keydown', e=>{ if(e.key==='Enter') send(); });
 
-// Fix hauteur iPhone quand le clavier s'ouvre / se ferme
-function setH(){
-  document.body.style.height = window.visualViewport ? window.visualViewport.height + 'px' : '100dvh';
-}
-if(window.visualViewport){ window.visualViewport.addEventListener('resize', setH); }
+// --- BLOQUE LE PULL-TO-REFRESH SAUF DANS LA CONV ---
+let lastY = 0;
+document.addEventListener('touchstart', e=>{ lastY = e.touches[0].clientY; }, {passive:true});
+document.addEventListener('touchmove', e=>{
+  // Si tu es dans la conv, on laisse scroller
+  if(e.target.closest('.chat')) return;
+  // Sinon on bloque tout : pas de tirage, pas d'actualisation
+  e.preventDefault();
+}, {passive:false});
+
+// Empêche le double dédoublement quand on est tout en haut de la conv
+chat.addEventListener('touchmove', e=>{
+  if(chat.scrollTop <= 0){
+    const y = e.touches[0].clientY;
+    if(y > lastY) e.preventDefault(); // tu tires vers le bas en haut de la conv = on bloque le refresh
+  }
+  lastY = e.touches[0].clientY;
+}, {passive:false});
 </script>
 
 </body>
