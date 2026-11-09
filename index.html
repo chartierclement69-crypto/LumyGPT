@@ -2,173 +2,148 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LumyGPT</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
-<script defer src="/_vercel/insights/script.js"></script>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html{background:#0d001f;color-scheme:dark}
-  html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:#0d001f}
-  body{font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,Arial,sans-serif;color:#fff;display:flex;flex-direction:column;height:100dvh;overflow:hidden;background:radial-gradient(circle at 15% 5%, rgba(192,38,211,.45) 0%, transparent 40%),radial-gradient(circle at 90% 15%, rgba(139,92,246,.45) 0%, transparent 42%),radial-gradient(circle at 50% 110%, rgba(217,70,239,.38) 0%, transparent 45%),linear-gradient(180deg,#1e003a 0%, #0d001f 45%, #05000f 100%);background-size:130% 130%;animation:bgNuance 16s ease-in-out infinite alternate}
-  @keyframes bgNuance{0%{background-position:0% 0%}100%{background-position:100% 100%}}
-  body.theme-foot{background:radial-gradient(circle at 20% 20%, rgba(34,197,94,.4) 0%, transparent 45%),linear-gradient(180deg,#052e16 0%, #0d001f 100%)}
-  body.theme-love{background:radial-gradient(circle at 50% 20%, rgba(236,72,153,.5) 0%, transparent 50%),linear-gradient(180deg,#500724 0%, #1a0033 100%)}
-  body.theme-devoir{background:radial-gradient(circle at 50% 20%, rgba(59,130,246,.45) 0%, transparent 50%),linear-gradient(180deg,#0c1a3a 0%, #0d001f 100%)}
-  body.theme-tiktok{background:radial-gradient(circle at 50% 20%, rgba(0,0,0,.6) 0%, transparent 50%),linear-gradient(180deg,#111 0%, #4c1d95 100%)}
-  body.light{background:radial-gradient(circle at 15% 5%, rgba(168,85,247,.25) 0%, transparent 40%),linear-gradient(180deg,#ffffff 0%, #f3e8ff 60%, #e9d5ff 100%);color:#1a0033}
-  body.light header{background:rgba(255,255,255,.82);border-bottom:1px solid rgba(168,85,247,.25)}
-  body.light header h1{color:#1a0033} body.light .subtitle{color:#6d28d9} body.light .chip{background:#fff;color:#6d28d9;border:1px solid #e9d5ff} body.light .bot-msg{background:#fff;color:#1a0033;border:1px solid #e9d5ff} body.light .bot-msg b{color:#6d28d9} body.light .time{color:#a78bfa} body.light .input-wrap{background:#fff;border:2px solid #d8b4fe} body.light #input{color:#1a0033} body.light #input::placeholder{color:#a78bfa}
-  body.night{background:linear-gradient(180deg,#020010 0%, #0a0033 60%, #000 100%)}
-  .moon{display:none;position:fixed;top:70px;right:18px;font-size:28px;z-index:1;animation:moonFloat 3s ease-in-out infinite} body.night .moon{display:block} @keyframes moonFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-  .night-star{position:fixed;width:3px;height:3px;background:#fff;border-radius:50%;z-index:0;opacity:0;animation:twinkle 2s ease-in-out infinite} @keyframes twinkle{0%,100%{opacity:0}50%{opacity:1}}
-  .snow{position:fixed;top:-10px;border-radius:50%;background:#e9d5ff;pointer-events:none;z-index:0;opacity:.7;animation:snowFall linear infinite} @keyframes snowFall{0%{transform:translateY(0);opacity:0}10%{opacity:.8}100%{transform:translateY(105vh) translateX(30px);opacity:0}}
-  .fall-item{position:fixed;top:-20px;font-size:18px;pointer-events:none;z-index:0;animation:snowFall linear infinite}
-  .spark{position:fixed;width:4px;height:4px;background:#fff;border-radius:50%;z-index:0;pointer-events:none;opacity:0;animation:sparkle 3s ease-in-out infinite} @keyframes sparkle{0%,100%{opacity:0;transform:translateY(0) scale(.5)}50%{opacity:.9;transform:translateY(-12px) scale(1.2)}} .spark.s1{left:12%;top:22%}.spark.s2{left:88%;top:18%;animation-delay:.6s}.spark.s3{left:78%;top:55%;animation-delay:1.1s}.spark.s4{left:8%;top:62%;animation-delay:1.5s}
-  #splash{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 50%, #3b0a6d 0%, #1a0033 45%, #0a0018 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;overflow:hidden;animation:splashOut .4s ease 2.6s forwards}
-  #splash::before{content:"";position:absolute;inset:0;background:#fff;opacity:0;animation:flash .3s ease .05s forwards} @keyframes flash{0%{opacity:.9}100%{opacity:0}} @keyframes splashOut{to{opacity:0;visibility:hidden}}
-  .splash-center{position:relative;width:240px;height:240px;display:flex;align-items:center;justify-content:center} .halo{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle, rgba(168,85,247,.65) 0%, transparent 65%);animation:haloPulse 1s ease-in-out infinite} @keyframes haloPulse{0%,100%{transform:scale(.88);opacity:.6}50%{transform:scale(1.2);opacity:.95}}
-  .shock{position:absolute;width:170px;height:170px;border-radius:50%;border:3px solid #e9d5ff;opacity:0;animation:shockWave 1s ease-out .45s forwards} @keyframes shockWave{0%{transform:scale(.8);opacity:.9}100%{transform:scale(2.1);opacity:0}}
-  .ring1{position:absolute;width:210px;height:210px;border:3px dashed rgba(216,180,254,.85);border-radius:50%;animation:spin 4s linear infinite} .ring2{position:absolute;width:255px;height:255px;border:2px solid rgba(168,85,247,.45);border-radius:50%;animation:spinRev 6s linear infinite} @keyframes spin{to{transform:rotate(360deg)}} @keyframes spinRev{to{transform:rotate(-360deg)}}
-  .splash-logo{position:relative;z-index:2;width:165px;height:165px;border-radius:42px;background:linear-gradient(135deg,#fff 0%, #d8b4fe 15%, #a855f7 40%, #6d28d9 75%, #4c1d95 100%);display:flex;align-items:center;justify-content:center;font-size:125px;font-weight:900;color:#fff;border:4px solid #fff;box-shadow:0 0 30px #fff, 0 0 70px #a855f7;animation:logoMax 2.6s cubic-bezier(.2,1.4,.3,1) forwards} @keyframes logoMax{0%{transform:scale(2.2) rotate(-15deg);opacity:0}15%{transform:scale(1.2) rotate(4deg);opacity:1}28%{transform:scale(1)}40%{transform:translateY(-28px)}50%{transform:translateY(0)}100%{transform:scale(0) rotate(360deg) translateY(-170px);opacity:0}}
-  .particle{position:absolute;width:7px;height:7px;border-radius:50%;background:#e9d5ff;opacity:0;animation:particleFly 1.1s ease-out .4s forwards} @keyframes particleFly{0%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(var(--x), var(--y))}}
-  .confetti{position:absolute;top:-10px;width:7px;height:12px;border-radius:2px;opacity:0;animation:fall 1.9s ease-in .9s forwards} @keyframes fall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(520px) rotate(680deg)}}
-  .splash-title{font-size:42px;font-weight:900;display:flex} .splash-title span{opacity:0;animation:letterPop .35s cubic-bezier(.2,1.8,.3,1) forwards;display:inline-block} .splash-title span:nth-child(1){animation-delay:.9s;color:#fff}.splash-title span:nth-child(2){animation-delay:1s;color:#e9d5ff}.splash-title span:nth-child(3){animation-delay:1.1s;color:#d8b4fe}.splash-title span:nth-child(4){animation-delay:1.2s;color:#c084fc}.splash-title span:nth-child(5){animation-delay:1.35s;color:#a855f7}.splash-title span:nth-child(6){animation-delay:1.5s;color:#c084fc}.splash-title span:nth-child(7){animation-delay:1.65s;color:#e9d5ff} @keyframes letterPop{0%{opacity:0;transform:translateY(22px) scale(.5)}100%{opacity:1;transform:translateY(0) scale(1)}}
-  .splash-sub{font-size:12px;color:#e9d5ff;letter-spacing:3px;text-transform:uppercase;opacity:0;animation:fadeIn .5s ease 1.8s forwards} .splash-bar{width:150px;height:6px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;opacity:0;animation:fadeIn .3s ease 1.5s forwards} .splash-bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#a855f7,#facc15,#fff);border-radius:99px;animation:loading 1s ease 1.5s forwards} @keyframes loading{to{width:100%}} @keyframes fadeIn{to{opacity:1}}
-  header{flex-shrink:0;padding:10px 14px 12px;padding-top:calc(6px + env(safe-area-inset-top));text-align:center;background:rgba(20,0,40,.55);border-bottom:1px solid rgba(255,255,255,.12);position:relative;z-index:2;opacity:0;animation:fadeIn .35s ease 2.7s forwards}
-  .top-row{display:flex;justify-content:space-between;align-items:center} .live{display:flex;align-items:center;gap:6px;font-size:11px;color:#a7f3d0;background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.4);padding:5px 10px;border-radius:999px;font-weight:700} .live i{width:7px;height:7px;background:#22c55e;border-radius:50%}
-  .badges{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end} .badge{background:rgba(168,85,247,.25);border:1px solid rgba(216,180,254,.6);color:#fff;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800} .badge-gold{background:linear-gradient(135deg,#fde68a,#facc15);color:#1a1000;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:900} .badge-fire{background:rgba(0,0,0,.35);border:1px solid rgba(251,146,60,.6);color:#fdba74;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800;cursor:pointer} .badge-fav{background:rgba(0,0,0,.35);border:1px solid rgba(250,204,21,.6);color:#fde68a;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800;cursor:pointer} .icon-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-  .logo-wrap{margin:10px auto 4px;width:68px;height:68px;position:relative} .ring{position:absolute;inset:-8px;border:2px solid rgba(216,180,254,.85);border-radius:24px;transform:rotate(12deg);animation:spinSlow 9s linear infinite} .ring-out{position:absolute;inset:-16px;border:1.5px dashed rgba(34,211,238,.55);border-radius:28px;transform:rotate(-10deg);animation:spinSlowRev 14s linear infinite}
-  .logo{width:68px;height:68px;border-radius:22px;position:relative;overflow:hidden;background:linear-gradient(135deg,#f5d0fe 0%, #e9d5ff 15%, #a855f7 40%, #6d28d9 75%, #3b0a6d 100%);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;box-shadow:calc(var(--sx, 0px)) calc(var(--sy, 8px)) 22px rgba(168,85,247,.7), 0 0 22px #fff;border:2px solid rgba(255,255,255,.95);transition:transform .2s} .logo::after{content:"";position:absolute;top:-30%;left:-20%;width:70%;height:140%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.5),transparent);transform:rotate(12deg) translateX(-120%);animation:gloss 4s ease-in-out infinite} @keyframes gloss{0%,55%{transform:rotate(12deg) translateX(-120%)}100%{transform:rotate(12deg) translateX(280%)}} body.typing .logo{transform:scale(1.08) translateY(-4px) rotate(-2deg)}
-  header h1{font-size:32px;line-height:1;font-weight:800} header h1 .grad{background:linear-gradient(90deg,#c084fc,#e9d5ff,#22d3ee,#f472b6,#c084fc);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 4s linear infinite} @keyframes shine{to{background-position:300% 0}}
-  .subtitle{font-size:12.5px;color:#d8b4fe;margin-top:4px} .chips{display:flex;gap:7px;justify-content:center;margin-top:10px;flex-wrap:wrap;min-height:32px} .chip{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);color:#fff;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer} .chip-tiktok{background:linear-gradient(135deg, rgba(168,85,247,.45), rgba(217,70,239,.45));border-color:#f0abfc}
-  #chat{flex:1;overflow-y:auto;padding:14px 12px 12px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch;position:relative;z-index:2;opacity:0;animation:fadeIn .35s ease 2.8s forwards}
-  .row{display:flex;gap:9px;align-items:flex-start} .row.user{justify-content:flex-end} .avatar-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0} .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#e9d5ff,#a855f7,#6d28d9);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;border:2px solid #fff} .avatar.user-av{background:linear-gradient(135deg,#22d3ee,#0ea5e9);border:2px solid #a5f3fc} .bot-mood{width:22px;height:22px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;border:1.5px solid #e9d5ff}
-  .msg{max-width:82%;padding:13px 15px;border-radius:20px;line-height:1.6;font-size:15px;white-space:pre-wrap;word-break:break-word} .bot-msg{background:linear-gradient(135deg, rgba(88,28,135,.92), rgba(76,29,149,.88));border:1px solid rgba(216,180,254,.6);box-shadow:0 8px 22px rgba(0,0,0,.3);border-bottom-left-radius:6px;color:#fff} .user-msg{background:linear-gradient(135deg,#8b5cf6,#a855f7);border:1px solid rgba(255,255,255,.25);border-bottom-right-radius:6px}
-  .bot-msg b{color:#fff} .bot-msg code{background:rgba(0,0,0,.45);padding:2px 6px;border-radius:6px;font-size:13px} .bot-msg pre{background:#000;padding:10px;border-radius:10px;overflow-x:auto;margin:8px 0;font-size:13px} .time{font-size:10px;color:rgba(255,255,255,.55);margin-top:5px;text-align:left;padding-left:2px}
-  .actions{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap} .action-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:11px;padding:5px 9px;border-radius:999px;cursor:pointer} .action-btn.active{background:#22c55e;border-color:#22c55e} .action-btn.active-red{background:#ef4444;border-color:#ef4444} .action-btn.fav-active{background:#facc15;border-color:#facc15;color:#000} .msg img.chat-img{max-width:100%;border-radius:12px;margin-top:6px;display:block}
-  .wave{position:relative;z-index:1;height:10px;overflow:hidden;opacity:.45;flex-shrink:0;margin-bottom:-2px;pointer-events:none;background:#0d001f} .wave svg{width:200%;height:100%;display:block;animation:waveMove 4s linear infinite} @keyframes waveMove{to{transform:translateX(-50%)}}
-  #form{flex-shrink:0;padding:6px 12px 12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));position:relative;z-index:5;opacity:0;animation:fadeIn .35s ease 2.9s forwards;background:#0d001f}
-  .input-wrap{display:flex;align-items:center;gap:6px;background:#1a0033;border:2px solid rgba(216,180,254,.7);border-radius:999px;padding:6px 6px 6px 14px;box-shadow:0 0 0 4px rgba(13,0,31,.9), 0 12px 28px rgba(0,0,0,.5)} body.typing .input-wrap{border-color:#fff;background:#220044;box-shadow:0 0 0 4px rgba(13,0,31,.9), 0 0 22px rgba(217,70,239,.7)}
-  .mini-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:16px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center} .mini-btn.active{background:#a855f7;border-color:#fff}
-  #input{flex:1;background:transparent;border:none;color:#fff;padding:12px 4px;outline:none;font-size:17px;font-weight:700;font-family:inherit;min-width:0;caret-color:#fff} #input::placeholder{color:#e9d5ff;font-weight:600;opacity:1} #input:focus::placeholder{color:rgba(233,213,255,.6)}
-  #send{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#c084fc,#a855f7,#6366f1);border:none;color:#fff;font-size:19px;cursor:pointer;flex-shrink:0} #send:active{transform:scale(.92)} #send:disabled{opacity:.5}
-  .typing{opacity:.7} .cursor{display:inline-block;width:8px;height:15px;background:#e9d5ff;vertical-align:middle;margin-left:2px;animation:blink .7s infinite} @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-  .burst{position:fixed;width:6px;height:6px;border-radius:50%;pointer-events:none;z-index:99;animation:burstFly .6s ease-out forwards} @keyframes burstFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--bx), var(--by)) scale(0)}}
-  .fav-drawer{position:fixed;left:12px;right:12px;bottom:90px;z-index:50;background:#1a0033;border:1px solid #a855f7;border-radius:18px;padding:14px;max-height:50vh;overflow:auto;display:none} .fav-drawer h3{font-size:15px;margin-bottom:8px} .fav-item{background:rgba(255,255,255,.08);padding:10px;border-radius:12px;margin-bottom:8px;font-size:13px;line-height:1.5}
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:60;display:none;align-items:flex-end;justify-content:center}
-  .overlay.open{display:flex}
-  .leader-card{background:linear-gradient(180deg,#2a0a5a,#12002b);width:100%;max-width:520px;max-height:86dvh;overflow:auto;border-radius:24px 24px 0 0;border:1px solid #a855f7;padding:16px 16px 24px;position:relative;animation:slideUp .25s ease}
-  @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
-  .close-x{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:16px;cursor:pointer}
-  .leader-card h2{font-size:20px;text-align:center;margin-top:6px} .leader-sub{text-align:center;color:#d8b4fe;font-size:12px;margin:6px 0 14px}
-  .my-rank{background:linear-gradient(135deg,#facc15,#f97316);color:#000;border-radius:16px;padding:14px;text-align:center}
-  .my-rank b{font-size:22px;display:block} .my-rank span{font-size:12px;font-weight:800}
-  .progress{height:10px;background:rgba(0,0,0,.25);border-radius:99px;overflow:hidden;margin:10px 0 4px} .progress i{display:block;height:100%;background:#fff;border-radius:99px}
-  .rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
-  .rank-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:9px 10px;font-size:12px;line-height:1.4} .rank-chip.active{border-color:#facc15;background:rgba(250,204,21,.18)}
-  .rank-chip b{display:block;font-size:13px}
-  .month-note{text-align:center;font-size:11px;color:#d8b4fe;margin-top:10px;line-height:1.5}
-  .pseudo-box{display:flex;gap:8px;margin-top:8px} .pseudo-box input{flex:1;background:#fff;color:#000;border:none;border-radius:12px;padding:11px 12px;font-weight:800;font-family:inherit;outline:none} .pseudo-box button{background:#fff;color:#000;border:none;border-radius:12px;padding:11px 14px;font-weight:900;cursor:pointer}
-  .ring, .ring-out{animation-play-state:running !important;will-change:transform}
-  @keyframes spinSlow{from{transform:rotate(12deg)}to{transform:rotate(372deg)}}
-  @keyframes spinSlowRev{from{transform:rotate(-10deg)}to{transform:rotate(-370deg)}}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,sans-serif;background:#0a0a12;color:white;display:flex;flex-direction:column;height:100vh}
+  header{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;background:#11111f;border-bottom:1px solid #2a2a44}
+  header h1{margin:0;font-size:22px}
+  header h1 span{color:#B45CFF}
+  .btn-tiktok{background:#000;border:1px solid #fff;color:#fff;padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:bold}
+  .btn-tiktok img{width:20px;height:20px;vertical-align:middle;border-radius:50%;margin-right:6px}
+  #chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .msg{max-width:80%;padding:12px 14px;border-radius:16px;line-height:1.4}
+  .user{align-self:flex-end;background:#B45CFF}
+  .bot{align-self:flex-start;background:#1e1e32}
+  #bar{display:flex;gap:8px;padding:12px;background:#11111f}
+  #bar input{flex:1;padding:12px;border-radius:999px;border:none;outline:none;background:#22223a;color:white}
+  #bar button{padding:12px 18px;border-radius:999px;border:none;background:#B45CFF;color:white;font-weight:bold;cursor:pointer}
+
+  /* ====== ECRAN TIKTOK ====== */
+  #tiktokScreen{display:none;position:fixed;inset:0;background:#000;z-index:99;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+  #tiktokScreen.show{display:flex}
+  .anim-logo{
+    width:180px;height:auto;border-radius:24px;
+    filter:drop-shadow(0 0 30px #B45CFF);
+    animation:spinPop .9s ease forwards;
+  }
+  @keyframes spinPop{
+    0%{transform:scale(0) rotate(-180deg);opacity:0}
+    60%{transform:scale(1.15) rotate(10deg);opacity:1}
+    100%{transform:scale(1) rotate(0deg);opacity:1}
+  }
+  .tiktok-title{font-size:32px;font-weight:900;margin-top:18px}
+  .tiktok-title span{color:#25F4EE}
+  .tiktok-title b{color:#FE2C55}
+  .tiktok-sub{opacity:.8;margin-top:8px}
+  .tiktok-idea{background:#1a1a2e;padding:14px 16px;border-radius:16px;margin:18px 16px 0;max-width:420px}
+  .btn-back{margin-top:20px;background:white;color:black;border:none;padding:12px 20px;border-radius:999px;font-weight:bold;cursor:pointer}
+  .burst{position:absolute;width:14px;height:14px;border-radius:50%;animation:burst 1s ease-out forwards}
+  @keyframes burst{
+    0%{transform:translate(0,0) scale(1);opacity:1}
+    100%{transform:translate(var(--x),var(--y)) scale(0);opacity:0}
+  }
 </style>
 </head>
 <body>
-<div class="spark s1"></div><div class="spark s2"></div><div class="spark s3"></div><div class="spark s4"></div>
-<div class="moon">🌙</div><div id="seasonZone"></div><div id="snowZone"></div>
-<div id="splash"><div class="splash-center" id="splashCenter"><div class="halo"></div><div class="shock"></div><div class="ring2"></div><div class="ring1"></div><div class="splash-logo">L</div></div><div class="splash-title"><span>L</span><span>u</span><span>m</span><span>y</span><span>G</span><span>P</span><span>T</span></div><div class="splash-sub">Votre assistant intelligent</div><div class="splash-bar"><i></i></div></div>
+
 <header>
-  <div class="top-row"><div class="live"><i></i> En ligne</div><div class="badges"><span class="badge">v2.5</span><span class="badge-gold">👑 PRO</span><span class="badge-fire" id="fireBadge">🔥 0</span><span class="badge-fav" id="favBadge">⭐ 0</span><button class="icon-btn" id="themeBtn">🌙</button><button class="icon-btn" id="newBtn">🔄</button></div></div>
-  <div class="logo-wrap" id="logoWrap"><div class="ring-out"></div><div class="ring"></div><div class="logo" id="mainLogo">L</div></div>
-  <h1>Lumy<span class="grad">GPT</span></h1><div class="subtitle" id="subtitle">Votre assistant intelligent ✨</div>
-  <div class="chips" id="chips"><button class="chip chip-tiktok" onclick="quickAsk('Donne-moi une idée de vidéo TikTok')">💡 Idée TikTok</button><button class="chip" onclick="quickAsk('Aide-moi pour mon devoir')">📚 Aide devoir</button><button class="chip" onclick="quickAsk('Raconte-moi une blague')">😂 Blague</button><button class="chip" onclick="quickAsk('Fais-moi un planning de révision')">📅 Planning</button></div>
+  <h1>Lumy<span>GPT</span></h1>
+  <button class="btn-tiktok" id="openTikTok">
+    <img src="logo-tiktok.png" alt="TikTok"> Idée TikTok
+  </button>
 </header>
-<div id="chat"></div>
-<div class="wave"><svg viewBox="0 0 1200 30" preserveAspectRatio="none"><path d="M0,15 Q30,0 60,15 T120,15 T180,15 T240,15 T300,15 T360,15 T420,15 T480,15 T540,15 T600,15 T660,15 T720,15 T780,15 T840,15 T900,15 T960,15 T1020,15 T1080,15 T1140,15 T1200,15 L1200,30 L0,30 Z" fill="#a855f7" opacity=".55"/></svg></div>
-<form id="form"><div class="input-wrap"><button type="button" class="mini-btn" id="modeBtn">⚡</button><button type="button" class="mini-btn" id="photoBtn">📸</button><input type="file" id="photoInput" accept="image/*" hidden><input id="input" placeholder="Écris à LumyGPT..." autocomplete="off" autocorrect="off" autocapitalize="sentences" enterkeyhint="send" /><button id="send" type="submit">➤</button></div></form>
-<div class="fav-drawer" id="favDrawer"><h3>⭐ Mes favoris</h3><div id="favList"></div><button class="action-btn" onclick="document.getElementById('favDrawer').style.display='none'">Fermer</button></div>
-<div class="overlay" id="leaderOverlay"><div class="leader-card">
-  <button class="close-x" onclick="closeLeader()">✕</button>
-  <h2>🏆 Ton Rang</h2><div class="leader-sub" id="leaderMonth">Ton niveau perso</div>
-  <div id="pseudoZone" style="text-align:center;margin-bottom:12px"></div>
-  <div class="my-rank" id="myRankBox"><b id="myRankTitle">🥉 BRONZE</b><span id="myRankSub">0 question cette saison</span><div class="progress"><i id="myProgress" style="width:0%"></i></div><span id="myNext">Plus que 30 pour passer Argent 🥈</span></div>
-  <div class="rank-grid" id="rankGrid"></div>
-  <div class="month-note">🌟 <b>PRO = 600 questions</b><br>C'est juste ton niveau à toi, personne d'autre le voit.<br>Fin de saison : tout repart à 0.</div>
-</div></div>
+
+<div id="chat">
+  <div class="msg bot">Salut bg ! Pose-moi une question, ou clique sur Idée TikTok en haut 👊</div>
+</div>
+
+<div id="bar">
+  <input id="input" placeholder="Écris ici...">
+  <button id="send">Envoyer</button>
+</div>
+
+<!-- ECRAN TIKTOK -->
+<div id="tiktokScreen">
+  <div id="burstZone"></div>
+  <img class="anim-logo" src="logo-tiktok.png" alt="LumyGPT TikTok">
+  <div class="tiktok-title">LumyGPT <span>Tik</span><b>Tok</b></div>
+  <div class="tiktok-sub">Ton idée TikTok qui va percer 🔥</div>
+  <div class="tiktok-idea" id="tiktokIdea">Chargement de ton idée...</div>
+  <button class="btn-back" id="closeTikTok">⬅ Retour au chat</button>
+</div>
+
 <script>
-const chat=document.getElementById('chat'); const form=document.getElementById('form'); const input=document.getElementById('input'); const send=document.getElementById('send'); const splash=document.getElementById('splash'); const splashCenter=document.getElementById('splashCenter'); const fireBadge=document.getElementById('fireBadge'); const favBadge=document.getElementById('favBadge'); const subtitle=document.getElementById('subtitle'); const mainLogo=document.getElementById('mainLogo');
-let currentMood='😴'; let fastMode=true;
-document.addEventListener('touchmove',e=>{const t=e.touches[0]; const r=mainLogo.getBoundingClientRect(); const dx=(t.clientX-(r.left+r.width/2))/30; const dy=(t.clientY-(r.top+r.height/2))/30; mainLogo.style.setProperty('--sx',dx.toFixed(1)+'px'); mainLogo.style.setProperty('--sy',(dy+8).toFixed(1)+'px');},{passive:true});
-document.addEventListener('mousemove',e=>{const r=mainLogo.getBoundingClientRect(); const dx=(e.clientX-(r.left+r.width/2))/30; const dy=(e.clientY-(r.top+r.height/2))/30; mainLogo.style.setProperty('--sx',dx.toFixed(1)+'px'); mainLogo.style.setProperty('--sy',(dy+8).toFixed(1)+'px');});
-const now=new Date(); const hour=now.getHours(); const month=now.getMonth()+1; const day=now.getDate();
-if(hour>=22||hour<6){document.body.classList.add('night'); for(let i=0;i<14;i++){const st=document.createElement('div'); st.className='night-star'; st.style.left=Math.random()*100+'%'; st.style.top=Math.random()*55+'%'; st.style.animationDelay=(Math.random()*2)+'s'; document.body.appendChild(st);}}
-const seasonZone=document.getElementById('seasonZone'); function addFall(emoji,n){for(let i=0;i<n;i++){const f=document.createElement('div'); f.className='fall-item'; f.textContent=emoji; f.style.left=Math.random()*100+'%'; f.style.animationDuration=(6+Math.random()*5)+'s'; f.style.animationDelay=(Math.random()*5)+'s'; seasonZone.appendChild(f);}}
-if(month===10&&day>=25) addFall('🎃',10); else if(month===12) addFall('🎄',8); else if(month>=6&&month<=8) addFall('☀️',8); else if(month===2) addFall('💘',8);
-const snowZone=document.getElementById('snowZone'); for(let i=0;i<8;i++){const s=document.createElement('div'); s.className='snow'; const sz=3+Math.random()*4; s.style.width=sz+'px'; s.style.height=sz+'px'; s.style.left=Math.random()*100+'%'; s.style.animationDuration=(7+Math.random()*6)+'s'; s.style.animationDelay=(Math.random()*7)+'s'; snowZone.appendChild(s);}
-const colors=['#e9d5ff','#a855f7','#facc15','#22d3ee','#fff','#c084fc']; for(let i=0;i<14;i++){const p=document.createElement('div'); p.className='particle'; const a=(i/14)*Math.PI*2; const d=110+Math.random()*70; p.style.setProperty('--x',Math.cos(a)*d+'px'); p.style.setProperty('--y',Math.sin(a)*d+'px'); splashCenter.appendChild(p);} for(let i=0;i<14;i++){const c=document.createElement('div'); c.className='confetti'; c.style.left=Math.random()*100+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(0.9+Math.random()*0.6)+'s'; splash.appendChild(c);} setTimeout(()=>{splash.style.display='none';},3000);
-let greet='Bonjour ☀️', greetMsg="Bonjour 👋 Je suis LumyGPT, ton assistant intelligent.\nQue veux-tu faire aujourd'hui ?";
-if(hour>=6&&hour<12){greet='Bonjour ☀️'; greetMsg='Bonjour ☀️ Je suis LumyGPT, bien réveillé pour toi.\nOn fait quoi ce matin ?';} else if(hour>=12&&hour<18){greet='Bon après-midi ✨'; greetMsg='Bon après-midi ✨ Je suis LumyGPT.\nQue veux-tu faire ?';} else if(hour>=18&&hour<23){greet='Bonsoir 🌙'; greetMsg='Bonsoir 🌙 Je suis LumyGPT.\nOn finit la journée en beauté ?';} else {greet='Bonne nuit 🌙'; greetMsg='Bonne nuit 🌙 Je suis LumyGPT, je veille pour toi.\nTu veux quoi ?';}
-subtitle.textContent=greet+' • Ton assistant intelligent ✨';
-const RANKS=[{name:'BRONZE',emoji:'🥉',min:0,max:29},{name:'ARGENT',emoji:'🥈',min:30,max:89},{name:'OR',emoji:'🥇',min:90,max:179},{name:'PLATINE',emoji:'💎',min:180,max:299},{name:'DIAMANT',emoji:'🔷',min:300,max:599},{name:'PRO',emoji:'🌟',min:600,max:999999}];
-function seasonKey(){const d=new Date(); const year=d.getFullYear(); const m=d.getMonth()+1; const season=Math.ceil(m/3); return year+'-S'+season;}
-function seasonLabel(){const d=new Date(); const m=d.getMonth()+1; const season=Math.ceil(m/3); const labels={1:'Janvier - Février - Mars',2:'Avril - Mai - Juin',3:'Juillet - Août - Septembre',4:'Octobre - Novembre - Décembre'}; return 'Saison '+season+' • '+labels[season]+' • Reset en fin de saison';}
-function getRank(score){ for(let r of RANKS){ if(score>=r.min&&score<=r.max) return r; } return RANKS[0]; }
-function getNextRank(score){ for(let r of RANKS){ if(score<r.min) return r; } return null; }
-let storedSeason=localStorage.getItem('lumy_season');
-if(storedSeason!==seasonKey()){ localStorage.setItem('lumy_season',seasonKey()); localStorage.setItem('lumy_count_season','0'); }
-let countMonth=parseInt(localStorage.getItem('lumy_count_season')||localStorage.getItem('lumy_count_month')||'0');
-let countTotal=parseInt(localStorage.getItem('lumy_count')||'0');
-let pseudo=localStorage.getItem('lumy_pseudo')||'';
-function updateFire(){ fireBadge.textContent='🔥 '+countMonth; } updateFire();
-let favs=JSON.parse(localStorage.getItem('lumy_favs')||'[]'); function updateFavBadge(){ favBadge.textContent='⭐ '+favs.length; } updateFavBadge();
-favBadge.onclick=()=>{const d=document.getElementById('favDrawer'); const list=document.getElementById('favList'); list.innerHTML=favs.length?favs.map(f=>`<div class="fav-item">${f.replace(/</g,'&lt;')}</div>`).join(''):'<div class="fav-item">Aucun favori pour l\'instant. Clique sur ⭐ sous une réponse.</div>'; d.style.display=d.style.display==='block'?'none':'block';};
-function openLeader(){ renderLeader(); document.getElementById('leaderOverlay').classList.add('open'); }
-function closeLeader(){ document.getElementById('leaderOverlay').classList.remove('open'); }
-fireBadge.onclick=openLeader;
-document.getElementById('leaderOverlay').addEventListener('click',e=>{ if(e.target.id==='leaderOverlay') closeLeader(); });
-function savePseudo(){ const v=document.getElementById('pseudoInput').value.trim(); if(!v) return; pseudo=v; localStorage.setItem('lumy_pseudo',pseudo); renderLeader(); }
-function renderLeader(){
-  document.getElementById('leaderMonth').textContent=seasonLabel();
-  const pz=document.getElementById('pseudoZone');
-  if(!pseudo){ pz.innerHTML=`<div style="background:rgba(255,255,255,.1);border-radius:14px;padding:12px;font-size:13px">Choisis ton pseudo 👇<div class="pseudo-box"><input id="pseudoInput" placeholder="Ex: Zennox69" maxlength="15"><button onclick="savePseudo()">OK</button></div></div>`; }
-  else { pz.innerHTML=`<div style="font-size:13px">Ton pseudo : <b>@${pseudo}</b> • <span style="color:#facc15;cursor:pointer;text-decoration:underline" onclick="localStorage.removeItem('lumy_pseudo');pseudo='';renderLeader()">changer</span></div>`; }
-  let myRankObj = getRank(countMonth);
-  document.getElementById('myRankTitle').textContent=myRankObj.emoji+' '+myRankObj.name;
-  document.getElementById('myRankSub').textContent=(pseudo? '@'+pseudo+' • ' : '')+countMonth+' question'+(countMonth>1?'s':'')+' cette saison • Total : '+countTotal;
-  let next=getNextRank(countMonth);
-  let prog=0, nextTxt='';
-  if(myRankObj.name==='PRO'){ prog=100; nextTxt='Tu es PRO 🌟 T\'es au max !'; }
-  else if(next){ prog=Math.min(100, Math.round((countMonth - myRankObj.min)/(next.min - myRankObj.min)*100)); nextTxt='Plus que '+(next.min-countMonth)+' pour passer '+next.emoji+' '+next.name; }
-  document.getElementById('myProgress').style.width=prog+'%'; document.getElementById('myNext').textContent=nextTxt;
-  document.getElementById('rankGrid').innerHTML=RANKS.map(r=>`<div class="rank-chip ${r.name===myRankObj.name?'active':''}"><b>${r.emoji} ${r.name}</b>${r.name==='PRO'?'600+ quest.':r.min+' - '+r.max+' quest.'}</div>`).join('');
-}
-function setMood(e){ currentMood=e; document.querySelectorAll('.bot-mood').forEach(el=>el.textContent=e); } setTimeout(()=>setMood('👀'),3200);
-let audioCtx=null; function playDing(){ try{ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination); o.frequency.value=880; o.type='sine'; g.gain.setValueAtTime(0.12,audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.45); o.start(); o.stop(audioCtx.currentTime+0.45); }catch(e){} }
-function speak(text){ try{ const u=new SpeechSynthesisUtterance(text); u.lang='fr-FR'; u.rate=1; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){} }
-const pool=[{e:'📚',t:'Aide devoir',q:'Aide-moi pour mon devoir'},{e:'😂',t:'Blague',q:'Raconte-moi une blague'},{e:'📅',t:'Planning',q:'Fais-moi un planning de révision'},{e:'🍕',t:'Idée repas',q:'Donne-moi une idée de repas'},{e:'💘',t:'Aide à draguer',q:'Aide-moi à draguer'},{e:'🎮',t:'Idée jeu',q:'Donne-moi une idée de jeu'},{e:'📖',t:'Histoire',q:'Raconte-moi une histoire'},{e:'🧠',t:'Quiz',q:'Fais-moi un quiz'},{e:'🎵',t:'Musique',q:'Conseille-moi une musique'},{e:'✍️',t:'Aide texte',q:'Aide-moi à écrire un texte'},{e:'💪',t:'Motivation',q:'Motive-moi'},{e:'🤔',t:'Devinette',q:'Dis-moi une devinette'}];
-const chipsEl=document.getElementById('chips'); function rotateChips(){ const shuffled=[...pool].sort(()=>Math.random()-0.5).slice(0,3); chipsEl.innerHTML='<button class="chip chip-tiktok" onclick="quickAsk(\'Donne-moi une idée de vidéo TikTok\')">💡 Idée TikTok</button>'+shuffled.map(c=>`<button class="chip" onclick="quickAsk('${c.q.replace(/'/g,"\\'")}')">${c.e} ${c.t}</button>`).join(''); } setInterval(rotateChips,10000);
-const themeBtn=document.getElementById('themeBtn'); themeBtn.onclick=()=>{
-  document.body.classList.toggle('light');
-  themeBtn.textContent=document.body.classList.contains('light')?'🌞':'🌙';
-  document.querySelectorAll('.ring, .ring-out').forEach(el=>{ el.style.animation='none'; void el.offsetWidth; el.style.animation=''; });
-};
-document.getElementById('newBtn').onclick=()=>{ chat.innerHTML=''; setMood('👀'); addMsg(greetMsg,'bot',true); };
-const modeBtn=document.getElementById('modeBtn'); modeBtn.onclick=()=>{ fastMode=!fastMode; modeBtn.textContent=fastMode?'⚡':'🐢'; modeBtn.classList.toggle('active',!fastMode); };
-const photoBtn=document.getElementById('photoBtn'); const photoInput=document.getElementById('photoInput'); photoBtn.onclick=()=>photoInput.click(); photoInput.onchange=()=>{ const file=photoInput.files[0]; if(!file) return; const url=URL.createObjectURL(file); addImageMsg(url); addMsg('Trop stylé ta photo 😍 Dis-moi, tu veux que je te donne mon avis, que je t\'aide à la décrire, ou que je t\'aide à l\'améliorer pour TikTok ?','bot'); photoInput.value=''; };
-function addImageMsg(url){ const row=document.createElement('div'); row.className='row user'; const div=document.createElement('div'); div.className='msg user-msg'; div.innerHTML='📸 Ma photo :<img class="chat-img" src="'+url+'">'; const av=document.createElement('div'); av.className='avatar user-av'; av.textContent='Z'; row.append(div); row.append(av); chat.appendChild(row); chat.scrollTop=chat.scrollHeight; }
-let typingTimeout; input.addEventListener('focus',()=>{ document.body.classList.add('typing'); setMood('👀'); }); input.addEventListener('blur',()=>{ if(!input.value){ document.body.classList.remove('typing'); setMood('😴'); } }); input.addEventListener('input',()=>{ if(input.value.trim().length>0){ document.body.classList.add('typing'); setMood('👀'); clearTimeout(typingTimeout); typingTimeout=setTimeout(()=>{ document.body.classList.remove('typing'); setMood('😴'); },1800); } else { document.body.classList.remove('typing'); setMood('😴'); } });
-function escapeHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function formatText(t){ let s=escapeHtml(t); s=s.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>'); s=s.replace(/`([^`]+)`/g,'<code>$1</code>'); s=s.replace(/```[\s\S]*?```/g,(m)=>{ const clean=m.replace(/```\w*/,'').replace(/```/,'').trim(); return '<pre>'+clean+'</pre>'; }); return s; }
-function timeNow(){ const d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
-function typeEffect(el,fullText){ let i=0; el.innerHTML=''; const iv=setInterval(()=>{ i+=4; el.innerHTML=formatText(fullText.slice(0,i))+'<span class="cursor"></span>'; chat.scrollTop=chat.scrollHeight; if(i>=fullText.length){ clearInterval(iv); el.innerHTML=formatText(fullText); document.body.classList.remove('answering'); setMood('👀'); } },16); }
-function addMsg(text,who,instant=false){ const row=document.createElement('div'); row.className='row '+(who==='user'?'user':''); if(who==='bot'){ const col=document.createElement('div'); col.className='avatar-col'; const av=document.createElement('div'); av.className='avatar'; av.textContent='L'; const mood=document.createElement('div'); mood.className='bot-mood'; mood.textContent=currentMood; col.append(av); col.append(mood); const wrap=document.createElement('div'); wrap.style.display='flex'; wrap.style.flexDirection='column'; wrap.style.maxWidth='84%'; const div=document.createElement('div'); div.className='msg bot-msg'; const t=document.createElement('div'); t.className='time'; t.textContent='LumyGPT • '+timeNow(); const actions=document.createElement('div'); actions.className='actions'; const copy=document.createElement('button'); copy.className='action-btn'; copy.textContent='📋 Copier'; copy.onclick=()=>{ navigator.clipboard.writeText(text); copy.textContent='✅ Copié !'; setTimeout(()=>copy.textContent='📋 Copier',1500); }; const like=document.createElement('button'); like.className='action-btn'; like.textContent='❤️'; like.onclick=()=>{ like.classList.toggle('active'); dislike.classList.remove('active-red'); if(like.classList.contains('active')){ setMood('😍'); setTimeout(()=>setMood('👀'),1500); } }; const dislike=document.createElement('button'); dislike.className='action-btn'; dislike.textContent='👎'; dislike.onclick=()=>{ dislike.classList.toggle('active-red'); like.classList.remove('active'); if(dislike.classList.contains('active-red')){ setMood('🥺'); setTimeout(()=>setMood('👀'),1200); } }; const listen=document.createElement('button'); listen.className='action-btn'; listen.textContent='🔊 Écouter'; listen.onclick=()=>{ speak(text); listen.textContent='🔊 ...'; setTimeout(()=>listen.textContent='🔊 Écouter',2000); }; const fav=document.createElement('button'); fav.className='action-btn'; fav.textContent='⭐ Favori'; fav.onclick=()=>{ if(favs.includes(text)){ favs=favs.filter(f=>f!==text); fav.classList.remove('fav-active'); fav.textContent='⭐ Favori'; } else { favs.push(text); fav.classList.add('fav-active'); fav.textContent='⭐ Sauvé !'; } localStorage.setItem('lumy_favs',JSON.stringify(favs)); updateFavBadge(); }; if(favs.includes(text)) fav.classList.add('fav-active'); actions.append(copy,like,dislike,listen,fav); wrap.append(div); wrap.append(t); wrap.append(actions); row.append(col); row.append(wrap); chat.appendChild(row); chat.scrollTop=chat.scrollHeight; if(instant){ div.innerHTML=formatText(text); } else { document.body.classList.add('answering'); setMood('🗣️'); typeEffect(div,text); playDing(); } return row; } else { const div=document.createElement('div'); div.className='msg user-msg'; div.innerHTML=formatText(text); const av=document.createElement('div'); av.className='avatar user-av'; av.textContent='Z'; row.append(div); row.append(av); chat.appendChild(row); chat.scrollTop=chat.scrollHeight; return row; } }
-function quickAsk(q){ input.value=q; input.dispatchEvent(new Event('input')); form.dispatchEvent(new Event('submit')); }
-addMsg(greetMsg,'bot',true);
-function burst(x,y){ for(let i=0;i<10;i++){ const b=document.createElement('div'); b.className='burst'; b.style.left=x+'px'; b.style.top=y+'px'; b.style.background=colors[i%colors.length]; const ang=(i/10)*Math.PI*2; const dist=35+Math.random()*35; b.style.setProperty('--bx',Math.cos(ang)*dist+'px'); b.style.setProperty('--by',Math.sin(ang)*dist+'px'); document.body.appendChild(b); setTimeout(()=>b.remove(),650); } }
-function updateThemeFromText(text){ const t=text.toLowerCase(); document.body.classList.remove('theme-foot','theme-love','theme-devoir','theme-tiktok'); let cls=''; if(t.includes('foot')||t.includes('psg')||t.includes('match')) cls='theme-foot'; else if(t.includes('amour')||t.includes('crush')||t.includes('draguer')||t.includes('copine')||t.includes('copain')) cls='theme-love'; else if(t.includes('devoir')||t.includes('révision')||t.includes('revision')||t.includes('examen')||t.includes('cours')||t.includes('maths')) cls='theme-devoir'; else if(t.includes('tiktok')||t.includes('vidéo')||t.includes('video')) cls='theme-tiktok'; if(cls){ document.body.classList.add(cls); setTimeout(()=>document.body.classList.remove(cls),5000); } }
-form.onsubmit=async(e)=>{ e.preventDefault(); const text=input.value.trim(); if(!text) return; const rect=send.getBoundingClientRect(); burst(rect.left+23,rect.top+23); document.body.classList.remove('typing'); setMood('🗣️'); updateThemeFromText(text); countMonth++; countTotal++; localStorage.setItem('lumy_count_season',countMonth); localStorage.setItem('lumy_count',countTotal); updateFire(); addMsg(text,'user'); input.value=''; send.disabled=true; const typingRow=addMsg('LumyGPT écrit...','bot',true); typingRow.querySelector('.msg').classList.add('typing'); document.body.classList.add('answering'); try{ const prompt=fastMode?'[Réponds en 1 à 2 phrases courtes, style pote] '+text:'[Réponds de façon très détaillée, avec exemples et étapes] '+text; const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:prompt})}); const data=await r.json(); typingRow.remove(); document.body.classList.remove('answering'); addMsg(data.reply||'Pas de réponse bg, réessaie.','bot'); }catch(err){ typingRow.remove(); document.body.classList.remove('answering'); addMsg('Erreur bg, réessaie.','bot'); } send.disabled=false; };
+  // ====== TA CLÉ GROQ - C'EST ICI, 1 SEULE ======
+  const GROQ_KEY = "COLLE_TA_CLE_ICI";
+
+  async function askGroq(msgs){
+    // Si t'es sur Vercel, il passe par /api/chat (clé cachée)
+    try{
+      const r = await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:msgs})});
+      if(r.ok){
+        const d = await r.json();
+        const txt = d.choices?.[0]?.message?.content || "";
+        if(txt && txt.length > 20) return txt;
+      }
+    }catch(e){}
+
+    // Sinon il utilise ta clé directe
+    if(!GROQ_KEY || GROQ_KEY.includes("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")) return null;
+    try{
+      const r = await fetch("https://api.groq.com/openai/v1/chat/completions",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Authorization":"Bearer "+GROQ_KEY},
+        body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:msgs,temperature:0.8,max_tokens:1000})
+      });
+      const d = await r.json();
+      return d.choices?.[0]?.message?.content || null;
+    }catch(e){ return null; }
+  }
+
+  // ====== CHAT ======
+  const chat=document.getElementById("chat");
+  const input=document.getElementById("input");
+  function addMsg(text,who){
+    const d=document.createElement("div");
+    d.className="msg "+who; d.textContent=text;
+    chat.appendChild(d); chat.scrollTop=chat.scrollHeight;
+    return d;
+  }
+  async function send(){
+    const t=input.value.trim(); if(!t) return;
+    addMsg(t,"user"); input.value="";
+    const loading=addMsg("LumyGPT réfléchit...","bot");
+    const rep=await askGroq([{role:"user",content:t}]);
+    loading.textContent = rep || "Ça a coupé bg, on a mangé les 1000 messages, reviens demain 👊";
+  }
+  document.getElementById("send").onclick=send;
+  input.addEventListener("keydown",e=>{if(e.key==="Enter") send()});
+
+  // ====== MODE TIKTOK ======
+  const screen=document.getElementById("tiktokScreen");
+  const burstZone=document.getElementById("burstZone");
+  const ideaEl=document.getElementById("tiktokIdea");
+
+  document.getElementById("openTikTok").onclick=async()=>{
+    screen.classList.add("show");
+    ideaEl.textContent="Chargement de ton idée...";
+    burstZone.innerHTML="";
+    const colors=["#25F4EE","#FE2C55","#B45CFF","#ffffff"];
+    for(let i=0;i<40;i++){
+      const b=document.createElement("div");
+      b.className="burst";
+      b.style.background=colors[i%colors.length];
+      b.style.setProperty("--x",(Math.random()*400-200)+"px");
+      b.style.setProperty("--y",(Math.random()*400-200)+"px");
+      b.style.left="50%"; b.style.top="40%";
+      burstZone.appendChild(b);
+    }
+    const rep=await askGroq([{role:"user",content:"Donne-moi 1 idée TikTok super originale, drôle, qui peut percer, en 3 phrases max, avec un hook. Style jeune, direct."}]);
+    ideaEl.textContent = rep || "Idée du jour : Filme-toi en train de montrer LumyGPT à tes potes et leur réaction 😂";
+  };
+  document.getElementById("closeTikTok").onclick=()=>{ screen.classList.remove("show"); };
 </script>
 </body>
 </html>
