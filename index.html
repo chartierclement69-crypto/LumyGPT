@@ -6,144 +6,204 @@
 <title>LumyGPT</title>
 <style>
   *{box-sizing:border-box}
-  body{margin:0;font-family:Arial,sans-serif;background:#0a0a12;color:white;display:flex;flex-direction:column;height:100vh}
-  header{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;background:#11111f;border-bottom:1px solid #2a2a44}
-  header h1{margin:0;font-size:22px}
-  header h1 span{color:#B45CFF}
-  .btn-tiktok{background:#000;border:1px solid #fff;color:#fff;padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:bold}
-  .btn-tiktok img{width:20px;height:20px;vertical-align:middle;border-radius:50%;margin-right:6px}
-  #chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-  .msg{max-width:80%;padding:12px 14px;border-radius:16px;line-height:1.4}
-  .user{align-self:flex-end;background:#B45CFF}
-  .bot{align-self:flex-start;background:#1e1e32}
-  #bar{display:flex;gap:8px;padding:12px;background:#11111f}
-  #bar input{flex:1;padding:12px;border-radius:999px;border:none;outline:none;background:#22223a;color:white}
-  #bar button{padding:12px 18px;border-radius:999px;border:none;background:#B45CFF;color:white;font-weight:bold;cursor:pointer}
-
-  /* ====== ECRAN TIKTOK ====== */
-  #tiktokScreen{display:none;position:fixed;inset:0;background:#000;z-index:99;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
-  #tiktokScreen.show{display:flex}
-  .anim-logo{
-    width:180px;height:auto;border-radius:24px;
-    filter:drop-shadow(0 0 30px #B45CFF);
-    animation:spinPop .9s ease forwards;
-  }
-  @keyframes spinPop{
-    0%{transform:scale(0) rotate(-180deg);opacity:0}
-    60%{transform:scale(1.15) rotate(10deg);opacity:1}
-    100%{transform:scale(1) rotate(0deg);opacity:1}
-  }
-  .tiktok-title{font-size:32px;font-weight:900;margin-top:18px}
-  .tiktok-title span{color:#25F4EE}
-  .tiktok-title b{color:#FE2C55}
-  .tiktok-sub{opacity:.8;margin-top:8px}
-  .tiktok-idea{background:#1a1a2e;padding:14px 16px;border-radius:16px;margin:18px 16px 0;max-width:420px}
-  .btn-back{margin-top:20px;background:white;color:black;border:none;padding:12px 20px;border-radius:999px;font-weight:bold;cursor:pointer}
-  .burst{position:absolute;width:14px;height:14px;border-radius:50%;animation:burst 1s ease-out forwards}
-  @keyframes burst{
-    0%{transform:translate(0,0) scale(1);opacity:1}
-    100%{transform:translate(var(--x),var(--y)) scale(0);opacity:0}
-  }
+  body{margin:0;font-family:Arial,sans-serif;background:#12001f;color:white;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  /* SPLASH */
+  #splash{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;animation:splashOut .5s ease 2.2s forwards}
+  @keyframes splashOut{to{opacity:0;visibility:hidden}}
+  .splash-logo{font-size:110px;line-height:1;filter:drop-shadow(0 0 30px #FE2C55);animation:pop .8s ease}
+  @keyframes pop{0%{transform:scale(.3) rotate(-10deg);opacity:0}60%{transform:scale(1.15) rotate(3deg)}100%{transform:scale(1)}}
+  .splash-title{font-size:44px;font-weight:900;line-height:.95;margin-top:10px}
+  .splash-title span{color:#25F4EE}
+  .splash-title b{color:#FE2C55}
+  .splash-sub{opacity:.7;margin-top:8px}
+  /* HEADER */
+  .topbar{display:flex;gap:6px;padding:10px;flex-wrap:wrap;align-items:center;background:#1a0030}
+  .pill{font-size:12px;padding:6px 10px;border-radius:999px;background:#2a004d;border:1px solid #4a007a}
+  .pill.pro{background:#ffcc00;color:#000;font-weight:bold}
+  .header{padding:10px 14px;text-align:center;background:linear-gradient(180deg,#2b004f,#12001f)}
+  .logo-L{width:72px;height:72px;margin:0 auto;background:linear-gradient(135deg,#B45CFF,#7a00ff);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;box-shadow:0 0 25px #B45CFF;border:2px solid #fff}
+  .header h1{margin:8px 0 0;font-size:38px;line-height:1}
+  .header h1 span{color:#B45CFF}
+  .header p{margin:4px 0 10px;opacity:.85;font-size:14px}
+  .actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .act{border:none;padding:10px 14px;border-radius:999px;font-weight:bold;cursor:pointer;color:white;background:#2a004d;border:1px solid #5a00a3}
+  .act.main{background:#7a00ff}
+  /* CHAT */
+  #chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+  .row{display:flex;gap:8px;align-items:flex-start}
+  .avatar{width:36px;height:36px;border-radius:50%;background:#B45CFF;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0}
+  .avatar.tiktok{background:#000;border:1px solid #FE2C55;font-size:18px}
+  .bubble{background:#3d0a7a;padding:12px 14px;border-radius:14px;max-width:85%;line-height:1.45;white-space:pre-line}
+  .bubble.tiktok{background:#1a0a2e;border:1px solid #FE2C55}
+  .meta{font-size:11px;opacity:.6;margin:4px 0 0 44px}
+  .tools{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 0 44px}
+  .tool{font-size:12px;background:#22003a;border:1px solid #5a00a3;color:white;padding:6px 10px;border-radius:999px;cursor:pointer}
+  .tool.like.active{background:#FE2C55}
+  /* BAR */
+  #bar{display:flex;gap:8px;padding:10px;background:#1a0030;align-items:center}
+  #bar input{flex:1;padding:12px 14px;border-radius:999px;border:none;outline:none;background:#2a004d;color:white}
+  #sendBtn{width:46px;height:46px;border-radius:50%;border:none;background:#B45CFF;font-size:18px;cursor:pointer}
+  .hidden{display:none!important}
+  /* TIKTOK MODE */
+  .tiktok-head{padding:12px;text-align:left;background:#000}
+  .tiktok-head h2{margin:0;font-size:30px;line-height:1}
+  .tiktok-head h2 span{color:#FE2C55}
+  .tiktok-pills{display:flex;gap:6px;flex-wrap:wrap;padding:10px}
+  .tiktok-pills button{background:#111;border:1px solid #333;color:white;padding:8px 10px;border-radius:999px;font-size:12px;cursor:pointer}
+  .tiktok-pills button.on{background:#FE2C55}
+  .closeTik{float:right;background:#1a1a2e;color:#ff5ce1;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Lumy<span>GPT</span></h1>
-  <button class="btn-tiktok" id="openTikTok">
-    <img src="logo-tiktok.png" alt="TikTok"> Idée TikTok
-  </button>
-</header>
+<!-- SPLASH LUMYGPT TIKTOK -->
+<div id="splash">
+  <div class="splash-logo">🎵</div>
+  <div class="splash-title">Lumy<span>GPT</span><br><span>Tik</span><b>Tok</b></div>
+  <div class="splash-sub">Ça va percer 🔥</div>
+</div>
 
-<div id="chat">
-  <div class="msg bot">Salut bg ! Pose-moi une question, ou clique sur Idée TikTok en haut 👊</div>
+<div class="topbar">
+  <span class="pill">🟢 En ligne</span>
+  <span class="pill">v2.5</span>
+  <span class="pill pro">🔥 PRO</span>
+  <span class="pill">🔥 1</span>
+  <span class="pill">⭐ 0</span>
+  <span class="pill">🌙</span>
+  <span class="pill" onclick="location.reload()">🔄</span>
+</div>
+
+<!-- MODE NORMAL -->
+<div id="normalMode" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+  <div class="header">
+    <div class="logo-L">L</div>
+    <h1>Lumy<span>GPT</span></h1>
+    <p>Bon après-midi ✨ • Ton assistant intelligent ✨</p>
+    <div class="actions">
+      <button class="act main" onclick="goTikTok()">💡 Idée TikTok</button>
+      <button class="act" onclick="quick('Aide devoir')">📚 Aide devoir</button>
+      <button class="act" onclick="quick('Blague')">😂 Blague</button>
+      <button class="act" onclick="quick('Planning')">📅 Planning</button>
+    </div>
+  </div>
+  <div id="chat"></div>
+</div>
+
+<!-- MODE TIKTOK -->
+<div id="tiktokMode" class="hidden" style="flex-direction:column;flex:1;overflow:hidden">
+  <div class="tiktok-head">
+    <button class="closeTik" onclick="goNormal()">✕</button>
+    <h2>🎵 LumyGPT<br><span>TikTok</span></h2>
+  </div>
+  <div class="tiktok-pills">
+    <button onclick="tiktokAction('trend',this)">🔥 Trend du moment</button>
+    <button onclick="tiktokAction('idee',this)">Idée vidéo virale</button>
+    <button onclick="tiktokAction('script',this)">🕒 Script 15 sec</button>
+    <button onclick="tiktokAction('percer',this)">Comment percer</button>
+    <button onclick="tiktokAction('bio',this)">✨ Bio qui tue</button>
+  </div>
+  <div id="chatTik" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px"></div>
 </div>
 
 <div id="bar">
-  <input id="input" placeholder="Écris ici...">
-  <button id="send">Envoyer</button>
-</div>
-
-<!-- ECRAN TIKTOK -->
-<div id="tiktokScreen">
-  <div id="burstZone"></div>
-  <img class="anim-logo" src="logo-tiktok.png" alt="LumyGPT TikTok">
-  <div class="tiktok-title">LumyGPT <span>Tik</span><b>Tok</b></div>
-  <div class="tiktok-sub">Ton idée TikTok qui va percer 🔥</div>
-  <div class="tiktok-idea" id="tiktokIdea">Chargement de ton idée...</div>
-  <button class="btn-back" id="closeTikTok">⬅ Retour au chat</button>
+  <span>⚡</span><span>📷</span>
+  <input id="input" placeholder="Écris à LumyGPT...">
+  <button id="sendBtn" onclick="send()">➤</button>
 </div>
 
 <script>
-  // ====== TA CLÉ GROQ - C'EST ICI, 1 SEULE ======
-  const GROQ_KEY = "COLLE_TA_CLE_ICI";
-
-  async function askGroq(msgs){
-    // Si t'es sur Vercel, il passe par /api/chat (clé cachée)
-    try{
-      const r = await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:msgs})});
-      if(r.ok){
-        const d = await r.json();
-        const txt = d.choices?.[0]?.message?.content || "";
-        if(txt && txt.length > 20) return txt;
-      }
-    }catch(e){}
-
-    // Sinon il utilise ta clé directe
-    if(!GROQ_KEY || GROQ_KEY.includes("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")) return null;
-    try{
-      const r = await fetch("https://api.groq.com/openai/v1/chat/completions",{
-        method:"POST",
-        headers:{"Content-Type":"application/json","Authorization":"Bearer "+GROQ_KEY},
-        body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:msgs,temperature:0.8,max_tokens:1000})
-      });
-      const d = await r.json();
-      return d.choices?.[0]?.message?.content || null;
-    }catch(e){ return null; }
-  }
-
-  // ====== CHAT ======
   const chat=document.getElementById("chat");
+  const chatTik=document.getElementById("chatTik");
   const input=document.getElementById("input");
-  function addMsg(text,who){
-    const d=document.createElement("div");
-    d.className="msg "+who; d.textContent=text;
-    chat.appendChild(d); chat.scrollTop=chat.scrollHeight;
-    return d;
-  }
-  async function send(){
-    const t=input.value.trim(); if(!t) return;
-    addMsg(t,"user"); input.value="";
-    const loading=addMsg("LumyGPT réfléchit...","bot");
-    const rep=await askGroq([{role:"user",content:t}]);
-    loading.textContent = rep || "Ça a coupé bg, on a mangé les 1000 messages, reviens demain 👊";
-  }
-  document.getElementById("send").onclick=send;
-  input.addEventListener("keydown",e=>{if(e.key==="Enter") send()});
+  let likes=128;
+  let isTik=false;
 
-  // ====== MODE TIKTOK ======
-  const screen=document.getElementById("tiktokScreen");
-  const burstZone=document.getElementById("burstZone");
-  const ideaEl=document.getElementById("tiktokIdea");
+  function addMsg(container,text,who="bot",tiktok=false){
+    const row=document.createElement("div"); row.className="row";
+    const av=document.createElement("div"); av.className="avatar"+(tiktok?" tiktok":""); av.textContent=tiktok?"🎵":"L";
+    const col=document.createElement("div"); col.style.flex="1";
+    const bub=document.createElement("div"); bub.className="bubble"+(tiktok?" tiktok":""); bub.textContent=text;
+    const meta=document.createElement("div"); meta.className="meta"; meta.textContent=(tiktok?"Lumy TikTok":"LumyGPT")+" • "+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    const tools=document.createElement("div"); tools.className="tools";
+    const c=document.createElement("button"); c.className="tool"; c.textContent="📋 Copier"; c.onclick=()=>{navigator.clipboard.writeText(text); c.textContent="✅ Copié !"; setTimeout(()=>c.textContent="📋 Copier",1200)};
+    const l=document.createElement("button"); l.className="tool like"; l.textContent="❤️ "+likes; l.onclick=()=>{likes++; l.textContent="❤️ "+likes; l.classList.add("active")};
+    const m=document.createElement("button"); m.className="tool"; m.textContent="💬 Modifier"; m.onclick=()=>{bub.textContent=bub.textContent+" (version modifiée 🔥) "};
+    const e=document.createElement("button"); e.className="tool"; e.textContent="🔊 Écouter"; e.onclick=()=>{speechSynthesis.speak(new SpeechSynthesisUtterance(text))};
+    const f=document.createElement("button"); f.className="tool"; f.textContent="⭐ Favori"; f.onclick=()=>{f.textContent="⭐ Ajouté !"};
+    tools.append(c,l,m,e,f);
+    col.append(bub,meta,tools); row.append(av,col); container.append(row); container.scrollTop=container.scrollHeight;
+    return bub;
+  }
+  function addUser(container,text){
+    const d=document.createElement("div"); d.style.cssText="align-self:flex-end;background:#B45CFF;padding:12px 14px;border-radius:14px;max-width:85%"; d.textContent=text; container.append(d); container.scrollTop=container.scrollHeight;
+  }
 
-  document.getElementById("openTikTok").onclick=async()=>{
-    screen.classList.add("show");
-    ideaEl.textContent="Chargement de ton idée...";
-    burstZone.innerHTML="";
-    const colors=["#25F4EE","#FE2C55","#B45CFF","#ffffff"];
-    for(let i=0;i<40;i++){
-      const b=document.createElement("div");
-      b.className="burst";
-      b.style.background=colors[i%colors.length];
-      b.style.setProperty("--x",(Math.random()*400-200)+"px");
-      b.style.setProperty("--y",(Math.random()*400-200)+"px");
-      b.style.left="50%"; b.style.top="40%";
-      burstZone.appendChild(b);
-    }
-    const rep=await askGroq([{role:"user",content:"Donne-moi 1 idée TikTok super originale, drôle, qui peut percer, en 3 phrases max, avec un hook. Style jeune, direct."}]);
-    ideaEl.textContent = rep || "Idée du jour : Filme-toi en train de montrer LumyGPT à tes potes et leur réaction 😂";
+  const reponses={
+    "bonjour":"Bon après-midi ✨ Je suis LumyGPT. Que veux-tu faire ?",
+    "idee":"Clique sur Idée TikTok en haut bg, je t'ai préparé des pépites 🔥",
+    "devoir":"Vas-y envoie ton devoir bg, je t'aide direct 📚 C'est quoi le sujet ?",
+    "blague":"Pourquoi les plongeurs plongent en arrière ? Parce que sinon ils tombent dans le bateau 😂",
+    "planning":"Ton planning bg : 1) 1 vidéo TikTok, 2) devoirs 30 min, 3) chill. Tu veux que je te le détaille ?"
   };
-  document.getElementById("closeTikTok").onclick=()=>{ screen.classList.remove("show"); };
+
+  function repondre(q){
+    q=q.toLowerCase();
+    if(q.includes("bonjour")||q.includes("salut")||q.includes("yo")) return reponses.bonjour;
+    if(q.includes("devoir")||q.includes("exercice")||q.includes("maths")) return reponses.devoir;
+    if(q.includes("blague")||q.includes("drôle")) return reponses.blague;
+    if(q.includes("planning")||q.includes("organiser")) return reponses.planning;
+    if(q.includes("tiktok")||q.includes("idée")||q.includes("idee")) return reponses.idee;
+    return "Ah ouais bg ? Raconte-moi plus 😏 Tu veux une idée TikTok, une aide devoir, une blague ou un planning ?";
+  }
+
+  function send(){
+    const t=input.value.trim(); if(!t) return;
+    const cont=isTik?chatTik:chat;
+    addUser(cont,t); input.value="";
+    const load=addMsg(cont,"LumyGPT écrit...", "bot", isTik);
+    setTimeout(()=>{load.textContent=isTik?reponseTikTok(t):repondre(t)},700);
+  }
+  input.addEventListener("keydown",e=>{if(e.key==="Enter") send()});
+  function quick(type){
+    input.value=type; send();
+  }
+
+  // ===== TIKTOK =====
+  function goTikTok(){
+    isTik=true;
+    document.getElementById("normalMode").classList.add("hidden");
+    document.getElementById("tiktokMode").classList.remove("hidden");
+    document.getElementById("tiktokMode").style.display="flex";
+    input.placeholder="Écris à Lumy TikTok...";
+    if(chatTik.children.length===0){
+      addMsg(chatTik,"Bonjour, je suis LumyGPT TikTok,\nje suis là pour t'aider sur TikTok.\n\n1️⃣ \"3 hacks iPhone que 99% ignorent\" - Hook accrocheur + démonstration rapide à l'écran, tendance sons Tech.\n\n2️⃣ \"Routine matinale 15s\" - Transition virale au réveil, texte dynamique + musique tendance.\n\n3️⃣ \"POV : quand ton café devient aesthetic\" - Style lifestyle, texte + effet glitch rose/bleu.\n\nTu veux que je te rédige le script complet pour l'idée 1 ?","bot",true);
+    }
+  }
+  function goNormal(){
+    isTik=false;
+    document.getElementById("tiktokMode").classList.add("hidden");
+    document.getElementById("normalMode").classList.remove("hidden");
+    input.placeholder="Écris à LumyGPT...";
+  }
+  function reponseTikTok(q){
+    q=q.toLowerCase();
+    if(q.includes("script")||q.includes("idée 1")||q.includes("idee 1")) return "SCRIPT 15 SEC - Idée 1 :\n[0-2s] Hook : \"Tu connais pas ce hack iPhone, attends...\"\n[2-8s] Tu montres l'écran, tu cliques\n[8-13s] Réaction choquée\n[13-15s] \"Abonne-toi sinon tu rates le 2ème\" 🔥";
+    return "Ok bg, pour TikTok je te conseille : Hook de 2 sec qui choque, vidéo courte, et poste tous les jours. Tu veux un Trend, une Idée virale, un Script 15 sec ou une Bio ?";
+  }
+  function tiktokAction(type,btn){
+    document.querySelectorAll(".tiktok-pills button").forEach(b=>b.classList.remove("on")); btn.classList.add("on");
+    const txt={
+      trend:"🔥 TREND DU MOMENT :\nLe son Tech + transition rapide. Tout le monde fait le \"POV : mon tel il sait tout\". Fais-le avec LumyGPT, ça va percer.",
+      idee:"💡 IDÉE VIDÉO VIRALE :\n\"J'ai demandé à LumyGPT de contrôler ma journée\" - Tu filmes ta réaction à chaque idée. Hook : \"Mon IA elle m'a démonté\"",
+      script:"🕒 SCRIPT 15 SEC :\n[0-2s] \"Regarde ça...\"\n[2-7s] Tu montres LumyGPT\n[7-12s] Réaction\n[12-15s] \"Commente PARTIE 2\"",
+      percer:"🚀 COMMENT PERCER :\n1. Hook 2 sec\n2. Vidéo < 20 sec\n3. Poste 1x / jour\n4. Réponds à tous les commentaires les 30 premières min",
+      bio:"✨ BIO QUI TUE :\n\"Je teste les IA pour que tu perces 🔥 | Nouvelle idée chaque jour | Abonne-toi 👇\""
+    };
+    addMsg(chatTik, txt[type], "bot", true);
+  }
+
+  // Message d'accueil normal
+  addMsg(chat,"Bon après-midi ✨ Je suis LumyGPT.\nQue veux-tu faire ?");
 </script>
 </body>
 </html>
