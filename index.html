@@ -6,15 +6,11 @@
 <title>LumyGPT</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;font-family:-apple-system,Arial,sans-serif;background:#0d001a;color:#fff;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+body{margin:0;font-family:-apple-system,Arial,sans-serif;background:#1a0033;color:#fff;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 body.light{background:#f5eaff;color:#1a0030}
-body.light #basePage{background:linear-gradient(180deg,#e8d5ff,#fff,#f5eaff)}
-body.light .bar,body.light .topbar{background:#e8d5ff}
-body.light .bubble{background:#fff;color:#1a0030}
-body.light .barInput{background:#fff}
-body.light .barInput input{color:#000}
-canvas.snow{position:fixed;inset:0;pointer-events:none;z-index:50}
-.led{height:5px;background:linear-gradient(90deg,#ff00ff,#25F4EE,#FE2C55,#B45CFF,#ffcc00,#ff00ff);background-size:300% 100%;animation:led 1.2s linear infinite;box-shadow:0 0 15px #ff00ff}
+body.light #basePage{background:linear-gradient(180deg,#2d0050,#e8d5ff)}
+canvas.snow{position:fixed;inset:0;pointer-events:none;z-index:60}
+.led{height:4px;background:linear-gradient(90deg,#ff00ff,#25F4EE,#FE2C55,#B45CFF,#ffcc00,#ff00ff);background-size:300% 100%;animation:led 1.2s linear infinite}
 @keyframes led{to{background-position:300% 0}}
 /* SPLASH L */
 #splashL{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
@@ -22,42 +18,47 @@ canvas.snow{position:fixed;inset:0;pointer-events:none;z-index:50}
 .explosion{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#ff00ff 20%,#25F4EE 40%,transparent 70%);animation:boom 1s ease-out forwards}
 @keyframes boom{0%{transform:scale(.1);opacity:1}100%{transform:scale(2.2);opacity:0}}
 .eclair{position:absolute;font-size:90px;animation:flash .15s infinite alternate}
-@keyframes flash{from{opacity:1;transform:scale(1)}to{opacity:.2;transform:scale(1.3)}}
-.bigL{width:200px;height:200px;background:linear-gradient(135deg,#ff00ff,#B45CFF,#25F4EE);border-radius:42px;display:flex;align-items:center;justify-content:center;font-size:130px;font-weight:900;border:5px solid #fff;box-shadow:0 0 40px #ff00ff,0 0 80px #25F4EE,0 0 120px #FE2C55;animation:spinL 2.2s ease, pulseL .6s infinite alternate;position:relative;z-index:2}
+@keyframes flash{from{opacity:1}to{opacity:.2;transform:scale(1.3)}}
+.bigL{width:200px;height:200px;background:linear-gradient(135deg,#ff00ff,#B45CFF,#25F4EE);border-radius:42px;display:flex;align-items:center;justify-content:center;font-size:130px;font-weight:900;border:5px solid #fff;box-shadow:0 0 40px #ff00ff,0 0 80px #25F4EE;animation:spinL 2.2s ease;position:relative;z-index:2}
 @keyframes spinL{0%{transform:rotate(-360deg) scale(.2)}60%{transform:rotate(10deg) scale(1.2)}100%{transform:rotate(0) scale(1)}}
-@keyframes pulseL{from{box-shadow:0 0 40px #ff00ff,0 0 80px #25F4EE}to{box-shadow:0 0 80px #FE2C55,0 0 120px #B45CFF}}
 .splashTxt{font-size:48px;font-weight:900;text-align:center;margin-top:18px;text-shadow:0 0 20px #ff00ff,0 0 40px #25F4EE}
-/* TOPBAR + RANKED */
-.topbar{display:flex;gap:6px;padding:10px;overflow-x:auto;background:#17002e;align-items:center}
-.topbar::-webkit-scrollbar{display:none}
-.pill{white-space:nowrap;font-size:12px;padding:7px 11px;border-radius:999px;background:#2a0a4a;border:1px solid #ff00ff;box-shadow:0 0 10px #ff00ff;cursor:pointer}
-.pill.pro{background:#ffcc00;color:#000;font-weight:800}
-#basePage{flex:1;display:none;flex-direction:column;overflow:hidden;background:linear-gradient(180deg,#2d0050,#17002e,#0d001a)}
+/* ===== BASE = PHOTO À L'IDENTIQUE ===== */
+#basePage{flex:1;display:none;flex-direction:column;overflow:hidden;background:linear-gradient(180deg,#2d0050 0%,#1a0033 55%,#0d001a 100%)}
 #basePage.show{display:flex}
-.rankBar{margin:8px 12px 0;background:#1e003a;border:1px solid #ff00ff;border-radius:14px;padding:10px;position:relative;z-index:2;box-shadow:0 0 15px #ff00ff}
-.rankBar .row{display:flex;justify-content:space-between;font-size:12px;font-weight:800}
-.progress{height:10px;background:#0d001a;border-radius:999px;margin-top:8px;overflow:hidden;border:1px solid #fff}
-.progress i{display:block;height:100%;background:linear-gradient(90deg,#ff00ff,#25F4EE,#FE2C55);transition:width .5s}
-.rankLevels{display:flex;justify-content:space-between;font-size:10px;margin-top:6px;opacity:.9}
-.rankLevels span.on{color:#ffcc00;font-weight:900;text-shadow:0 0 10px #ffcc00}
-.hero{text-align:center;padding:6px 12px;position:relative;z-index:2}
-.logoL{width:78px;height:78px;margin:2px auto;background:linear-gradient(135deg,#ff00ff,#B45CFF,#25F4EE);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900;box-shadow:0 0 0 3px #fff,0 0 25px #ff00ff,0 0 50px #25F4EE;animation:rotateLogo 4s linear infinite}
-@keyframes rotateLogo{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-.hero h1{font-size:40px;margin:10px 0 0;text-shadow:0 0 20px #ff00ff}
-.hero h1 span{color:#ff5ce1}
+.topbar{display:flex;gap:7px;padding:10px 10px 6px;overflow-x:auto;align-items:center;background:transparent;position:relative;z-index:2}
+.topbar::-webkit-scrollbar{display:none}
+.pill{white-space:nowrap;font-size:12.5px;padding:7px 11px;border-radius:999px;background:#2a0a4a;border:1px solid #4a1a7a;cursor:pointer}
+.pill.pro{background:#ffcc00;color:#000;font-weight:800;border-color:#ffcc00}
+.pill.rank{background:#3a0a6a;border-color:#ffcc00}
+.hero{text-align:center;padding:2px 12px 4px;position:relative;z-index:2}
+.logoWrap{position:relative;width:96px;height:96px;margin:0 auto}
+.logoWrap::before{content:"";position:absolute;inset:-6px;border:2px dashed #7a4dff;border-radius:50%;animation:rotateDashed 8s linear infinite}
+@keyframes rotateDashed{to{transform:rotate(360deg)}}
+.logoL{position:absolute;inset:0;background:linear-gradient(135deg,#c86bff,#7a00ff);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:900;box-shadow:0 0 0 3px #fff,0 0 25px #B45CFF}
+.hero h1{margin:10px 0 0;font-size:42px;line-height:1;letter-spacing:-1px}
+.hero h1 span{color:#c86bff}
+.hero p{margin:6px 0 12px;font-size:14.5px;opacity:.95}
 .rowBtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.btn{border:1px solid #ff00ff;background:#2a0a4a;color:#fff;padding:10px 14px;border-radius:999px;font-weight:700;cursor:pointer;box-shadow:0 0 12px #B45CFF}
-.btn.main{background:#ff00aa;animation:pulseBtn .8s infinite alternate}
-@keyframes pulseBtn{from{transform:scale(1)}to{transform:scale(1.08)}}
-.chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;position:relative;z-index:2}
-.bubble{background:#3d0a7a;border:1px solid #ff00ff;padding:13px;border-radius:16px;max-width:85%;line-height:1.4;white-space:pre-line;box-shadow:0 0 15px #B45CFF}
-.meta{font-size:11px;opacity:.6;margin:5px 0 0 46px}
-.tools{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0 46px}
-.tool{background:#1e003a;border:1px solid #25F4EE;color:#fff;padding:7px 11px;border-radius:999px;font-size:12px}
-.bar{display:flex;gap:10px;padding:12px;background:#17002e;position:relative;z-index:2}
-.barInput{flex:1;display:flex;gap:10px;align-items:center;background:#1e003a;border:2px solid #ff00ff;border-radius:999px;padding:11px 14px;box-shadow:0 0 20px #ff00ff}
+.btn{border:1px solid #6a2db3;background:#2a0a4a;color:#fff;padding:10px 15px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer}
+.btn.main{background:#7a00e6;border-color:#a35cff}
+.chat{flex:1;overflow-y:auto;padding:16px 12px 8px;display:flex;flex-direction:column;gap:10px;position:relative;z-index:2}
+.msgRow{display:flex;gap:8px;align-items:flex-start}
+.avCol{display:flex;flex-direction:column;align-items:center;gap:4px}
+.av{width:40px;height:40px;border-radius:50%;background:#B45CFF;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:19px;border:1px solid rgba(255,255,255,.7)}
+.avEye{width:26px;height:26px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+.bubble{background:#3d0a7a;padding:13px 14px;border-radius:16px;max-width:82%;line-height:1.35;font-size:16px;white-space:pre-line}
+.meta{font-size:11px;opacity:.6;margin:5px 0 0 54px}
+.tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 0 54px}
+.tool{background:#1e003a;border:1px solid #4a1a7a;color:#fff;padding:8px 11px;border-radius:999px;font-size:12.5px;cursor:pointer}
+.bar{display:flex;gap:10px;align-items:center;padding:12px;background:#17002e;border-top:1px solid #2a0a4a;position:relative;z-index:2}
+.barInput{flex:1;display:flex;align-items:center;gap:10px;background:#1e003a;border:1px solid #5a2aa0;border-radius:999px;padding:11px 14px}
 .barInput input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:16px}
-.send{width:44px;height:44px;border-radius:50%;border:none;background:linear-gradient(135deg,#ff00ff,#25F4EE);font-size:20px;cursor:pointer}
+.barInput input::placeholder{color:#c9a8e8}
+.send{width:46px;height:46px;border-radius:50%;border:none;background:#a855ff;color:#fff;font-size:20px;cursor:pointer;flex-shrink:0}
+/* RANKED COMPACT - ne casse pas la photo */
+.rankMini{margin:0 12px;background:#1e003a;border:1px solid #ffcc00;border-radius:12px;padding:8px 10px;position:relative;z-index:2;font-size:12px;cursor:pointer}
+.progress{height:8px;background:#0d001a;border-radius:999px;margin-top:6px;overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,#ff00ff,#25F4EE);transition:width .5s}
 /* SPLASH TIKTOK */
 #splashTik{position:fixed;inset:0;background:#000;z-index:210;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
 #splashTik.show{display:flex}
@@ -67,55 +68,35 @@ canvas.snow{position:fixed;inset:0;pointer-events:none;z-index:50}
 #tikPage{flex:1;display:none;flex-direction:column;overflow:hidden;background:#000}
 #tikPage.show{display:flex}
 .tikHead{display:flex;gap:10px;align-items:center;padding:12px;position:relative;z-index:2}
-.tikHead svg{width:58px;height:58px;animation:rotateLogo 3s linear infinite}
+.tikHead svg{width:58px;height:58px;animation:rotateDashed 5s linear infinite}
 .tikHead h2{font-size:32px;line-height:.95;margin:0;text-shadow:0 0 20px #FE2C55}
 .tikHead h2 span{color:#25F4EE}
 .tikHead .x{margin-left:auto;width:36px;height:36px;border-radius:50%;background:#111;color:#ff5ce1;border:1px solid #ff00ff}
 .tikPills{display:flex;gap:8px;padding:10px;overflow-x:auto;position:relative;z-index:2}
 .tikPills::-webkit-scrollbar{display:none}
-.tikPills button{white-space:nowrap;background:#000;border:1px solid #25F4EE;color:#fff;padding:9px 12px;border-radius:999px;box-shadow:0 0 10px #25F4EE}
+.tikPills button{white-space:nowrap;background:#000;border:1px solid #25F4EE;color:#fff;padding:9px 12px;border-radius:999px}
 .tikPills button.on{background:#FE2C55}
 .chatTik{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;position:relative;z-index:2}
-.bubbleTik{background:#0a0a1a;border:2px solid #FE2C55;padding:14px;border-radius:18px;line-height:1.45;white-space:pre-line;box-shadow:0 0 20px #FE2C55,0 0 40px #25F4EE}
-/* MODAL RANKED */
+.bubbleTik{background:#0a0a1a;border:2px solid #FE2C55;padding:14px;border-radius:18px;line-height:1.45;white-space:pre-line;box-shadow:0 0 20px #FE2C55}
 #rankModal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;display:none;align-items:center;justify-content:center;padding:16px}
 #rankModal.show{display:flex}
-.rankCard{background:#1e003a;border:2px solid #ffcc00;border-radius:20px;padding:18px;width:100%;max-width:380px;box-shadow:0 0 40px #ffcc00;text-align:center}
-.rankCard h3{margin:0;font-size:22px}
+.rankCard{background:#1e003a;border:2px solid #ffcc00;border-radius:20px;padding:18px;width:100%;max-width:380px;text-align:center}
 .rankItem{display:flex;justify-content:space-between;padding:9px 10px;border-radius:10px;margin-top:6px;background:#0d001a;border:1px solid #444}
-.rankItem.on{border-color:#ffcc00;background:#2a1a00;box-shadow:0 0 15px #ffcc00}
+.rankItem.on{border-color:#ffcc00;background:#2a1a00}
 </style>
 </head>
 <body>
 <canvas class="snow" id="snow"></canvas>
 
-<!-- SPLASH L -->
-<div id="splashL">
-  <div class="explosion"></div>
-  <div class="eclair" style="left:10%;top:15%">⚡</div><div class="eclair" style="right:12%;top:20%">⚡</div><div class="eclair" style="left:15%;bottom:20%">⚡</div><div class="eclair" style="right:15%;bottom:25%">⚡</div>
-  <div class="bigL">L</div>
-  <div class="splashTxt">LumyGPT<br><span style="font-size:28px;color:#25F4EE">💥 ÇA VA PÉTER 💥</span></div>
-</div>
+<div id="splashL"><div class="explosion"></div><div class="eclair" style="left:10%;top:15%">⚡</div><div class="eclair" style="right:12%;top:20%">⚡</div><div class="eclair" style="left:15%;bottom:20%">⚡</div><div class="bigL">L</div><div class="splashTxt">LumyGPT<br><span style="font-size:28px;color:#25F4EE">💥 ÇA VA PÉTER 💥</span></div></div>
 
-<!-- BASE -->
 <div id="basePage">
   <div class="led"></div>
   <div class="topbar">
-    <span class="pill">🟢 En ligne</span><span class="pill">v2.5</span><span class="pill pro" onclick="openRank()">🏆 <span id="rankTop">Bronze</span></span>
-    <span class="pill" onclick="toggleDay()">🌙 / ☀️ Jour / Nuit</span>
-    <span class="pill" onclick="location.reload()">🔄</span>
+    <span class="pill">🟢 En ligne</span><span class="pill">v2.5</span><span class="pill pro" onclick="openRank()">🔥 PRO</span><span class="pill">🔥 <span id="flame">1</span></span><span class="pill">⭐ <span id="stars">0</span></span><span class="pill" onclick="toggleDay()">🌙</span><span class="pill" onclick="location.reload()">🔄</span>
   </div>
-
-  <!-- RANKED 3 MOIS -->
-  <div class="rankBar" onclick="openRank()">
-    <div class="row"><span>🏆 RANKED - SAISON 3 MOIS</span><span id="seasonLeft">90 jours restants</span></div>
-    <div class="row" style="margin-top:4px"><span id="rankName">🥉 Bronze</span><span><span id="xpTxt">0 / 100 XP</span> • 🔥 <span id="flame">1</span> • ⭐ <span id="stars">0</span></span></div>
-    <div class="progress"><i id="xpBar" style="width:0%"></i></div>
-    <div class="rankLevels"><span class="on" data-r="Bronze">🥉 Bronze</span><span data-r="Argent">🥈 Argent</span><span data-r="Or">🥇 Or</span><span data-r="Platine">💎 Platine</span><span data-r="Diamant">💠 Diamant</span><span data-r="Pro">👑 Pro</span></div>
-  </div>
-
   <div class="hero">
-    <div class="logoL">L</div>
+    <div class="logoWrap"><div class="logoL">L</div></div>
     <h1>Lumy<span>GPT</span></h1>
     <p>Bon après-midi ✨ • Ton assistant intelligent ✨</p>
     <div class="rowBtns">
@@ -123,126 +104,104 @@ canvas.snow{position:fixed;inset:0;pointer-events:none;z-index:50}
       <button class="btn" onclick="quick('Aide devoir')">📚 Aide devoir</button>
       <button class="btn" onclick="quick('Blague')">😂 Blague</button>
     </div>
-    <div class="rowBtns" style="margin-top:8px"><button class="btn" onclick="quick('Planning')">📅 Planning</button><button class="btn" onclick="openRank()">🏆 Voir mon Rank</button></div>
+    <div class="rowBtns" style="margin-top:8px"><button class="btn" onclick="quick('Planning')">📅 Planning</button></div>
   </div>
+  <div class="rankMini" onclick="openRank()">🏆 RANKED - <b id="rankName">🥉 Bronze</b> • <span id="xpTxt">0 / 100 XP</span> • <span id="seasonLeft">90 jours restants</span><div class="progress"><i id="xpBar" style="width:0%"></i></div></div>
   <div class="chat" id="chatBase"></div>
   <div class="bar"><div class="barInput"><span>⚡</span><span>📷</span><input id="inputBase" placeholder="Écris à LumyGPT..."></div><button class="send" onclick="sendBase()">➤</button></div>
   <div class="led"></div>
 </div>
 
-<!-- SPLASH TIKTOK -->
-<div id="splashTik">
-  <div class="explosion"></div>
-  <div class="eclair" style="left:8%;top:10%">⚡</div><div class="eclair" style="right:8%;top:15%">⚡</div><div class="eclair" style="left:10%;bottom:15%">💥</div><div class="eclair" style="right:10%;bottom:20%">💥</div>
-  <div class="tikBig"><svg viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#25F4EE"/><stop offset=".5" stop-color="#a855ff"/><stop offset="1" stop-color="#FE2C55"/></linearGradient></defs><path fill="url(#g)" stroke="#fff" stroke-width="1.5" d="M62 8 L62 62 A18 18 0 1 1 44 62 L44 8 L62 8 Z M62 8 L78 18 L78 34 L62 30 Z"/></svg></div>
-  <div class="splashTxt">LumyGPT<br><span style="color:#25F4EE">Tik</span><span style="color:#FE2C55">Tok</span><br><span style="font-size:22px">⚡ EXPLOSION ⚡</span></div>
-</div>
+<div id="splashTik"><div class="explosion"></div><div class="eclair" style="left:8%;top:10%">⚡</div><div class="eclair" style="right:8%;top:15%">⚡</div><div class="eclair" style="left:10%;bottom:15%">💥</div><div class="eclair" style="right:10%;bottom:20%">💥</div><div class="tikBig"><svg viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#25F4EE"/><stop offset=".5" stop-color="#a855ff"/><stop offset="1" stop-color="#FE2C55"/></linearGradient></defs><path fill="url(#g)" stroke="#fff" stroke-width="1.5" d="M62 8 L62 62 A18 18 0 1 1 44 62 L44 8 L62 8 Z M62 8 L78 18 L78 34 L62 30 Z"/></svg></div><div class="splashTxt">LumyGPT<br><span style="color:#25F4EE">Tik</span><span style="color:#FE2C55">Tok</span><br><span style="font-size:22px">⚡ EXPLOSION ⚡</span></div></div>
 
-<!-- TIKTOK PAGE -->
 <div id="tikPage">
   <div class="led"></div>
-  <div class="tikHead">
-    <svg viewBox="0 0 100 100"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#25F4EE"/><stop offset="1" stop-color="#FE2C55"/></linearGradient></defs><path fill="url(#g2)" d="M62 8 L62 62 A18 18 0 1 1 44 62 L44 8 L62 8 Z M62 8 L78 18 L78 34 L62 30 Z"/></svg>
-    <h2>LumyGPT<br><span>TikTok</span></h2>
-    <button class="x" onclick="closeTik()">✕</button>
-  </div>
-  <div class="tikPills">
-    <button onclick="tikBtn('trend',this)">🔥 Trend du moment</button>
-    <button onclick="tikBtn('idee',this)">Idée vidéo virale</button>
-    <button onclick="tikBtn('script',this)">🕒 Script 15 sec</button>
-    <button onclick="tikBtn('percer',this)">Comment percer</button>
-    <button onclick="tikBtn('bio',this)">✨ Bio qui tue</button>
-  </div>
+  <div class="tikHead"><svg viewBox="0 0 100 100"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#25F4EE"/><stop offset="1" stop-color="#FE2C55"/></linearGradient></defs><path fill="url(#g2)" d="M62 8 L62 62 A18 18 0 1 1 44 62 L44 8 L62 8 Z M62 8 L78 18 L78 34 L62 30 Z"/></svg><h2>LumyGPT<br><span>TikTok</span></h2><button class="x" onclick="closeTik()">✕</button></div>
+  <div class="tikPills"><button onclick="tikBtn('trend',this)">🔥 Trend du moment</button><button onclick="tikBtn('idee',this)">Idée vidéo virale</button><button onclick="tikBtn('script',this)">🕒 Script 15 sec</button><button onclick="tikBtn('percer',this)">Comment percer</button><button onclick="tikBtn('bio',this)">✨ Bio qui tue</button></div>
   <div class="chatTik" id="chatTik"></div>
-  <div class="bar"><div class="barInput" style="border-color:#FE2C55;box-shadow:0 0 20px #FE2C55"><span>⚡</span><span>📷</span><input id="inputTik" placeholder="Écris à Lumy TikTok..."></div><button class="send" onclick="sendTik()">➤</button></div>
+  <div class="bar"><div class="barInput" style="border-color:#FE2C55"><span>⚡</span><span>📷</span><input id="inputTik" placeholder="Écris à Lumy TikTok..."></div><button class="send" onclick="sendTik()">➤</button></div>
   <div class="led"></div>
 </div>
 
-<!-- MODAL RANKED -->
-<div id="rankModal" onclick="if(event.target===this) closeRank()">
-  <div class="rankCard">
-    <h3>🏆 MODE RANKED - 3 MOIS</h3>
-    <p style="opacity:.8;font-size:13px">Saison : <span id="seasonDates"></span> • <span id="seasonLeft2"></span></p>
-    <p><b id="rankBig">🥉 Bronze</b> • <span id="xpBig">0 XP</span></p>
-    <div class="progress"><i id="xpBar2" style="width:0%"></i></div>
-    <div id="rankList"></div>
-    <p style="font-size:12px;opacity:.8">+10 XP par message • +25 XP par idée TikTok • +50 XP si tu likes • Monte de Bronze à Pro en 3 mois 🔥</p>
-    <button class="btn main" onclick="closeRank()" style="width:100%;padding:12px">Fermer</button>
-  </div>
-</div>
+<div id="rankModal" onclick="if(event.target===this) closeRank()"><div class="rankCard"><h3>🏆 MODE RANKED - 3 MOIS</h3><p style="opacity:.8;font-size:13px"><span id="seasonDates"></span> • <span id="seasonLeft2"></span></p><p><b id="rankBig">🥉 Bronze</b> • <span id="xpBig">0 XP</span></p><div class="progress"><i id="xpBar2" style="width:0%"></i></div><div id="rankList"></div><p style="font-size:12px;opacity:.8">+10 XP par message • +25 XP par idée TikTok • +50 XP si tu likes</p><button class="btn main" onclick="closeRank()" style="width:100%;padding:12px">Fermer</button></div></div>
 
 <script>
-// NEIGE
+// ===== NEIGE : BLANCHE pour LumyGPT, PEU de couleur pour TikTok =====
+let snowMode="base";
 const c=document.getElementById("snow"),ctx=c.getContext("2d");let W,H,flakes=[];
-function rs(){W=c.width=innerWidth;H=c.height=innerHeight;flakes=Array.from({length:90},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*3+1,s:Math.random()*1.5+.5,col:["#ff00ff","#FE2C55","#25F4EE","#B45CFF","#ffffff"][Math.floor(Math.random()*5)]}))}rs();addEventListener("resize",rs);
-(function loop(){ctx.clearRect(0,0,W,H);flakes.forEach(f=>{ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,7);ctx.fillStyle=f.col;ctx.shadowColor=f.col;ctx.shadowBlur=10;ctx.fill();f.y+=f.s;f.x+=Math.sin(f.y/20)*.5;if(f.y>H){f.y=-5;f.x=Math.random()*W}});requestAnimationFrame(loop)})();
+function makeFlakes(){
+  let count=snowMode==="base"?70:snowMode==="tiktok"?28:70;
+  flakes=Array.from({length:count},()=>{
+    let r=Math.random();
+    let col;
+    if(snowMode==="base"){ col="#ffffff"; }
+    else if(snowMode==="tiktok"){ col=r<0.78?"#ffffff":r<0.88?"#25F4EE":r<0.94?"#FE2C55":"#B45CFF"; }
+    else{ col="#ffffff"; }
+    return {x:Math.random()*W,y:Math.random()*H,r:Math.random()*2.5+1,s:Math.random()*1.2+.4,col}
+  });
+}
+function rs(){W=c.width=innerWidth;H=c.height=innerHeight;makeFlakes()}rs();addEventListener("resize",rs);
+function setSnow(mode){snowMode=mode;makeFlakes()}
+(function loop(){ctx.clearRect(0,0,W,H);flakes.forEach(f=>{ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,7);ctx.fillStyle=f.col;ctx.shadowColor=f.col;ctx.shadowBlur=6;ctx.fill();f.y+=f.s;f.x+=Math.sin(f.y/25)*.4;if(f.y>H){f.y=-5;f.x=Math.random()*W}});requestAnimationFrame(loop)})();
 
-// JOUR / NUIT
-function toggleDay(){document.body.classList.toggle("light");let isLight=document.body.classList.contains("light");localStorage.setItem("lumy_theme",isLight?"light":"dark")}
+function toggleDay(){document.body.classList.toggle("light");localStorage.setItem("lumy_theme",document.body.classList.contains("light")?"light":"dark")}
 if(localStorage.getItem("lumy_theme")==="light") document.body.classList.add("light");
 
-// RANKED 3 MOIS
 const RANKS=[{n:"Bronze",e:"🥉",xp:0},{n:"Argent",e:"🥈",xp:100},{n:"Or",e:"🥇",xp:250},{n:"Platine",e:"💎",xp:500},{n:"Diamant",e:"💠",xp:800},{n:"Pro",e:"👑",xp:1200}];
 let xp=parseInt(localStorage.getItem("lumy_xp")||"0");
 let flame=parseInt(localStorage.getItem("lumy_flame")||"1");
 let stars=parseInt(localStorage.getItem("lumy_stars")||"0");
-let seasonStart=localStorage.getItem("lumy_season_start");
-if(!seasonStart){seasonStart=new Date().toISOString();localStorage.setItem("lumy_season_start",seasonStart)}
+let seasonStart=localStorage.getItem("lumy_season_start");if(!seasonStart){seasonStart=new Date().toISOString();localStorage.setItem("lumy_season_start",seasonStart)}
 let startDate=new Date(seasonStart);let endDate=new Date(startDate);endDate.setDate(endDate.getDate()+90);
 function getRank(){let r=RANKS[0];RANKS.forEach(x=>{if(xp>=x.xp) r=x});return r}
 function updateRank(){
-  let r=getRank();let next=RANKS[RANKS.indexOf(r)+1];
-  let max=next?next.xp:1200;let cur=next?xp-r.xp:max;
-  let total=next?next.xp-r.xp:100;let pct=Math.min(100,Math.round(cur/total*100));
-  document.getElementById("rankTop").textContent=r.n;
+  let r=getRank();let next=RANKS[RANKS.indexOf(r)+1];let max=next?next.xp:1200;let pct=Math.min(100,Math.round((xp-r.xp)/((next?next.xp:1300)-r.xp)*100));
   document.getElementById("rankName").textContent=r.e+" "+r.n;
   document.getElementById("xpTxt").textContent=xp+" / "+max+" XP";
-  document.getElementById("xpBar").style.width=pct+"%";
-  document.getElementById("xpBar2").style.width=pct+"%";
-  document.getElementById("rankBig").textContent=r.e+" "+r.n;
-  document.getElementById("xpBig").textContent=xp+" XP";
-  document.getElementById("flame").textContent=flame;
-  document.getElementById("stars").textContent=stars;
+  document.getElementById("xpBar").style.width=pct+"%";document.getElementById("xpBar2").style.width=pct+"%";
+  document.getElementById("rankBig").textContent=r.e+" "+r.n;document.getElementById("xpBig").textContent=xp+" XP";
+  document.getElementById("flame").textContent=flame;document.getElementById("stars").textContent=stars;
   let left=Math.max(0,Math.ceil((endDate-new Date())/86400000));
-  document.getElementById("seasonLeft").textContent=left+" jours restants";
-  document.getElementById("seasonLeft2").textContent=left+" jours restants";
+  document.getElementById("seasonLeft").textContent=left+" jours restants";document.getElementById("seasonLeft2").textContent=left+" jours restants";
   document.getElementById("seasonDates").textContent=startDate.toLocaleDateString("fr-FR")+" → "+endDate.toLocaleDateString("fr-FR");
-  document.querySelectorAll(".rankLevels span").forEach(s=>{s.classList.toggle("on",s.dataset.r===r.n)});
   document.getElementById("rankList").innerHTML=RANKS.map(x=>`<div class="rankItem ${x.n===r.n?"on":""}"><span>${x.e} ${x.n}</span><span>${x.xp} XP ${x.n===r.n?"• TOI 👈":""}</span></div>`).join("");
 }
-function addXP(n){xp+=n;localStorage.setItem("lumy_xp",xp);let old=getRank();updateRank();let nr=getRank();if(nr.n!==old.n){alert("🔥 TU ES MONTÉ : "+nr.e+" "+nr.n+" ! GG BG 👑")}}
+function addXP(n){let old=getRank();xp+=n;localStorage.setItem("lumy_xp",xp);updateRank();if(getRank().n!==old.n) alert("🔥 TU ES MONTÉ : "+getRank().e+" "+getRank().n+" !")}
 function openRank(){updateRank();document.getElementById("rankModal").classList.add("show")}
 function closeRank(){document.getElementById("rankModal").classList.remove("show")}
 updateRank();
 
-// CHAT
 const chatBase=document.getElementById("chatBase"),chatTik=document.getElementById("chatTik");
 function bubble(cont,text,tik){
-  let row=document.createElement("div");row.style.display="flex";row.style.gap="8px";
-  let av=document.createElement("div");av.style.cssText="width:36px;height:36px;border-radius:50%;background:#B45CFF;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0";av.textContent=tik?"🎵":"L";
+  let row=document.createElement("div");row.className="msgRow";
+  let colAv=document.createElement("div");colAv.className="avCol";
+  let av=document.createElement("div");av.className="av";av.textContent=tik?"🎵":"L";
+  let eye=document.createElement("div");eye.className="avEye";eye.textContent="👀";
+  colAv.append(av,eye);
   let col=document.createElement("div");col.style.flex="1";
   let b=document.createElement("div");b.className=tik?"bubbleTik":"bubble";b.textContent=text;
   let meta=document.createElement("div");meta.className="meta";meta.textContent=(tik?"Lumy TikTok":"LumyGPT")+" • "+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   let tools=document.createElement("div");tools.className="tools";
   let mk=(t,fn)=>{let x=document.createElement("button");x.className="tool";x.textContent=t;x.onclick=fn;tools.append(x);return x};
   mk("📋 Copier",e=>{navigator.clipboard.writeText(text);e.target.textContent="✅ Copié"});
-  let likes=128; mk("❤️ "+likes,e=>{likes++;e.target.textContent="❤️ "+likes;stars++;localStorage.setItem("lumy_stars",stars);addXP(50);});
-  mk("💬 Modifier",()=>{b.textContent+=" 🔥"});
+  let likes=128; mk("❤️ "+likes,e=>{likes++;e.target.textContent="❤️ "+likes;stars++;localStorage.setItem("lumy_stars",stars);addXP(50);updateRank()});
+  mk("👎",()=>{});
   mk("🔊 Écouter",()=>{speechSynthesis.speak(new SpeechSynthesisUtterance(text))});
   mk("⭐ Favori",e=>{e.target.textContent="⭐ Ajouté"});
-  col.append(b,meta,tools);row.append(av,col);cont.append(row);cont.scrollTop=cont.scrollHeight;return b;
+  col.append(b,meta,tools);row.append(colAv,col);cont.append(row);cont.scrollTop=cont.scrollHeight;return b;
 }
 function userB(cont,t){let d=document.createElement("div");d.style.cssText="align-self:flex-end;background:#B45CFF;padding:12px 14px;border-radius:14px;max-width:85%";d.textContent=t;cont.append(d);cont.scrollTop=cont.scrollHeight}
-bubble(chatBase,"Bon après-midi ✨ Je suis LumyGPT.\nQue veux-tu faire ? • Ton Rank : "+getRank().e+" "+getRank().n,false);
+bubble(chatBase,"Bon après-midi ✨ Je suis LumyGPT.\nQue veux-tu faire ?",false);
+setSnow("base");
 setTimeout(()=>{document.getElementById("splashL").classList.add("hide");document.getElementById("basePage").classList.add("show")},2300);
 function sendBase(){let inp=document.getElementById("inputBase");let t=inp.value.trim();if(!t)return;userB(chatBase,t);inp.value="";addXP(10);flame++;localStorage.setItem("lumy_flame",flame);updateRank();let l=bubble(chatBase,"LumyGPT écrit...",false);setTimeout(()=>{l.textContent=t.toLowerCase().includes("devoir")?"Vas-y envoie ton devoir bg 📚":t.toLowerCase().includes("blague")?"Pourquoi les plongeurs plongent en arrière ? Parce que sinon ils tombent dans le bateau 😂":"Ah ouais bg ? Tu veux idée TikTok, aide devoir, blague ou planning ? +10 XP 🔥"},600)}
 document.getElementById("inputBase").addEventListener("keydown",e=>{if(e.key==="Enter")sendBase()});
 function quick(t){document.getElementById("inputBase").value=t;sendBase()}
-function openTikTok(){addXP(25);document.getElementById("splashTik").classList.add("show");setTimeout(()=>{document.getElementById("splashTik").classList.remove("show");document.getElementById("basePage").classList.remove("show");document.getElementById("tikPage").classList.add("show");if(chatTik.children.length===0) bubble(chatTik,"Bonjour, je suis LumyGPT TikTok,\nje suis là pour t'aider sur TikTok.\n\n① \"3 hacks iPhone que 99% ignorent\" - Hook + démo rapide, sons Tech.\n\n② \"Routine matinale 15s\" - Transition virale, texte dynamique + musique tendance.\n\n③ \"POV : quand ton café devient aesthetic\" - Style lifestyle, effet glitch rose/bleu.\n\nTu veux que je te rédige le script complet pour l'idée 1 ? +25 XP 🏆",true);document.getElementById("inputTik").focus()},2200)}
-function closeTik(){document.getElementById("tikPage").classList.remove("show");document.getElementById("basePage").classList.add("show")}
+function openTikTok(){addXP(25);setSnow("tiktok");document.getElementById("splashTik").classList.add("show");setTimeout(()=>{document.getElementById("splashTik").classList.remove("show");document.getElementById("basePage").classList.remove("show");document.getElementById("tikPage").classList.add("show");if(chatTik.children.length===0) bubble(chatTik,"Bonjour, je suis LumyGPT TikTok,\nje suis là pour t'aider sur TikTok.\n\n① \"3 hacks iPhone que 99% ignorent\" - Hook + démo rapide, sons Tech.\n\n② \"Routine matinale 15s\" - Transition virale, texte dynamique + musique tendance.\n\n③ \"POV : quand ton café devient aesthetic\" - Style lifestyle, effet glitch rose/bleu.\n\nTu veux que je te rédige le script complet pour l'idée 1 ?",true);document.getElementById("inputTik").focus()},2200)}
+function closeTik(){document.getElementById("tikPage").classList.remove("show");document.getElementById("basePage").classList.add("show");setSnow("base")}
 function sendTik(){let inp=document.getElementById("inputTik");let t=inp.value.trim();if(!t)return;userB(chatTik,t);inp.value="";addXP(10);let l=bubble(chatTik,"Lumy TikTok écrit...",true);setTimeout(()=>{l.textContent=t.toLowerCase().includes("script")?"SCRIPT 15 SEC :\n[0-2s] \"Tu connais pas ce hack...\"\n[2-8s] Tu montres l'écran\n[8-13s] Réaction choquée\n[13-15s] \"Abonne-toi\" 🔥":"Ok bg, Hook 2 sec qui choque, vidéo courte, poste tous les jours. Tu veux Trend, Idée, Script, Percer ou Bio ?"},600)}
 document.getElementById("inputTik").addEventListener("keydown",e=>{if(e.key==="Enter")sendTik()});
-function tikBtn(type,btn){document.querySelectorAll(".tikPills button").forEach(b=>b.classList.remove("on"));btn.classList.add("on");addXP(25);const txt={trend:"🔥 TREND DU MOMENT : Son Tech + transition rapide. Fais le POV avec LumyGPT. +25 XP",idee:"💡 IDÉE VIRALE : \"LumyGPT contrôle ma journée\" - Hook : Mon IA m'a démonté",script:"🕒 SCRIPT 15 SEC : [0-2s] Regarde ça... [2-7s] Tu montres LumyGPT [7-12s] Réaction [12-15s] Commente PARTIE 2",percer:"🚀 COMMENT PERCER : 1 Hook 2 sec 2 Vidéo <20 sec 3 Poste 1x/jour 4 Réponds aux coms 30 min",bio:"✨ BIO QUI TUE : \"Je teste les IA pour que tu perces 🔥 | Nouvelle idée chaque jour | Abonne-toi 👇\""};bubble(chatTik,txt[type],true)}
+function tikBtn(type,btn){document.querySelectorAll(".tikPills button").forEach(b=>b.classList.remove("on"));btn.classList.add("on");addXP(25);const txt={trend:"🔥 TREND DU MOMENT : Son Tech + transition rapide. Fais le POV avec LumyGPT.",idee:"💡 IDÉE VIRALE : \"LumyGPT contrôle ma journée\" - Hook : Mon IA m'a démonté",script:"🕒 SCRIPT 15 SEC : [0-2s] Regarde ça... [2-7s] Tu montres LumyGPT [7-12s] Réaction [12-15s] Commente PARTIE 2",percer:"🚀 COMMENT PERCER : 1 Hook 2 sec 2 Vidéo <20 sec 3 Poste 1x/jour 4 Réponds aux coms 30 min",bio:"✨ BIO QUI TUE : \"Je teste les IA pour que tu perces 🔥 | Nouvelle idée chaque jour | Abonne-toi 👇\""};bubble(chatTik,txt[type],true)}
 </script>
 </body>
 </html>
