@@ -4,78 +4,85 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>JARVIS</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:#020a14}
-body{font-family:"Plus Jakarta Sans",Arial,sans-serif;color:#fff;display:flex;flex-direction:column;height:100dvh;background:radial-gradient(circle at 50% 20%, rgba(0,212,255,.35) 0%, transparent 45%),linear-gradient(180deg,#021a2e 0%, #020a14 60%, #000 100%)}
-#lock{position:fixed;inset:0;z-index:200;background:#020a14;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;text-align:center}
-#lock .reactor{width:110px;height:110px;border-radius:50%;border:3px solid #00d4ff;box-shadow:0 0 40px #00d4ff;display:flex;align-items:center;justify-content:center;font-size:40px;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 20px #00d4ff}50%{box-shadow:0 0 55px #00d4ff}}
-#lock h1{font-size:32px;letter-spacing:4px}
-#lock p{color:#7dd3fc;font-size:13px}
-#codeInput{width:220px;padding:15px;border-radius:15px;border:2px solid #00d4ff;background:#071a2e;color:#fff;text-align:center;font-size:20px;letter-spacing:5px;outline:none;font-weight:800}
-#codeBtn{padding:13px 30px;border-radius:99px;border:none;background:#00d4ff;color:#000;font-weight:900;font-size:15px;cursor:pointer}
+html,body{height:100%;overflow:hidden;background:#000}
+body{font-family:"Plus Jakarta Sans",Arial,sans-serif;color:#fff;display:flex;flex-direction:column;height:100dvh;background:radial-gradient(circle at 50% 0%, #0a2a4a 0%, #020a14 45%, #000 100%);position:relative}
+body:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,212,255,.03) 2px 3px);pointer-events:none;z-index:0}
+
+/* LOCK */
+#lock{position:fixed;inset:0;z-index:200;background:radial-gradient(circle at 50% 20%, #0a2a4a, #000 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;text-align:center}
+#lock .reactor{width:120px;height:120px;border-radius:50%;border:3px solid #00d4ff;box-shadow:0 0 40px #00d4ff, inset 0 0 20px #00d4ff44;display:flex;align-items:center;justify-content:center;font-family:Orbitron;font-size:30px;color:#00d4ff;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px #00d4ff}50%{box-shadow:0 0 60px #00d4ff}}
+#lock h1{font-family:Orbitron;font-size:34px;letter-spacing:6px}
+#lock p{color:#7dd3fc;font-size:13px;line-height:1.5}
+#codeInput{width:230px;padding:16px;border-radius:16px;border:2px solid #00d4ff;background:rgba(0,20,40,.9);color:#fff;text-align:center;font-size:22px;letter-spacing:8px;outline:none;font-weight:800}
+#codeBtn{padding:14px 34px;border-radius:999px;border:none;background:#00d4ff;color:#000;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 0 25px #00d4ff88}
 #codeError{color:#ff5c7a;font-size:13px;min-height:18px}
 
-/* HEADER + SPHERE */
-header{flex-shrink:0;padding:10px 14px 6px;text-align:center;background:rgba(2,20,35,.6);border-bottom:1px solid rgba(0,212,255,.25);position:relative;z-index:2}
-.top-row{display:flex;justify-content:space-between;align-items:center}
-.live{display:flex;align-items:center;gap:6px;font-size:11px;color:#a7f3d0;background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.4);padding:5px 10px;border-radius:999px;font-weight:700}
-.live i{width:7px;height:7px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e;animation:blink 1.2s infinite}
+/* TOP HUD */
+header{flex-shrink:0;padding:10px 12px 4px;position:relative;z-index:2}
+.top-hud{display:flex;gap:8px;justify-content:space-between}
+.hud{flex:1;background:rgba(2,25,45,.85);border:1px solid rgba(0,212,255,.4);border-radius:14px;padding:8px 10px;display:flex;align-items:center;gap:8px;box-shadow:0 0 18px rgba(0,212,255,.15);backdrop-filter:blur(8px)}
+.hud .dot{width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e;animation:blink 1.2s infinite;flex-shrink:0}
 @keyframes blink{50%{opacity:.3}}
-.badge{background:rgba(0,212,255,.2);border:1px solid #00d4ff66;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800}
+.hud small{display:block;font-size:9px;color:#7dd3fc;letter-spacing:1px;text-transform:uppercase}
+.hud b{font-size:12px}
+.hud-right{justify-content:flex-end;text-align:right}
+.hud-right .brain{font-size:18px}
 
-/* LA SPHERE */
-.orb-wrap{position:relative;width:148px;height:148px;margin:10px auto 2px;display:flex;align-items:center;justify-content:center}
-.orb{position:relative;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #a5f3fc, #00d4ff 30%, #0369a1 60%, #020a14 100%);box-shadow:0 0 30px #00d4ff, 0 0 70px #00d4ff88, inset 0 0 25px #ffffff88;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;letter-spacing:1px;animation:orbFloat 3s ease-in-out infinite;transition:.3s}
-@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.03)}}
-.ring{position:absolute;border-radius:50%;border:2px solid transparent;border-top-color:#00d4ff;border-bottom-color:#00d4ff;pointer-events:none}
-.ring1{width:132px;height:132px;animation:spin 4s linear infinite;opacity:.9}
-.ring2{width:152px;height:152px;border-top-color:#22d3ee;border-bottom-color:transparent;border-left-color:#22d3ee;animation:spinRev 6s linear infinite;opacity:.6}
-.ring3{width:168px;height:168px;border-style:dashed;border-color:rgba(0,212,255,.4);animation:spin 12s linear infinite}
+/* SPHERE */
+.orb-wrap{position:relative;width:180px;height:180px;margin:14px auto 0;display:flex;align-items:center;justify-content:center}
+.orb{position:relative;width:128px;height:128px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #e0faff, #00d4ff 32%, #0369a1 62%, #020a14 100%);box-shadow:0 0 35px #00d4ff, 0 0 80px #00d4ff66, inset 0 0 30px #ffffff99;display:flex;align-items:center;justify-content:center;animation:orbFloat 3.2s ease-in-out infinite;z-index:2}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.03)}}
+.orb span{font-family:Orbitron;font-size:15px;letter-spacing:3px;text-shadow:0 0 12px #fff}
+.ring{position:absolute;border-radius:50%;pointer-events:none}
+.ring1{width:155px;height:155px;border:2px solid transparent;border-top-color:#00d4ff;border-bottom-color:#00d4ff;animation:spin 4s linear infinite}
+.ring2{width:178px;height:178px;border:1px solid transparent;border-left-color:#22d3ee;border-right-color:#22d3ee;animation:spinRev 7s linear infinite;opacity:.7}
+.ring3{width:195px;height:195px;border:1px dashed rgba(0,212,255,.45);animation:spin 14s linear infinite}
+.ring4{width:210px;height:110px;border:1px solid rgba(0,212,255,.25);border-radius:50%;transform:rotateX(70deg);animation:spin 9s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes spinRev{to{transform:rotate(-360deg)}}
-.orb-text{font-size:11px;letter-spacing:3px;color:#fff;text-shadow:0 0 10px #fff;z-index:2}
-
-/* QUAND JARVIS PARLE */
-.orb-wrap.speaking .orb{animation:orbTalk .45s ease-in-out infinite;box-shadow:0 0 45px #00d4ff, 0 0 100px #00d4ff, inset 0 0 35px #fff}
-.orb-wrap.speaking .ring1{animation-duration:0.8s}
+.base{width:150px;height:18px;margin:2px auto 0;background:radial-gradient(ellipse, #00d4ff88, transparent 70%);border-radius:50%;filter:blur(2px)}
+.wave{display:flex;gap:3px;align-items:center;justify-content:center;height:22px;margin:8px 0 2px;opacity:.4}
+.wave span{width:3px;background:#00d4ff;border-radius:99px;height:6px}
+.orb-wrap.speaking .orb{animation:orbTalk .45s ease-in-out infinite;box-shadow:0 0 55px #00d4ff, 0 0 120px #00d4ff, inset 0 0 40px #fff}
+.orb-wrap.speaking .ring1{animation-duration:.8s}
 .orb-wrap.speaking .ring2{animation-duration:1s}
-@keyframes orbTalk{0%,100%{transform:scale(1)}25%{transform:scale(1.12) translateY(-2px)}50%{transform:scale(0.96)}75%{transform:scale(1.08)}}
+@keyframes orbTalk{0%,100%{transform:scale(1)}25%{transform:scale(1.13) translateY(-2px)}50%{transform:scale(.96)}75%{transform:scale(1.09)}}
+.orb-wrap.speaking + .base + .wave{opacity:1}
+.orb-wrap.speaking + .base + .wave span{animation:waveBar .4s ease-in-out infinite alternate}
+.orb-wrap.speaking + .base + .wave span:nth-child(2n){animation-delay:.1s}
+.orb-wrap.speaking + .base + .wave span:nth-child(3n){animation-delay:.2s}
+@keyframes waveBar{from{height:5px}to{height:20px}}
+.title{text-align:center;font-family:Orbitron;font-size:22px;letter-spacing:5px;margin-top:2px}
+.subtitle{text-align:center;font-size:12px;color:#7dd3fc;margin-top:2px}
 
-/* WAVEFORM SOUS LA SPHERE */
-.wave{display:flex;gap:3px;align-items:center;justify-content:center;height:18px;margin:4px 0 2px;opacity:.45}
-.wave span{width:3px;background:#00d4ff;border-radius:99px;height:6px;transition:.2s}
-.orb-wrap.speaking + .wave{opacity:1}
-.orb-wrap.speaking + .wave span{animation:waveBar .4s ease-in-out infinite alternate}
-.orb-wrap.speaking + .wave span:nth-child(2n){animation-delay:.1s}
-.orb-wrap.speaking + .wave span:nth-child(3n){animation-delay:.2s}
-@keyframes waveBar{from{height:5px}to{height:18px}}
-
-header h1{font-size:26px;margin-top:2px} .subtitle{font-size:12.5px;color:#7dd3fc;margin-top:2px}
-.chips{display:flex;gap:7px;justify-content:center;margin-top:8px;flex-wrap:wrap}
-.chip{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);color:#fff;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer}
-#chat{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:14px}
+/* CHAT */
+#chat{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:14px;position:relative;z-index:2}
 .row{display:flex;gap:9px;align-items:flex-start} .row.user{justify-content:flex-end}
-.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00d4ff,#0369a1);display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0}
+.avatar{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #00d4ff, #0369a1);display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;border:1px solid #00d4ff;box-shadow:0 0 15px #00d4ff88}
 .avatar.user-av{background:linear-gradient(135deg,#22d3ee,#0ea5e9)}
-.msg{max-width:82%;padding:13px 15px;border-radius:20px;line-height:1.6;font-size:15px;white-space:pre-wrap;word-break:break-word}
-.bot-msg{background:#0a1f33;border:1px solid #00d4ff44;border-bottom-left-radius:6px}
+.msg{max-width:84%;padding:13px 15px;border-radius:18px;line-height:1.6;font-size:15px;white-space:pre-wrap;word-break:break-word}
+.bot-msg{background:rgba(2,25,45,.92);border:1px solid rgba(0,212,255,.45);border-bottom-left-radius:6px;box-shadow:0 0 18px rgba(0,212,255,.12);clip-path:polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%)}
+.bot-msg b{color:#00d4ff}
 .user-msg{background:linear-gradient(135deg,#00d4ff,#0369a1);color:#000;border-bottom-right-radius:6px;font-weight:600}
-#form{flex-shrink:0;padding:10px 12px 16px}
-.input-wrap{display:flex;align-items:center;gap:6px;background:#071a2e;border:2px solid #00d4ff66;border-radius:999px;padding:6px 6px 6px 14px}
-#input{flex:1;background:transparent;border:none;color:#fff;padding:12px 4px;outline:none;font-size:16px;font-weight:700;font-family:inherit;min-width:0}
-#input::placeholder{color:#7dd3fc}
-#send{width:46px;height:46px;border-radius:50%;background:#00d4ff;border:none;color:#000;font-size:19px;cursor:pointer;flex-shrink:0}
+.name{font-size:12px;color:#00d4ff;font-weight:800;margin-bottom:3px}
+#form{flex-shrink:0;padding:10px 12px 18px;position:relative;z-index:2}
+.input-wrap{display:flex;align-items:center;gap:8px;background:rgba(2,25,45,.95);border:2px solid rgba(0,212,255,.55);border-radius:999px;padding:5px 5px 5px 12px;box-shadow:0 0 25px rgba(0,212,255,.2)}
+.mic{width:38px;height:38px;border-radius:50%;background:rgba(0,212,255,.15);border:1px solid #00d4ff88;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+#input{flex:1;background:transparent;border:none;color:#fff;padding:12px 4px;outline:none;font-size:16px;font-weight:600;font-family:inherit;min-width:0}
+#input::placeholder{color:#6ea8c7}
+#send{width:46px;height:46px;border-radius:50%;background:#00d4ff;border:none;color:#000;font-size:19px;cursor:pointer;flex-shrink:0;box-shadow:0 0 20px #00d4ff88}
 </style>
 </head>
 <body>
 
 <div id="lock">
-  <div class="reactor">⚡</div>
+  <div class="reactor">J</div>
   <h1>J.A.R.V.I.S</h1>
-  <p>ACCÈS SÉCURISÉ<br>Entrez le code d'accès</p>
+  <p>ACCÈS SÉCURISÉ<br>Entrez le code d'accès Boss</p>
   <input id="codeInput" type="password" placeholder="••••" maxlength="10" inputmode="numeric">
   <button id="codeBtn" onclick="checkCode()">DÉVERROUILLER</button>
   <div id="codeError"></div>
@@ -83,33 +90,30 @@ header h1{font-size:26px;margin-top:2px} .subtitle{font-size:12.5px;color:#7dd3f
 </div>
 
 <header>
-  <div class="top-row"><div class="live"><i></i> En ligne</div><div class="badge">JARVIS • PRO</div></div>
+  <div class="top-hud">
+    <div class="hud"><span class="dot"></span><div><small>État du système</small><b>Opérationnel</b></div><div style="margin-left:auto">📈</div></div>
+    <div class="hud hud-right"><div><small>Mode</small><b>IA Avancée</b></div><div class="brain">🧠</div></div>
+  </div>
 
-  <!-- SPHERE JARVIS -->
   <div class="orb-wrap" id="orbWrap">
+    <div class="ring ring4"></div>
     <div class="ring ring3"></div>
     <div class="ring ring2"></div>
     <div class="ring ring1"></div>
-    <div class="orb" id="orb"><span class="orb-text">JARVIS</span></div>
+    <div class="orb" id="orb"><span>JARVIS</span></div>
   </div>
-  <div class="wave" id="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-
-  <h1>JARVIS</h1>
-  <div class="subtitle" id="statusText">Bonjour Boss. Tous les systèmes sont opérationnels.</div>
-  <div class="chips">
-    <button class="chip" onclick="quickAsk('Aide-moi pour mon devoir')">📚 Devoir</button>
-    <button class="chip" onclick="quickAsk('Fais-moi un planning')">📅 Planning</button>
-    <button class="chip" onclick="quickAsk('Donne-moi une idée')">💡 Idée</button>
-    <button class="chip" onclick="quickAsk('Aide-moi à coder')">💻 Code</button>
-  </div>
+  <div class="base"></div>
+  <div class="wave" id="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="title">JARVIS</div>
+  <div class="subtitle" id="statusText">ONLINE • TOUS LES SYSTÈMES OPÉRATIONNELS</div>
 </header>
 
 <div id="chat"></div>
 
-<form id="form"><div class="input-wrap"><input id="input" placeholder="Parle à Jarvis..." autocomplete="off"><button id="send" type="submit">➤</button></div></form>
+<form id="form"><div class="input-wrap"><div class="mic">🎤</div><input id="input" placeholder="Parlez-moi ou écrivez..." autocomplete="off"><button id="send" type="submit">➤</button></div></form>
 
 <script>
-const ACCESS_CODE = "0707";
+const ACCESS_CODE = "1789";
 function checkCode(){
   const v = document.getElementById('codeInput').value.trim();
   if(v === ACCESS_CODE){
@@ -131,29 +135,25 @@ function checkJarvisFilter(q){
   }
   return null;
 }
-
 const chat=document.getElementById('chat');
 const form=document.getElementById('form');
 const input=document.getElementById('input');
 const orbWrap=document.getElementById('orbWrap');
 const statusText=document.getElementById('statusText');
 let historique = [];
-
 function setSpeaking(on){
-  if(on){ orbWrap.classList.add('speaking'); statusText.textContent = "JARVIS parle..."; }
-  else { orbWrap.classList.remove('speaking'); statusText.textContent = "Bonjour Boss. Tous les systèmes sont opérationnels."; }
+  if(on){ orbWrap.classList.add('speaking'); statusText.textContent = "JARVIS PARLE..."; }
+  else { orbWrap.classList.remove('speaking'); statusText.textContent = "ONLINE • TOUS LES SYSTÈMES OPÉRATIONNELS"; }
 }
 function addMsg(text, who){
   const row=document.createElement('div'); row.className='row '+(who==='user'?'user':'');
-  const div=document.createElement('div'); div.className='msg '+(who==='user'?'user-msg':'bot-msg'); div.textContent=text;
+  const div=document.createElement('div'); div.className='msg '+(who==='user'?'user-msg':'bot-msg');
+  if(who==='bot'){ const n=document.createElement('div'); n.className='name'; n.textContent='Jarvis •'; div.appendChild(n); const t=document.createElement('div'); t.textContent=text; div.appendChild(t); } else { div.textContent=text; }
   const av=document.createElement('div'); av.className='avatar '+(who==='user'?'user-av':''); av.textContent=who==='user'?'B':'J';
   if(who==='user'){ row.append(div); row.append(av); } else { row.append(av); row.append(div); }
   chat.appendChild(row); chat.scrollTop=chat.scrollHeight;
 }
-function quickAsk(q){ input.value=q; form.dispatchEvent(new Event('submit')); }
-
-addMsg("Bonjour Boss. JARVIS en ligne.\nMode JARVIS activé. Je réponds à tout.\nQue puis-je faire pour vous ?", 'bot');
-
+addMsg("Bonjour Boss. 👑\nJe suis Jarvis, votre assistant IA.\nQue puis-je faire pour vous ?", 'bot');
 form.onsubmit=async(e)=>{
   e.preventDefault();
   const text=input.value.trim(); if(!text) return;
@@ -164,11 +164,7 @@ form.onsubmit=async(e)=>{
   setSpeaking(true);
   const typing=document.createElement('div'); typing.className='row'; typing.innerHTML='<div class="avatar">J</div><div class="msg bot-msg">JARVIS réfléchit...</div>'; chat.appendChild(typing); chat.scrollTop=chat.scrollHeight;
   try{
-    const r=await fetch('/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ message: text, history: historique.slice(-12) })
-    });
+    const r=await fetch('/api/chat',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ message: text, history: historique.slice(-12) }) });
     const data=await r.json();
     typing.remove();
     const rep = data.reply || "Pas de réponse Boss, réessaie.";
