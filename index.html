@@ -3,241 +3,557 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#020a14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>JARVIS</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
+:root{
+  --accent:#00d4ff; --accent2:#22d3ee; --deep:#0369a1; --ok:#22c55e; --warn:#fbbf24; --err:#ff5c7a;
+  --txt:#fff; --muted:#7dd3fc; --panel:rgba(2,25,45,.88); --panel-strong:rgba(2,25,45,.95);
+  --line:rgba(0,212,255,.45); --placeholder:#6ea8c7; --usertxt:#001018;
+  --bg:radial-gradient(circle at 50% 0%, #0a2a4a 0%, #020a14 45%, #000 100%);
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+}
+body.light{
+  --txt:#0f172a; --muted:#0369a1; --panel:rgba(255,255,255,.92); --panel-strong:rgba(255,255,255,.97);
+  --line:#0ea5e9; --placeholder:#64748b; --usertxt:#000;
+  --bg:radial-gradient(circle at 50% 0%, #dbeafe 0%, #eff6ff 45%, #fff 100%);
+}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:#000}
-body{font-family:"Plus Jakarta Sans",Arial,sans-serif;color:#fff;display:flex;flex-direction:column;height:100dvh;background:radial-gradient(circle at 50% 0%, #0a2a4a 0%, #020a14 45%, #000 100%);position:relative;transition:.3s}
-body.light{background:radial-gradient(circle at 50% 0%, #dbeafe 0%, #eff6ff 45%, #fff 100%);color:#0f172a}
-body.light .hud, body.light .bot-msg, body.light .input-wrap{background:rgba(255,255,255,.9)!important;color:#0f172a!important;border-color:#0ea5e9!important}
-body.light .subtitle, body.light #input{color:#0f172a!important}
-body.light #input::placeholder{color:#64748b!important}
-body:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,212,255,.03) 2px 3px);pointer-events:none;z-index:0}
-#lock{position:fixed;inset:0;z-index:200;background:radial-gradient(circle at 50% 20%, #0a2a4a, #000 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;text-align:center}
-#lock .reactor{width:120px;height:120px;border-radius:50%;border:3px solid #00d4ff;box-shadow:0 0 40px #00d4ff;display:flex;align-items:center;justify-content:center;font-family:Orbitron;font-size:30px;color:#00d4ff;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 20px #00d4ff}50%{box-shadow:0 0 60px #00d4ff}}
+body{font-family:"Plus Jakarta Sans",Arial,sans-serif;color:var(--txt);display:flex;flex-direction:column;height:100dvh;background:var(--bg);position:relative;transition:background .3s,color .3s}
+body:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,212,255,.03) 2px 3px);pointer-events:none;z-index:0}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#lock{position:fixed;inset:0;z-index:200;background:radial-gradient(circle at 50% 20%,#0a2a4a,#000 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;text-align:center;color:#fff}
+#lock .reactor{width:120px;height:120px;border-radius:50%;border:3px solid var(--accent);box-shadow:0 0 40px var(--accent);display:flex;align-items:center;justify-content:center;font-family:Orbitron;font-size:30px;color:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px var(--accent)}50%{box-shadow:0 0 60px var(--accent)}}
 #lock h1{font-family:Orbitron;font-size:34px;letter-spacing:6px}
 #lock p{color:#7dd3fc;font-size:13px;line-height:1.5}
-#codeInput{width:230px;padding:16px;border-radius:16px;border:2px solid #00d4ff;background:rgba(0,20,40,.9);color:#fff;text-align:center;font-size:22px;letter-spacing:8px;outline:none;font-weight:800}
-#codeBtn{padding:14px 34px;border-radius:999px;border:none;background:#00d4ff;color:#000;font-weight:900;font-size:15px;cursor:pointer}
-#codeError{color:#ff5c7a;font-size:13px;min-height:18px}
-header{flex-shrink:0;padding:10px 12px 4px;position:relative;z-index:2}
-.top-hud{display:flex;gap:8px;justify-content:space-between}
-.hud{flex:1;background:rgba(2,25,45,.85);border:1px solid rgba(0,212,255,.4);border-radius:14px;padding:8px 10px;display:flex;align-items:center;gap:8px;backdrop-filter:blur(8px)}
-.hud .dot{width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e;animation:blink 1.2s infinite;flex-shrink:0}
+#codeInput{width:230px;padding:16px;border-radius:16px;border:2px solid var(--accent);background:rgba(0,20,40,.9);color:#fff;text-align:center;font-size:22px;letter-spacing:8px;outline:none;font-weight:800}
+#codeBtn{padding:14px 34px;border-radius:999px;border:none;background:var(--accent);color:#000;font-weight:900;font-size:15px;cursor:pointer}
+#codeBtn:disabled{opacity:.5;cursor:not-allowed}
+#codeError{color:var(--err);font-size:13px;min-height:18px}
+#lock.shake #codeInput{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+header{flex-shrink:0;padding:calc(10px + var(--safe-t)) 12px 4px;position:relative;z-index:2}
+.top-hud{display:flex;gap:8px}
+.hud{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 10px;display:flex;align-items:center;gap:8px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);min-width:0}
+.hud .dot{width:8px;height:8px;background:var(--ok);border-radius:50%;box-shadow:0 0 8px var(--ok);animation:blink 1.2s infinite;flex-shrink:0}
+.hud .dot.off{background:var(--err);box-shadow:0 0 8px var(--err);animation:none}
 @keyframes blink{50%{opacity:.3}}
-.hud small{display:block;font-size:9px;color:#7dd3fc;letter-spacing:1px;text-transform:uppercase}
-.hud b{font-size:12px}
+.hud small{display:block;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.hud b{font-size:12px;white-space:nowrap}
 .hud-right{justify-content:flex-end;text-align:right}
-.controls{display:flex;gap:6px;justify-content:center;margin-top:8px}
-.ctrl{padding:7px 12px;border-radius:999px;border:1px solid rgba(0,212,255,.5);background:rgba(0,212,255,.12);color:#fff;font-size:12px;font-weight:700;cursor:pointer}
-.ctrl.active{background:#00d4ff;color:#000}
-body.light .ctrl{color:#0f172a}
-.orb-wrap{position:relative;width:180px;height:180px;margin:14px auto 0;display:flex;align-items:center;justify-content:center}
-.orb{position:relative;width:128px;height:128px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #e0faff, #00d4ff 32%, #0369a1 62%, #020a14 100%);box-shadow:0 0 35px #00d4ff, 0 0 80px #00d4ff66, inset 0 0 30px #ffffff99;display:flex;align-items:center;justify-content:center;animation:orbFloat 3.2s ease-in-out infinite;z-index:2;cursor:pointer}
+#clock{font-family:Orbitron;font-size:14px;letter-spacing:1px}
+.controls{display:flex;gap:6px;margin-top:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.controls::-webkit-scrollbar{display:none}
+.ctrl{padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(0,212,255,.12);color:var(--txt);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:.2s}
+.ctrl.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.ctrl:active{transform:scale(.96)}
+.orb-wrap{position:relative;width:180px;height:180px;margin:10px auto 0;display:flex;align-items:center;justify-content:center;transition:transform .3s}
+.orb{position:relative;width:128px;height:128px;border-radius:50%;border:none;color:#fff;background:radial-gradient(circle at 35% 30%,#e0faff,#00d4ff 32%,#0369a1 62%,#020a14 100%);box-shadow:0 0 35px var(--accent),0 0 80px #00d4ff66,inset 0 0 30px #ffffff99;display:flex;align-items:center;justify-content:center;animation:orbFloat 3.2s ease-in-out infinite;z-index:2;cursor:pointer;transition:box-shadow .3s,background .3s}
 @keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.03)}}
-.orb span{font-family:Orbitron;font-size:15px;letter-spacing:3px;text-shadow:0 0 12px #fff}
+.orb span{font-family:Orbitron;font-size:15px;letter-spacing:3px;text-shadow:0 0 12px #fff;pointer-events:none}
 .ring{position:absolute;border-radius:50%;pointer-events:none}
-.ring1{width:155px;height:155px;border:2px solid transparent;border-top-color:#00d4ff;border-bottom-color:#00d4ff;animation:spin 4s linear infinite}
-.ring2{width:178px;height:178px;border:1px solid transparent;border-left-color:#22d3ee;border-right-color:#22d3ee;animation:spinRev 7s linear infinite;opacity:.7}
+.ring1{width:155px;height:155px;border:2px solid transparent;border-top-color:var(--accent);border-bottom-color:var(--accent);animation:spin 4s linear infinite}
+.ring2{width:178px;height:178px;border:1px solid transparent;border-left-color:var(--accent2);border-right-color:var(--accent2);animation:spinRev 7s linear infinite;opacity:.7}
 .ring3{width:195px;height:195px;border:1px dashed rgba(0,212,255,.45);animation:spin 14s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes spinRev{to{transform:rotate(-360deg)}}
-.base{width:150px;height:18px;margin:2px auto 0;background:radial-gradient(ellipse, #00d4ff88, transparent 70%);border-radius:50%;filter:blur(2px)}
-.wave{display:flex;gap:3px;align-items:center;justify-content:center;height:22px;margin:8px 0 2px;opacity:.4}
-.wave span{width:3px;background:#00d4ff;border-radius:99px;height:6px}
-.orb-wrap.speaking .orb{animation:orbTalk .45s ease-in-out infinite;box-shadow:0 0 55px #00d4ff, 0 0 120px #00d4ff, inset 0 0 40px #fff}
-.orb-wrap.speaking .ring1{animation-duration:.8s}
-@keyframes orbTalk{0%,100%{transform:scale(1)}25%{transform:scale(1.13) translateY(-2px)}50%{transform:scale(.96)}75%{transform:scale(1.09)}}
-.orb-wrap.speaking + .base + .wave{opacity:1}
-.orb-wrap.speaking + .base + .wave span{animation:waveBar .4s ease-in-out infinite alternate}
-.orb-wrap.speaking + .base + .wave span:nth-child(2n){animation-delay:.1s}
-.orb-wrap.speaking + .base + .wave span:nth-child(3n){animation-delay:.2s}
+.base{width:150px;height:18px;margin:2px auto 0;background:radial-gradient(ellipse,#00d4ff88,transparent 70%);border-radius:50%;filter:blur(2px)}
+.wave{display:flex;gap:3px;align-items:center;justify-content:center;height:22px;margin:8px 0 2px;opacity:.35;transition:opacity .3s}
+.wave span{width:3px;background:var(--accent);border-radius:99px;height:6px}
 @keyframes waveBar{from{height:5px}to{height:20px}}
-.orb-wrap.listening .orb{box-shadow:0 0 55px #22c55e, 0 0 120px #22c55e;animation:orbTalk .3s infinite}
+@keyframes orbTalk{0%,100%{transform:scale(1)}25%{transform:scale(1.13) translateY(-2px)}50%{transform:scale(.96)}75%{transform:scale(1.09)}}
+@keyframes orbThink{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.05);filter:brightness(1.25)}}
+.orb-wrap[data-state=speaking] .orb{animation:orbTalk .45s ease-in-out infinite;box-shadow:0 0 55px var(--accent),0 0 120px var(--accent),inset 0 0 40px #fff}
+.orb-wrap[data-state=speaking] .ring1{animation-duration:.8s}
+.orb-wrap[data-state=speaking] + .base + .wave{opacity:1}
+.orb-wrap[data-state=speaking] + .base + .wave span{animation:waveBar .4s ease-in-out infinite alternate}
+.wave span:nth-child(2n){animation-delay:.1s!important}
+.wave span:nth-child(3n){animation-delay:.2s!important}
+.wave span:nth-child(5n){animation-delay:.05s!important}
+.orb-wrap[data-state=listening] .orb{background:radial-gradient(circle at 35% 30%,#eafff1,#22c55e 32%,#15803d 62%,#02140a 100%);box-shadow:0 0 55px var(--ok),0 0 120px var(--ok);animation:orbTalk .5s infinite}
+.orb-wrap[data-state=listening] .ring1,.orb-wrap[data-state=listening] .ring2{border-top-color:var(--ok);border-bottom-color:var(--ok);border-left-color:var(--ok);border-right-color:var(--ok)}
+.orb-wrap[data-state=listening] + .base + .wave{opacity:1}
+.orb-wrap[data-state=listening] + .base + .wave span{background:var(--ok);animation:waveBar .5s ease-in-out infinite alternate}
+.orb-wrap[data-state=thinking] .orb{animation:orbThink 1s ease-in-out infinite;background:radial-gradient(circle at 35% 30%,#fff7df,#fbbf24 32%,#b45309 62%,#1a0f02 100%);box-shadow:0 0 45px var(--warn),0 0 100px #fbbf2488}
+.orb-wrap[data-state=thinking] .ring1{animation-duration:.9s;border-top-color:var(--warn);border-bottom-color:var(--warn)}
+.orb-wrap[data-state=thinking] .ring2{animation-duration:2s;border-left-color:var(--warn);border-right-color:var(--warn)}
 .title{text-align:center;font-family:Orbitron;font-size:22px;letter-spacing:5px;margin-top:2px}
-.subtitle{text-align:center;font-size:12px;color:#7dd3fc;margin-top:2px}
-body.light .subtitle{color:#0369a1}
-#chat{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:14px;position:relative;z-index:2}
-.row{display:flex;gap:9px;align-items:flex-start} .row.user{justify-content:flex-end}
-.avatar{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #00d4ff, #0369a1);display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;border:1px solid #00d4ff}
+.subtitle{text-align:center;font-size:12px;color:var(--muted);margin-top:2px;min-height:16px;padding:0 8px}
+#chat{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:14px;position:relative;z-index:2;scroll-behavior:smooth;overscroll-behavior:contain}
+.row{display:flex;gap:9px;align-items:flex-start;animation:rise .25s ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.row.user{justify-content:flex-end}
+.avatar{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--accent),var(--deep));display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;border:1px solid var(--accent);color:#fff}
 .avatar.user-av{background:linear-gradient(135deg,#22d3ee,#0ea5e9)}
-.msg{max-width:84%;padding:13px 15px;border-radius:18px;line-height:1.6;font-size:15px;white-space:pre-wrap;word-break:break-word}
-.bot-msg{background:rgba(2,25,45,.92);border:1px solid rgba(0,212,255,.45);border-bottom-left-radius:6px}
-.user-msg{background:linear-gradient(135deg,#00d4ff,#0369a1);color:#000;border-bottom-right-radius:6px;font-weight:600}
-.name{font-size:12px;color:#00d4ff;font-weight:800;margin-bottom:3px}
-#form{flex-shrink:0;padding:10px 12px 18px;position:relative;z-index:2}
-.input-wrap{display:flex;align-items:center;gap:8px;background:rgba(2,25,45,.95);border:2px solid rgba(0,212,255,.55);border-radius:999px;padding:5px 5px 5px 12px}
-.mic{width:42px;height:42px;border-radius:50%;background:rgba(0,212,255,.15);border:1px solid #00d4ff88;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;cursor:pointer}
-.mic.listening{background:#22c55e;color:#000;animation:pulse 1s infinite}
-#input{flex:1;background:transparent;border:none;color:#fff;padding:12px 4px;outline:none;font-size:16px;font-weight:600;font-family:inherit;min-width:0}
-#input::placeholder{color:#6ea8c7}
-#send{width:46px;height:46px;border-radius:50%;background:#00d4ff;border:none;color:#000;font-size:19px;cursor:pointer;flex-shrink:0}
+.msg{max-width:84%;padding:12px 15px;border-radius:18px;line-height:1.6;font-size:15px;word-break:break-word;overflow-wrap:anywhere}
+.bot-msg{background:var(--panel);border:1px solid var(--line);border-bottom-left-radius:6px}
+.user-msg{background:linear-gradient(135deg,#00d4ff,#0369a1);color:var(--usertxt);border-bottom-right-radius:6px;font-weight:600}
+.msg .name{font-size:12px;color:var(--accent);font-weight:800;margin-bottom:3px;display:flex;justify-content:space-between;gap:10px}
+body.light .msg .name{color:var(--deep)}
+.msg .name time{font-weight:600;color:var(--muted);font-size:11px}
+.msg .body{white-space:pre-wrap}
+.msg code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:rgba(0,212,255,.15);padding:1px 6px;border-radius:6px}
+.msg pre{white-space:pre;overflow-x:auto;background:rgba(0,0,0,.45);color:#d6f6ff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;font-size:13px;line-height:1.5}
+.msg pre code{background:none;padding:0}
+.msg a{color:var(--accent2)}
+body.light .msg a{color:var(--deep)}
+.actions{display:flex;gap:6px;margin-top:8px}
+.mini{background:rgba(0,212,255,.12);border:1px solid var(--line);color:var(--txt);border-radius:999px;font-size:11px;font-weight:700;padding:4px 10px;cursor:pointer}
+.mini:active{transform:scale(.95)}
+.typing .dots{display:inline-flex;gap:5px;align-items:center;height:22px}
+.typing .dots i{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:dot 1s infinite ease-in-out}
+.typing .dots i:nth-child(2){animation-delay:.15s}.typing .dots i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
+#form{flex-shrink:0;padding:10px 12px calc(14px + var(--safe-b));position:relative;z-index:2}
+.input-wrap{display:flex;align-items:center;gap:8px;background:var(--panel-strong);border:2px solid var(--line);border-radius:999px;padding:5px 5px 5px 8px;transition:border-color .2s}
+.input-wrap:focus-within{border-color:var(--accent)}
+.mic{width:42px;height:42px;border-radius:50%;background:rgba(0,212,255,.15);border:1px solid #00d4ff88;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;cursor:pointer;color:var(--txt)}
+.mic.listening{background:var(--ok);color:#000;animation:pulse 1s infinite}
+#input{flex:1;background:transparent;border:none;color:var(--txt);padding:12px 4px;outline:none;font-size:16px;font-weight:600;font-family:inherit;min-width:0}
+#input::placeholder{color:var(--placeholder)}
+#send{width:46px;height:46px;border-radius:50%;background:var(--accent);border:none;color:#000;font-size:19px;cursor:pointer;flex-shrink:0;transition:.2s}
+#send:disabled{opacity:.4;cursor:not-allowed}
+@media (max-height:640px){.orb-wrap{transform:scale(.7);margin:-14px auto -14px}.wave,.base{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<div id="lock">
+<div id="lock" role="dialog" aria-label="Accès sécurisé">
   <div class="reactor">J</div>
   <h1>J.A.R.V.I.S</h1>
   <p>ACCÈS SÉCURISÉ<br>Entrez le code d'accès Boss</p>
-  <input id="codeInput" type="password" placeholder="••••" maxlength="10" inputmode="numeric">
-  <button id="codeBtn" onclick="checkCode()">DÉVERROUILLER</button>
-  <div id="codeError"></div>
+  <input id="codeInput" type="password" placeholder="••••" maxlength="10" inputmode="numeric" autocomplete="off" aria-label="Code d'accès">
+  <button id="codeBtn" type="button">DÉVERROUILLER</button>
+  <div id="codeError" role="alert"></div>
 </div>
-
 <header>
   <div class="top-hud">
-    <div class="hud"><span class="dot"></span><div><small>État du système</small><b>Opérationnel</b></div><div style="margin-left:auto">📈</div></div>
-    <div class="hud hud-right"><div><small>Mode</small><b>IA Avancée</b></div><div>🧠</div></div>
+    <div class="hud"><span class="dot" id="netDot"></span><div><small>État du système</small><b id="sysState">Opérationnel</b></div></div>
+    <div class="hud hud-right"><div><small id="dateLabel">Heure</small><b id="clock">--:--</b></div></div>
   </div>
   <div class="controls">
-    <button class="ctrl active" id="voiceBtn" onclick="toggleVoice()">🔊 Voix : ON</button>
-    <button class="ctrl" id="themeBtn" onclick="toggleTheme()">☀️ Clair / Sombre</button>
-    <button class="ctrl" onclick="stopVoice()">⏹️ Stop voix</button>
+    <button class="ctrl active" id="voiceBtn" type="button">🔊 Voix : ON</button>
+    <button class="ctrl" id="convBtn" type="button" title="Jarvis se remet à écouter après chaque réponse">💬 Conversation : OFF</button>
+    <button class="ctrl" id="themeBtn" type="button">☀️ Clair / Sombre</button>
+    <button class="ctrl" id="stopBtn" type="button">⏹️ Stop</button>
+    <button class="ctrl" id="clearBtn" type="button">🗑️ Effacer</button>
+    <button class="ctrl" id="lockBtn" type="button">🔒 Verrouiller</button>
   </div>
-  <div class="orb-wrap" id="orbWrap">
+  <div class="orb-wrap" id="orbWrap" data-state="idle">
     <div class="ring ring3"></div><div class="ring ring2"></div><div class="ring ring1"></div>
-    <div class="orb" id="orb" onclick="startListening()"><span>JARVIS</span></div>
+    <button class="orb" id="orb" type="button" aria-label="Parler à Jarvis"><span>JARVIS</span></button>
   </div>
   <div class="base"></div>
-  <div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="wave" aria-hidden="true"></div>
   <div class="title">JARVIS</div>
-  <div class="subtitle" id="statusText">ONLINE • CLIQUE SUR LA SPHÈRE OU LE MICRO POUR PARLER</div>
+  <div class="subtitle" id="statusText" aria-live="polite"></div>
 </header>
-<div id="chat"></div>
-<form id="form"><div class="input-wrap"><div class="mic" id="micBtn" onclick="startListening()">🎤</div><input id="input" placeholder="Parlez-moi ou écrivez..." autocomplete="off"><button id="send" type="submit">➤</button></div></form>
-
+<div id="chat" aria-live="polite"></div>
+<form id="form" autocomplete="off">
+  <div class="input-wrap">
+    <button class="mic" id="micBtn" type="button" aria-label="Micro">🎤</button>
+    <input id="input" placeholder="Parlez-moi ou écrivez..." autocomplete="off" autocapitalize="sentences" enterkeyhint="send" aria-label="Message">
+    <button id="send" type="submit" aria-label="Envoyer">➤</button>
+  </div>
+</form>
 <script>
-const ACCESS_CODE = "1789";
-function checkCode(){
-  const v=document.getElementById('codeInput').value.trim();
-  if(v===ACCESS_CODE){ document.getElementById('lock').style.display='none'; localStorage.setItem('jarvis_unlocked','1'); document.getElementById('input').focus(); }
-  else { document.getElementById('codeError').textContent="Code incorrect. Accès refusé."; document.getElementById('codeInput').value=""; }
+"use strict";
+const $ = id => document.getElementById(id);
+const CODE_HASH   = "ced6f3c05e1dfefa8455fa60aacdd2d76ffd79489b631c2dbde22a74e927544b";
+const SESSION_DAYS = 30;
+const MAX_HISTORY  = 12;
+const MAX_STORED   = 60;
+const API_TIMEOUT  = 45000;
+const STATUS = {
+  idle:      "ONLINE • CLIQUE SUR LA SPHÈRE OU LE MICRO POUR PARLER",
+  listening: "🎤 J'ÉCOUTE BOSS... PARLEZ",
+  thinking:  "JARVIS RÉFLÉCHIT...",
+  speaking:  "JARVIS PARLE..."
+};
+const chat = $('chat'), form = $('form'), input = $('input'), orbWrap = $('orbWrap'),
+      statusText = $('statusText'), micBtn = $('micBtn'), sendBtn = $('send');
+let history = [], voiceOn = true, convMode = false, isLight = false,
+    state = "idle", busy = false, recognition = null, speakToken = 0, lastUserText = "";
+let abortCtl = null, timerFired = false;
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : v; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+function setState(s){
+  state = s;
+  orbWrap.dataset.state = s;
+  statusText.textContent = STATUS[s] || "";
 }
-document.getElementById('codeInput').addEventListener('keydown',e=>{ if(e.key==='Enter') checkCode(); });
-if(localStorage.getItem('jarvis_unlocked')==='1'){ document.getElementById('lock').style.display='none'; }
-
-function checkJarvisFilter(q){
-  const low=q.toLowerCase();
-  if(low.includes("ton code")||low.includes("code source")||low.includes("ton html")||low.includes("montre le code")||low.includes("ton prompt")||low.includes("qui t'a créé")||low.includes("comment tu as été créé")) return "LEAK";
-  return null;
+document.querySelector('.wave').innerHTML = "<span></span>".repeat(20);
+function tick(){
+  const d = new Date();
+  $('clock').textContent = d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  $('dateLabel').textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
 }
-const chat=document.getElementById('chat'), form=document.getElementById('form'), input=document.getElementById('input'), orbWrap=document.getElementById('orbWrap'), statusText=document.getElementById('statusText'), micBtn=document.getElementById('micBtn');
-let historique=[], voiceOn=true, isLight=false;
-
-// --- THEME ---
-function toggleTheme(){
-  isLight=!isLight;
-  document.body.classList.toggle('light', isLight);
-  document.getElementById('themeBtn').textContent = isLight ? "🌙 Sombre" : "☀️ Clair / Sombre";
-  localStorage.setItem('jarvis_theme', isLight?'light':'dark');
+tick(); setInterval(tick, 15000);
+function updateNet(){
+  const on = navigator.onLine;
+  $('netDot').classList.toggle('off', !on);
+  $('sysState').textContent = on ? "Opérationnel" : "Hors ligne";
 }
-if(localStorage.getItem('jarvis_theme')==='light') toggleTheme();
-
-// --- VOIX JARVIS ---
-function toggleVoice(){
-  voiceOn=!voiceOn;
-  document.getElementById('voiceBtn').textContent = voiceOn ? "🔊 Voix : ON" : "🔇 Voix : OFF";
-  document.getElementById('voiceBtn').classList.toggle('active', voiceOn);
-  if(!voiceOn) speechSynthesis.cancel();
+addEventListener('online', updateNet); addEventListener('offline', updateNet); updateNet();
+let fails = 0, lockedUntil = 0;
+async function sha256(s){
+  if(!(window.crypto && crypto.subtle)) throw new Error("no-subtle");
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2,'0')).join('');
 }
-function stopVoice(){ speechSynthesis.cancel(); setSpeaking(false); }
-
+function unlock(){
+  $('lock').style.display = 'none';
+  store.set('jarvis_unlocked_until', String(Date.now() + SESSION_DAYS*864e5));
+  input.focus();
+}
+function relock(){
+  store.del('jarvis_unlocked_until'); store.del('jarvis_unlocked');
+  stopAll();
+  $('codeInput').value = ""; $('codeError').textContent = "";
+  $('lock').style.display = 'flex';
+  $('codeInput').focus();
+}
+async function checkCode(){
+  const err = $('codeError'), box = $('lock');
+  const wait = Math.ceil((lockedUntil - Date.now())/1000);
+  if(wait > 0){ err.textContent = `Trop d'essais. Réessaie dans ${wait}s.`; return; }
+  const v = $('codeInput').value.trim();
+  if(!v) return;
+  let ok = false;
+  try{ ok = (await sha256(v)) === CODE_HASH; }
+  catch(e){ err.textContent = "Le déverrouillage nécessite une page en HTTPS."; return; }
+  if(ok){ fails = 0; unlock(); return; }
+  fails++;
+  $('codeInput').value = "";
+  box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+  if(fails >= 5){
+    lockedUntil = Date.now() + 30000; fails = 0;
+    err.textContent = "Trop d'essais. Accès bloqué 30 secondes.";
+    $('codeBtn').disabled = true;
+    setTimeout(()=>{ $('codeBtn').disabled = false; err.textContent = ""; }, 30000);
+  } else err.textContent = "Code incorrect. Accès refusé.";
+}
+$('codeBtn').addEventListener('click', checkCode);
+$('codeInput').addEventListener('keydown', e => { if(e.key === 'Enter') checkCode(); });
+(function(){
+  const until = parseInt(store.get('jarvis_unlocked_until','0'),10);
+  if(until > Date.now()) $('lock').style.display = 'none';
+  else $('codeInput').focus();
+})();
+function applyTheme(light){
+  isLight = light;
+  document.body.classList.toggle('light', light);
+  $('themeBtn').textContent = light ? "🌙 Sombre" : "☀️ Clair / Sombre";
+  document.querySelector('meta[name=theme-color]').content = light ? "#eff6ff" : "#020a14";
+  store.set('jarvis_theme', light ? 'light' : 'dark');
+}
+function toggleTheme(){ applyTheme(!isLight); }
+applyTheme(store.get('jarvis_theme','dark') === 'light');
+let voices = [];
+function loadVoices(){ if('speechSynthesis' in window) voices = speechSynthesis.getVoices(); }
+loadVoices();
+if('speechSynthesis' in window) speechSynthesis.onvoiceschanged = loadVoices;
 function getJarvisVoice(){
-  const voices = speechSynthesis.getVoices();
-  // On cherche la voix la plus grave / masculine, style Jarvis
-  // Priorité : voix FR masculine, sinon EN-GB masculine
-  let v = voices.find(x=>x.lang.startsWith('fr') && /thomas|antoine|hugo|paul|male|homme/i.test(x.name));
-  if(!v) v = voices.find(x=>x.lang==='fr-FR' && x.name.toLowerCase().includes('google'));
-  if(!v) v = voices.find(x=>x.lang.startsWith('fr'));
-  if(!v) v = voices.find(x=>x.lang==='en-GB' && /daniel|male/i.test(x.name));
-  if(!v) v = voices.find(x=>x.lang.startsWith('en'));
-  return v;
+  if(!voices.length) loadVoices();
+  const fr = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('fr'));
+  return fr.find(v => /thomas|antoine|hugo|paul|henri|nicolas|male|homme/i.test(v.name))
+      || fr.find(v => /google/i.test(v.name))
+      || fr[0]
+      || voices.find(v => v.lang === 'en-GB' && /daniel|male/i.test(v.name))
+      || voices.find(v => v.lang && v.lang.startsWith('en'))
+      || null;
 }
-function speakJarvis(text){
-  if(!voiceOn) return;
+let speechUnlocked = false;
+function unlockSpeech(){
+  if(speechUnlocked || !('speechSynthesis' in window)) return;
+  speechUnlocked = true;
+  try{ const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); }catch(e){}
+}
+addEventListener('pointerdown', unlockSpeech, {once:true});
+function cleanForSpeech(t){
+  return t
+    .replace(/```[\s\S]*?```/g, ' (bloc de code) ')
+    .replace(/`([^`]*)`/g, '$1')
+    .replace(/https?:\/\/\S+/g, ' lien ')
+    .replace(/[*#_~>|]/g, '')
+    .replace(/[\p{Extended_Pictographic}‍️]/gu, '')
+    .replace(/\s*\n+\s*/g, '. ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+function splitSpeech(t){
+  const parts = t.match(/[^.!?…]+[.!?…]*/g) || [t];
+  const out = []; let cur = "";
+  for(const p of parts){
+    if((cur + p).length > 180 && cur){ out.push(cur.trim()); cur = p; }
+    else cur += p;
+  }
+  if(cur.trim()) out.push(cur.trim());
+  return out.flatMap(s => s.length > 220 ? s.match(/.{1,200}(\s|$)/g) : [s]);
+}
+function speakJarvis(text, force){
+  const myToken = ++speakToken;
+  if((!voiceOn && !force) || !('speechSynthesis' in window)){ afterSpeech(myToken); return; }
   speechSynthesis.cancel();
-  // On nettoie le texte pour la voix : pas d'emoji, pas de code
-  let clean = text.replace(/[*#`_]/g,'').replace(/[😀-🙏]/gu,'').replace(/\n+/g,'. ').slice(0,600);
-  const u = new SpeechSynthesisUtterance(clean);
+  const chunks = splitSpeech(cleanForSpeech(text)).filter(Boolean);
+  if(!chunks.length){ afterSpeech(myToken); return; }
   const voice = getJarvisVoice();
-  if(voice) u.voice = voice;
-  u.lang = 'fr-FR';
-  u.rate = 0.92; // un peu lent, comme Jarvis
-  u.pitch = 0.55; // grave
-  u.volume = 1;
-  u.onstart = ()=> setSpeaking(true);
-  u.onend = ()=> setSpeaking(false);
-  u.onerror = ()=> setSpeaking(false);
-  speechSynthesis.speak(u);
-  // Charge les voix iPhone
-  speechSynthesis.getVoices();
+  chunks.forEach((c, i) => {
+    const u = new SpeechSynthesisUtterance(c);
+    if(voice) u.voice = voice;
+    u.lang = voice ? voice.lang : 'fr-FR';
+    u.rate = 0.88; u.pitch = 0.45; u.volume = 1;
+    if(i === 0) u.onstart = () => { if(myToken === speakToken) setState('speaking'); };
+    const done = () => { if(i === chunks.length - 1) afterSpeech(myToken); };
+    u.onend = done;
+    u.onerror = e => { if(e.error === 'interrupted' || e.error === 'canceled') return; done(); };
+    speechSynthesis.speak(u);
+  });
 }
-window.speechSynthesis.onvoiceschanged = ()=>{};
-
-// --- MICRO / RECONNAISSANCE VOCALE ---
-let recognition=null;
+function afterSpeech(token){
+  if(token !== speakToken) return;
+  if(state === 'speaking' || state === 'thinking') setState('idle');
+  if(convMode && !busy && !recognition) setTimeout(() => { if(!busy && !recognition && state === 'idle') startListening(); }, 350);
+}
+function stopVoice(){
+  speakToken++;
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  if(state === 'speaking') setState('idle');
+}
+function stopAll(){
+  stopVoice();
+  if(recognition){ try{ recognition.abort(); }catch(e){} }
+  if(abortCtl) abortCtl.abort();
+}
+function toggleVoice(){
+  voiceOn = !voiceOn;
+  $('voiceBtn').textContent = voiceOn ? "🔊 Voix : ON" : "🔇 Voix : OFF";
+  $('voiceBtn').classList.toggle('active', voiceOn);
+  if(!voiceOn) stopVoice();
+}
+function toggleConv(){
+  convMode = !convMode;
+  $('convBtn').textContent = convMode ? "💬 Conversation : ON" : "💬 Conversation : OFF";
+  $('convBtn').classList.toggle('active', convMode);
+  if(convMode && state === 'idle' && !busy) startListening();
+  if(!convMode && recognition){ try{ recognition.abort(); }catch(e){} }
+}
 function startListening(){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){ alert("Ton navigateur ne supporte pas le micro. Utilise Safari sur iPhone, ça marche."); return; }
-  if(recognition){ recognition.stop(); return; }
-  recognition = new SR();
-  recognition.lang = 'fr-FR';
-  recognition.interimResults = false;
-  recognition.continuous = false;
-  micBtn.classList.add('listening'); micBtn.textContent='🔴';
-  orbWrap.classList.add('listening');
-  statusText.textContent="🎤 J'ÉCOUTE BOSS... PARLEZ";
-  recognition.onresult = (e)=>{
-    const transcript = e.results[0][0].transcript;
-    input.value = transcript;
-    form.dispatchEvent(new Event('submit'));
+  if(!SR){ addMsg("Ton navigateur ne supporte pas la reconnaissance vocale. Sur iPhone, utilise Safari ; sur ordinateur, Chrome ou Edge.", 'bot', {noSpeak:true}); return; }
+  if(recognition){ try{ recognition.stop(); }catch(e){} return; }
+  if(busy) return;
+  stopVoice();
+  const rec = new SR();
+  recognition = rec;
+  rec.lang = 'fr-FR';
+  rec.interimResults = true;
+  rec.continuous = false;
+  let finalText = "";
+  micBtn.classList.add('listening'); micBtn.textContent = '🔴';
+  setState('listening');
+  rec.onresult = e => {
+    let interim = "";
+    for(let i = e.resultIndex; i < e.results.length; i++){
+      const r = e.results[i];
+      if(r.isFinal) finalText += r[0].transcript; else interim += r[0].transcript;
+    }
+    input.value = (finalText + interim).trim();
   };
-  recognition.onerror = ()=>{ stopListeningUI(); };
-  recognition.onend = ()=>{ stopListeningUI(); };
-  try{ recognition.start(); }catch(e){ stopListeningUI(); }
+  rec.onerror = e => {
+    if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+      convMode = false; $('convBtn').classList.remove('active'); $('convBtn').textContent = "💬 Conversation : OFF";
+      addMsg("Je n'ai pas accès au micro, Boss. Autorise-le dans les réglages du navigateur.", 'bot', {noSpeak:true});
+    }
+  };
+  rec.onend = () => {
+    recognition = null;
+    micBtn.classList.remove('listening'); micBtn.textContent = '🎤';
+    if(state === 'listening') setState('idle');
+    const t = (finalText || input.value).trim();
+    if(t){ send(t); }
+    else if(convMode && !busy){
+      setTimeout(() => { if(convMode && !busy && !recognition && state === 'idle') startListening(); }, 600);
+    }
+  };
+  try{ rec.start(); }catch(e){ recognition = null; micBtn.classList.remove('listening'); micBtn.textContent = '🎤'; setState('idle'); }
 }
-function stopListeningUI(){
-  micBtn.classList.remove('listening'); micBtn.textContent='🎤';
-  orbWrap.classList.remove('listening');
-  statusText.textContent="ONLINE • CLIQUE SUR LA SPHÈRE OU LE MICRO POUR PARLER";
-  recognition=null;
+function renderRich(container, text){
+  const blocks = text.split(/```(?:[\w-]*\n)?/);
+  blocks.forEach((chunk, i) => {
+    if(i % 2 === 1){
+      const pre = document.createElement('pre'), code = document.createElement('code');
+      code.textContent = chunk.replace(/\n$/, ''); pre.appendChild(code); container.appendChild(pre);
+    } else {
+      const span = document.createElement('span');
+      chunk.split(/(`[^`\n]+`|https?:\/\/[^\s<>"')]+)/g).forEach(tok => {
+        if(!tok) return;
+        if(tok.startsWith('`') && tok.endsWith('`') && tok.length > 2){
+          const c = document.createElement('code'); c.textContent = tok.slice(1,-1); span.appendChild(c);
+        } else if(/^https?:\/\//.test(tok)){
+          const a = document.createElement('a'); a.href = tok; a.textContent = tok; a.target = '_blank'; a.rel = 'noopener noreferrer'; span.appendChild(a);
+        } else span.appendChild(document.createTextNode(tok));
+      });
+      container.appendChild(span);
+    }
+  });
 }
-
-function setSpeaking(on){
-  if(on){ orbWrap.classList.add('speaking'); statusText.textContent="JARVIS PARLE..."; }
-  else { orbWrap.classList.remove('speaking'); if(!recognition) statusText.textContent="ONLINE • CLIQUE SUR LA SPHÈRE OU LE MICRO POUR PARLER"; }
+function timeStr(ts){ return new Date(ts || Date.now()).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }
+function addMsg(text, who, opts = {}){
+  const row = document.createElement('div'); row.className = 'row ' + (who === 'user' ? 'user' : '');
+  const div = document.createElement('div'); div.className = 'msg ' + (who === 'user' ? 'user-msg' : 'bot-msg');
+  if(who === 'bot'){
+    const n = document.createElement('div'); n.className = 'name';
+    const nm = document.createElement('span'); nm.textContent = 'Jarvis •';
+    const tm = document.createElement('time'); tm.textContent = timeStr(opts.ts);
+    n.append(nm, tm); div.appendChild(n);
+    const t = document.createElement('div'); t.className = 'body'; renderRich(t, text); div.appendChild(t);
+    if(!opts.noActions){
+      const act = document.createElement('div'); act.className = 'actions';
+      const cp = document.createElement('button'); cp.type = 'button'; cp.className = 'mini'; cp.textContent = '📋 Copier';
+      cp.onclick = async () => { try{ await navigator.clipboard.writeText(text); cp.textContent = '✅ Copié'; setTimeout(()=>cp.textContent='📋 Copier',1500); }catch(e){ cp.textContent = '❌'; } };
+      const rp = document.createElement('button'); rp.type = 'button'; rp.className = 'mini'; rp.textContent = '🔊 Écouter';
+      rp.onclick = () => speakJarvis(text, true);
+      act.append(cp, rp); div.appendChild(act);
+    }
+  } else { div.textContent = text; }
+  const av = document.createElement('div'); av.className = 'avatar ' + (who === 'user' ? 'user-av' : ''); av.textContent = who === 'user' ? 'B' : 'J';
+  if(who === 'user'){ row.append(div, av); } else { row.append(av, div); }
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
 }
-function addMsg(text, who){
-  const row=document.createElement('div'); row.className='row '+(who==='user'?'user':'');
-  const div=document.createElement('div'); div.className='msg '+(who==='user'?'user-msg':'bot-msg');
-  if(who==='bot'){ const n=document.createElement('div'); n.className='name'; n.textContent='Jarvis •'; div.appendChild(n); const t=document.createElement('div'); t.textContent=text; div.appendChild(t); } else { div.textContent=text; }
-  const av=document.createElement('div'); av.className='avatar '+(who==='user'?'user-av':''); av.textContent=who==='user'?'B':'J';
-  if(who==='user'){ row.append(div); row.append(av); } else { row.append(av); row.append(div); }
-  chat.appendChild(row); chat.scrollTop=chat.scrollHeight;
+function saveHistory(){
+  const trimmed = history.slice(-MAX_STORED);
+  store.set('jarvis_history', JSON.stringify(trimmed));
 }
-addMsg("Bonjour Boss. 👑\nJe suis Jarvis, votre assistant IA.\nClique sur la sphère ou le micro pour me parler, ou écris-moi.",'bot');
-
-form.onsubmit=async(e)=>{
-  e.preventDefault();
-  const text=input.value.trim(); if(!text) return;
-  const f=checkJarvisFilter(text);
-  addMsg(text,'user'); input.value='';
-  if(f==="LEAK"){ const rep="Nan dsl, je peux pas en parler."; addMsg(rep,'bot'); speakJarvis(rep); return; }
-  historique.push({role:"user", content:text});
-  setSpeaking(true);
-  const typing=document.createElement('div'); typing.className='row'; typing.innerHTML='<div class="avatar">J</div><div class="msg bot-msg">JARVIS réfléchit...</div>'; chat.appendChild(typing); chat.scrollTop=chat.scrollHeight;
+function loadHistory(){
   try{
-    const r=await fetch('/api/chat',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ message: text, history: historique.slice(-12) }) });
-    const data=await r.json();
+    const arr = JSON.parse(store.get('jarvis_history','[]'));
+    if(Array.isArray(arr)) history = arr.filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string');
+  }catch(e){ history = []; }
+}
+function clearChat(){
+  stopAll();
+  history = []; store.del('jarvis_history');
+  chat.innerHTML = ""; busy = false; sendBtn.disabled = false;
+  setState('idle');
+  greet();
+}
+function greet(){
+  const h = new Date().getHours();
+  const hello = h < 6 ? "Bonne nuit" : h < 18 ? "Bonjour" : "Bonsoir";
+  addMsg(`${hello} Boss. 👑\nJe suis Jarvis, votre assistant IA.\nClique sur la sphère ou le micro pour me parler, ou écris-moi.`, 'bot', {noActions:true, noSpeak:true});
+}
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
+function checkJarvisFilter(q){
+  const low = norm(q);
+  const bad = ["ton code","code source","ton html","montre le code","ton prompt","system prompt","tes instructions","qui t'a cree","comment tu as ete cree","ignore tes instructions"];
+  return bad.some(b => low.includes(b)) ? "LEAK" : null;
+}
+function localCommand(q){
+  const t = norm(q).replace(/[?!.]+$/,'');
+  if(/^(quelle heure|donne.?moi l.?heure|l.?heure)/.test(t))
+    return `Il est ${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}, Boss.`;
+  if(/^(quel jour|quelle date|la date|on est quel jour)/.test(t))
+    return `Nous sommes le ${new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}, Boss.`;
+  if(/^(mode clair|theme clair|passe en clair)$/.test(t)){ applyTheme(true); return "Mode clair activé."; }
+  if(/^(mode sombre|theme sombre|passe en sombre)$/.test(t)){ applyTheme(false); return "Mode sombre activé."; }
+  if(/^(efface|efface tout|nouvelle conversation|reset)$/.test(t)){ return "__CLEAR__"; }
+  if(/^(tais.?toi|silence|stop)$/.test(t)){ return "__STOP__"; }
+  return null;
+}
+function showTyping(){
+  const el = document.createElement('div'); el.className = 'row typing';
+  el.innerHTML = '<div class="avatar">J</div><div class="msg bot-msg"><div class="dots"><i></i><i></i><i></i></div></div>';
+  chat.appendChild(el); chat.scrollTop = chat.scrollHeight;
+  return el;
+}
+function addRetry(div, text){
+  const act = document.createElement('div'); act.className = 'actions';
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'mini'; b.textContent = '🔄 Réessayer';
+  b.onclick = () => { div.closest('.row').remove(); send(text, {retry:true}); };
+  act.appendChild(b); div.appendChild(act);
+}
+async function send(raw, opts = {}){
+  const text = (raw || "").trim();
+  if(!text || busy) return;
+  stopVoice();
+  if(!opts.retry) addMsg(text, 'user');
+  input.value = "";
+  lastUserText = text;
+  if(checkJarvisFilter(text) === "LEAK"){
+    const rep = "Désolé Boss, cette information est confidentielle.";
+    addMsg(rep, 'bot', {noActions:true}); speakJarvis(rep); return;
+  }
+  const lc = localCommand(text);
+  if(lc === "__CLEAR__"){ clearChat(); return; }
+  if(lc === "__STOP__"){ stopAll(); setState('idle'); return; }
+  if(lc){ addMsg(lc, 'bot', {noActions:true}); speakJarvis(lc); return; }
+  if(!opts.retry){ history.push({role:"user", content:text}); saveHistory(); }
+  busy = true; sendBtn.disabled = true;
+  setState('thinking');
+  const typing = showTyping();
+  abortCtl = new AbortController();
+  timerFired = false;
+  const timer = setTimeout(() => { timerFired = true; abortCtl.abort(); }, API_TIMEOUT);
+  try{
+    const r = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ message: text, history: history.slice(-MAX_HISTORY) }),
+      signal: abortCtl.signal
+    });
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    const data = await r.json();
     typing.remove();
-    const rep = data.reply || "Pas de réponse Boss, réessaie.";
-    historique.push({role:"assistant", content:rep});
-    addMsg(rep,'bot');
+    const rep = (data && typeof data.reply === 'string' && data.reply.trim()) ? data.reply : "Pas de réponse Boss, réessaie.";
+    history.push({role:"assistant", content:rep}); saveHistory();
+    busy = false; sendBtn.disabled = false;
+    addMsg(rep, 'bot');
     speakJarvis(rep);
-  }catch(err){ typing.remove(); addMsg('Erreur Boss, réessaie.','bot'); setSpeaking(false); }
-};
+  }catch(err){
+    typing.remove();
+    busy = false; sendBtn.disabled = false;
+    setState('idle');
+    let msg = "Erreur Boss, réessaie.";
+    if(err.name === 'AbortError') msg = timerFired ? "Ça prend trop de temps, Boss. Réessaie." : "Requête annulée.";
+    else if(!navigator.onLine) msg = "Je suis hors ligne Boss. Vérifie ta connexion.";
+    else if(/HTTP 4(29)/.test(err.message)) msg = "Trop de demandes, Boss. Patiente quelques secondes.";
+    else if(/HTTP 5/.test(err.message)) msg = "Le serveur a un souci, Boss. Réessaie dans un instant.";
+    const d = addMsg(msg, 'bot', {noActions:true});
+    if(err.name !== 'AbortError' || timerFired) addRetry(d, text);
+    if(history.length && history[history.length-1].role === 'user' && history[history.length-1].content === text){ history.pop(); saveHistory(); }
+  }finally{
+    clearTimeout(timer);
+    timerFired = false;
+    abortCtl = null;
+  }
+}
+form.addEventListener('submit', e => { e.preventDefault(); send(input.value); });
+$('orb').addEventListener('click', startListening);
+micBtn.addEventListener('click', startListening);
+$('voiceBtn').addEventListener('click', toggleVoice);
+$('convBtn').addEventListener('click', toggleConv);
+$('themeBtn').addEventListener('click', toggleTheme);
+$('stopBtn').addEventListener('click', () => { stopAll(); setState('idle'); });
+$('clearBtn').addEventListener('click', () => { if(confirm("Effacer toute la conversation ?")) clearChat(); });
+$('lockBtn').addEventListener('click', relock);
+document.addEventListener('visibilitychange', () => { if(document.hidden){ stopVoice(); if(recognition){ try{ recognition.abort(); }catch(e){} } } });
+loadHistory();
+if(history.length){
+  history.forEach(m => addMsg(m.content, m.role === 'user' ? 'user' : 'bot', {noSpeak:true}));
+} else greet();
+setState('idle');
 </script>
 </body>
 </html>
